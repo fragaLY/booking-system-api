@@ -1,15 +1,13 @@
 spring:
   main:
     banner-mode: "off"
-  #data:
-    #mongodb:
-      #host: localhost
-      #port: 27017
-      #database: booking-system
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: booking-system
       #username:
       #password:
-    #devtools:
-    #add-properties: false
 
 logging:
   level:
