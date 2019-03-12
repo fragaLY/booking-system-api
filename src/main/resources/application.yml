@@ -11,7 +11,7 @@ spring:
 
 logging:
   level:
-    ROOT: INFO
+    ROOT: DEBUG
     org.springframework.web: DEBUG
     guru.springframework.controllers: DEBUG
 
