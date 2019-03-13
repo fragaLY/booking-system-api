@@ -2,13 +2,12 @@ package by.vk.bookingsystem.domain;
 
 import java.math.BigDecimal;
 
-import javax.persistence.Id;
-
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "homes")
