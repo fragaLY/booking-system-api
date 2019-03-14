@@ -3,15 +3,6 @@ spring:
     active: "development"
   main:
     banner-mode: "off"
-  data:
-    mongodb:
-      host: localhost
-      port: 27017
-      uri: mongodb://localhost/booking-system
-      #username:
-      #password:
-      repositories:
-        type: "auto"
 
 logging:
   level:

@@ -4,9 +4,10 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 import by.vk.bookingsystem.domain.User;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface UserDao extends MongoRepository<User, String> {
+public interface UserDao extends MongoRepository<User, ObjectId> {
 
   User getUsersByEmail(String email);
 

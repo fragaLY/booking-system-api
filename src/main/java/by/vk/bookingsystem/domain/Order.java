@@ -14,21 +14,22 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "orders")
+@Document(collection = "order")
 @Getter
 @Setter
 @ToString(exclude = {"homes", "user"})
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(exclude = {"id", "homes", "user"})
+@EqualsAndHashCode(exclude = {"homes", "user"})
 public class Order {
 
   @Id private final ObjectId id;
 
+  private final User user;
   private final LocalDateTime from;
   private final LocalDateTime to;
   private final BigDecimal cost;
   private final boolean confirmed;
   private final Set<Home> homes;
-  private final User user;
+  private final byte guests;
 }

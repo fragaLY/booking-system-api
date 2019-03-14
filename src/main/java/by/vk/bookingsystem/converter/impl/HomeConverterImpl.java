@@ -11,19 +11,11 @@ public class HomeConverterImpl implements HomeConverter {
 
   @Override
   public HomeDto convertToDto(final Home entity) {
-    return HomeDto.builder()
-        .id(entity.getId().toHexString())
-        .name(entity.getName())
-        .price(entity.getPrice())
-        .build();
+    return new HomeDto(entity.getId().toHexString(), entity.getName());
   }
 
   @Override
   public Home convertToEntity(final HomeDto dto) {
-    return Home.builder()
-        .id(new ObjectId(dto.getId()))
-        .name(dto.getName())
-        .price(dto.getPrice())
-        .build();
+    return new Home(new ObjectId(dto.getId()), dto.getName());
   }
 }
