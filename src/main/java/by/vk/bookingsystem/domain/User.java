@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -25,7 +26,7 @@ public class User {
 
   private static final int EXPIRE_IN_ONE_DAY = 86_400;
 
-  @Id private final String id;
+  @Id private final ObjectId id;
 
   private final String firstName;
   private final String lastName;

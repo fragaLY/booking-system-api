@@ -7,6 +7,7 @@ import by.vk.bookingsystem.converter.OrderConverter;
 import by.vk.bookingsystem.converter.UserConverter;
 import by.vk.bookingsystem.domain.Order;
 import by.vk.bookingsystem.dto.order.OrderDto;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +27,7 @@ public class OrderConverterImpl implements OrderConverter {
   public OrderDto convertToDto(final Order entity) {
 
     return OrderDto.builder()
-        .id(entity.getId())
+        .id(entity.getId().toHexString())
         .from(entity.getFrom())
         .to(entity.getTo())
         .cost(entity.getCost())
@@ -41,7 +42,7 @@ public class OrderConverterImpl implements OrderConverter {
   public Order convertToEntity(final OrderDto dto) {
 
     return Order.builder()
-        .id(dto.getId())
+        .id(new ObjectId(dto.getId()))
         .from(dto.getFrom())
         .to(dto.getTo())
         .cost(dto.getCost())

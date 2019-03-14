@@ -1,11 +1,12 @@
 spring:
+  profiles:
+    active: "development"
   main:
     banner-mode: "off"
   data:
     mongodb:
       host: localhost
       port: 27017
-      database: booking-system
       uri: mongodb://localhost/booking-system
       #username:
       #password:

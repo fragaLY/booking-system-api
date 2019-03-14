@@ -4,6 +4,7 @@ import by.vk.bookingsystem.converter.UserConverter;
 import by.vk.bookingsystem.domain.User;
 import by.vk.bookingsystem.domain.role.Role;
 import by.vk.bookingsystem.dto.user.UserDto;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,7 +13,7 @@ public class UserConverterImpl implements UserConverter {
   @Override
   public UserDto convertToDto(final User entity) {
     return UserDto.builder()
-        .id(entity.getId())
+        .id(entity.getId().toHexString())
         .firstName(entity.getFirstName())
         .lastName(entity.getLastName())
         .role(entity.getRole().toString().toUpperCase())
@@ -29,7 +30,7 @@ public class UserConverterImpl implements UserConverter {
   @Override
   public User convertToEntity(final UserDto dto) {
     return User.builder()
-        .id(dto.getId())
+        .id(new ObjectId(dto.getId()))
         .firstName(dto.getFirstName())
         .lastName(dto.getLastName())
         .role(Role.getRole(dto.getRole().toUpperCase()))
