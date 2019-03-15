@@ -11,12 +11,11 @@ public class PriceConverterImpl implements PriceConverter {
 
   @Override
   public PriceDto convertToDto(final Price entity) {
-    return new PriceDto(
-        entity.getId().toHexString(), entity.getPricePerAmount(), entity.getGuests());
+    return new PriceDto(entity.getId().toHexString(), entity.getPrice(), entity.getGuests());
   }
 
   @Override
   public Price convertToEntity(final PriceDto dto) {
-    return new Price(new ObjectId(dto.getId()), dto.getPricePerAmount(), dto.getGuests());
+    return new Price(new ObjectId(dto.getId()), dto.getPrice(), dto.getGuests());
   }
 }

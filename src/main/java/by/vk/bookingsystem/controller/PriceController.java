@@ -2,8 +2,8 @@ package by.vk.bookingsystem.controller;
 
 import java.util.List;
 
-import by.vk.bookingsystem.dto.home.HomeDto;
-import by.vk.bookingsystem.service.HomeService;
+import by.vk.bookingsystem.dto.price.PriceDto;
+import by.vk.bookingsystem.service.PriceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,19 +14,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/homes")
-public class HomeController {
+@RequestMapping("/prices")
+public class PriceController {
 
-  private final HomeService homeService;
+  private final PriceService priceService;
 
   @Autowired
-  public HomeController(final HomeService homeService) {
-    this.homeService = homeService;
+  public PriceController(final PriceService priceService) {
+    this.priceService = priceService;
   }
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
-  public ResponseEntity<List<HomeDto>> getHomes() {
-    return new ResponseEntity<>(homeService.findAll(), HttpStatus.FOUND);
+  public ResponseEntity<List<PriceDto>> getPrices() {
+    return new ResponseEntity<>(priceService.findAll(), HttpStatus.FOUND);
   }
 }
