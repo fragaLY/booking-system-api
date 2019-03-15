@@ -27,6 +27,6 @@ public class HomeController {
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
   public ResponseEntity<List<HomeDto>> getHomes() {
-    return new ResponseEntity<>(homeService.findAll(), HttpStatus.FOUND);
+    return new ResponseEntity<>(homeService.findAllHomes(), HttpStatus.FOUND);
   }
 }

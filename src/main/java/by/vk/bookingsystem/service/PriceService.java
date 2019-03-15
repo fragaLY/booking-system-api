@@ -6,5 +6,5 @@ import by.vk.bookingsystem.dto.price.PriceDto;
 
 public interface PriceService {
 
-    List<PriceDto> findAll();
+    List<PriceDto> findAllPrices();
 }

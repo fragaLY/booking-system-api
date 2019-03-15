@@ -1,7 +1,6 @@
 package by.vk.bookingsystem.dao;
 
-import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 import by.vk.bookingsystem.domain.User;
 import org.bson.types.ObjectId;
@@ -9,7 +8,11 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface UserDao extends MongoRepository<User, ObjectId> {
 
-  User getUsersByEmail(String email);
+  List<User> findAll();
 
-  Set<User> findAllByRegisteredBetween(LocalDateTime from, LocalDateTime to);
+  User findUserById(String id);
+
+  User save(User user);
+
+  void deleteById(ObjectId id);
 }

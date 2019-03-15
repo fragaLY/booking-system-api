@@ -18,4 +18,8 @@ public enum UserErrors {
   public String getMessage() {
     return message;
   }
+
+  public String getMessage(final String id) {
+    return message + "with id : " + id;
+  }
 }

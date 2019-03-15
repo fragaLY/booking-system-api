@@ -8,16 +8,19 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 
 @JsonRootName(value = "user")
 @Getter
+@Setter
 @Builder
 @EqualsAndHashCode(
     doNotUseGetters = true,
     exclude = {"firstName", "lastName", "role", "email", "phone"})
 public class UserDto {
 
-  private final String id;
+  private String id;
+
   private final String firstName;
   private final String lastName;
   private final String role;

@@ -27,6 +27,6 @@ public class PriceController {
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
   public ResponseEntity<List<PriceDto>> getPrices() {
-    return new ResponseEntity<>(priceService.findAll(), HttpStatus.FOUND);
+    return new ResponseEntity<>(priceService.findAllPrices(), HttpStatus.FOUND);
   }
 }
