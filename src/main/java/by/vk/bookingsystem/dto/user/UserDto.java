@@ -71,22 +71,27 @@ public class UserDto {
     return email;
   }
 
+  @NotBlank(message = "The currency cannot not be null")
+  @Pattern(
+      regexp = LITERALS_ONLY_PATTERN,
+      message = "The currency code cannot contain only the literals")
+  public String getCurrencyCode() {
+    return currencyCode;
+  }
+
   @NotBlank(message = "The phone cannot not be blank")
   public String getPhone() {
     return phone;
   }
 
-  @NotBlank(message = "The currency cannot not be null")
-  public String getCurrencyCode() {
-    return currencyCode;
-  }
-
   @NotBlank(message = "The country cannot not be blank")
+  @Pattern(regexp = LITERALS_ONLY_PATTERN, message = "The country cannot contain only the literals")
   public String getCountry() {
     return country;
   }
 
   @NotBlank(message = "The city cannot not be blank")
+  @Pattern(regexp = LITERALS_ONLY_PATTERN, message = "The city cannot contain only the literals")
   public String getCity() {
     return city;
   }
