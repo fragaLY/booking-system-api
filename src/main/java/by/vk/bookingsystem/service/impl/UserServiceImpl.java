@@ -47,7 +47,10 @@ public class UserServiceImpl implements UserService {
 
     if (user == null) {
       throw new ObjectNotFoundException(
-          environment.getProperty(ObjectNotFoundException.class.getName().toLowerCase()));
+          environment.getProperty(
+              User.class.getName().toLowerCase()
+                  + "."
+                  + ObjectNotFoundException.class.getName().toLowerCase()));
     }
 
     return userConverter.convertToDto(user);

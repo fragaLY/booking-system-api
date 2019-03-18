@@ -38,9 +38,8 @@ public class UserController {
   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
   public ResponseEntity<UserDto> getUser(
-      @NotBlank(message = "The id cannot be blank") @PathVariable(value = "id")
-          final String userId) {
-    return ResponseEntity.ok(userService.findUserById(userId));
+      @NotBlank(message = "The id cannot be blank") @PathVariable(value = "id") final String id) {
+    return ResponseEntity.ok(userService.findUserById(id));
   }
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)

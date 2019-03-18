@@ -10,8 +10,6 @@ import lombok.Getter;
 @Getter
 public class PriceSetDto {
 
-  @JsonProperty("prices")
-  private final Set<PriceDto> prices;
-
-  // todo vk: add links
+    @JsonProperty("prices")
+    private final Set<PriceDto> prices;
 }

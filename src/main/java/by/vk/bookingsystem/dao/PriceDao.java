@@ -9,4 +9,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface PriceDao extends MongoRepository<Price, ObjectId> {
 
   List<Price> findAll();
+
+  Price findPriceById(String id);
 }
