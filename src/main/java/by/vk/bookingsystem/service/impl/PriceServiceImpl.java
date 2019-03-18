@@ -23,7 +23,7 @@ public class PriceServiceImpl implements PriceService {
   }
 
   @Override
-  public List<PriceDto> findAll() {
+  public List<PriceDto> findAllPrices() {
     return priceDao.findAll().stream()
         .map(priceConverter::convertToDto)
         .collect(Collectors.toList());

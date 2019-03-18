@@ -20,4 +20,6 @@ public interface UserConverter {
    * @return the {@link User}
    */
   User convertToEntity(UserDto dto);
+
+  User enrichModel(User user, UserDto dto);
 }

@@ -23,7 +23,7 @@ public class HomeServiceImpl implements HomeService {
   }
 
   @Override
-  public List<HomeDto> findAll() {
+  public List<HomeDto> findAllHomes() {
     return homeDao.findAll().stream().map(homeConverter::convertToDto).collect(Collectors.toList());
   }
 }
