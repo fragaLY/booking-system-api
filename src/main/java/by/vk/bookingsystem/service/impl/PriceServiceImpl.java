@@ -47,9 +47,9 @@ public class PriceServiceImpl implements PriceService {
     if (price == null) {
       throw new ObjectNotFoundException(
           environment.getProperty(
-              Price.class.getName().toLowerCase()
+              Price.class.getSimpleName().toLowerCase()
                   + "."
-                  + ObjectNotFoundException.class.getName().toLowerCase()));
+                  + ObjectNotFoundException.class.getSimpleName().toLowerCase()));
     }
 
     return priceConverter.convertToDto(price);

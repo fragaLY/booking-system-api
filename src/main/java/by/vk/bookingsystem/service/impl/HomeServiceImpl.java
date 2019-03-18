@@ -44,9 +44,9 @@ public class HomeServiceImpl implements HomeService {
         if (home == null) {
             throw new ObjectNotFoundException(
                     environment.getProperty(
-                            Home.class.getName().toLowerCase()
+                            Home.class.getSimpleName().toLowerCase()
                                     + "."
-                                    + ObjectNotFoundException.class.getName().toLowerCase()));
+                                    + ObjectNotFoundException.class.getSimpleName().toLowerCase()));
         }
 
         return homeConverter.convertToDto(home);

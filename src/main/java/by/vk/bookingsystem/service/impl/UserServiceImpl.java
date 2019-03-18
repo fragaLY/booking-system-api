@@ -9,6 +9,8 @@ import by.vk.bookingsystem.dao.UserDao;
 import by.vk.bookingsystem.domain.User;
 import by.vk.bookingsystem.dto.user.UserDto;
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
+import by.vk.bookingsystem.exception.user.EmailAlreadyRegisteredException;
+import by.vk.bookingsystem.exception.user.PhoneAlreadyRegisteredException;
 import by.vk.bookingsystem.service.UserService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,8 @@ import org.springframework.stereotype.Service;
 @Service
 @PropertySources(@PropertySource("classpath:i18n/validation_errors.properties"))
 public class UserServiceImpl implements UserService {
+
+  private static final String SPLITTER = ".";
 
   private final UserDao userDao;
   private final UserConverter userConverter;
@@ -48,9 +52,9 @@ public class UserServiceImpl implements UserService {
     if (user == null) {
       throw new ObjectNotFoundException(
           environment.getProperty(
-              User.class.getName().toLowerCase()
-                  + "."
-                  + ObjectNotFoundException.class.getName().toLowerCase()));
+              User.class.getSimpleName().toLowerCase()
+                  + SPLITTER
+                  + ObjectNotFoundException.class.getSimpleName().toLowerCase()));
     }
 
     return userConverter.convertToDto(user);
@@ -58,6 +62,25 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public String createUser(final UserDto dto) {
+    final User userWithSameEmail = userDao.findUserByEmail(dto.getEmail());
+    final User userWithSamePhone = userDao.findUserByPhone(dto.getPhone());
+
+    if (userWithSameEmail != null) {
+      throw new EmailAlreadyRegisteredException(
+          environment.getProperty(
+              User.class.getSimpleName().toLowerCase()
+                  + SPLITTER
+                  + EmailAlreadyRegisteredException.class.getSimpleName().toLowerCase()));
+    }
+
+    if (userWithSamePhone != null) {
+      throw new PhoneAlreadyRegisteredException(
+          environment.getProperty(
+              User.class.getSimpleName().toLowerCase()
+                  + SPLITTER
+                  + PhoneAlreadyRegisteredException.class.getSimpleName().toLowerCase()));
+    }
+
     return userDao.save(userConverter.convertToEntity(dto)).getId().toHexString();
   }
 
@@ -67,7 +90,10 @@ public class UserServiceImpl implements UserService {
 
     if (user == null) {
       throw new ObjectNotFoundException(
-          environment.getProperty(ObjectNotFoundException.class.getName().toLowerCase()));
+          environment.getProperty(
+              User.class.getSimpleName().toLowerCase()
+                  + SPLITTER
+                  + ObjectNotFoundException.class.getSimpleName().toLowerCase()));
     }
 
     return userDao.save(userConverter.enrichModel(user, dto)).getId().toHexString();
@@ -76,7 +102,11 @@ public class UserServiceImpl implements UserService {
   @Override
   public boolean deleteUserById(final String id) {
     if (userDao.findUserById(id) == null) {
-      throw new ObjectNotFoundException(ObjectNotFoundException.class.getName().toLowerCase());
+      throw new ObjectNotFoundException(
+          environment.getProperty(
+              User.class.getSimpleName().toLowerCase()
+                  + SPLITTER
+                  + ObjectNotFoundException.class.getSimpleName().toLowerCase()));
     }
     userDao.deleteById(new ObjectId(id));
     return true;

@@ -1,8 +1,10 @@
 package by.vk.bookingsystem.controller;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -10,7 +12,6 @@ import javax.validation.constraints.NotNull;
 import by.vk.bookingsystem.dto.user.UserDto;
 import by.vk.bookingsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -65,11 +66,12 @@ public class UserController {
   @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
   public ResponseEntity<Void> updateUser(
-      final HttpRequest request,
+      final HttpServletRequest request,
       @NotNull(message = "The user cannot be null") @Valid @RequestBody final UserDto dto,
-      @NotBlank(message = "The id cannot be blank") @PathVariable final String id) {
+      @NotBlank(message = "The id cannot be blank") @PathVariable final String id)
+      throws URISyntaxException {
     userService.updateUser(dto, id);
-    return ResponseEntity.noContent().location(request.getURI()).build();
+    return ResponseEntity.noContent().location(new URI(request.getRequestURI())).build();
   }
 
   @DeleteMapping(value = "/{id}")

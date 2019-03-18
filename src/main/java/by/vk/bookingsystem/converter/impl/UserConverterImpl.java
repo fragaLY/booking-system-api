@@ -16,19 +16,7 @@ public class UserConverterImpl implements UserConverter {
 
   @Override
   public UserDto convertToDto(final User entity) {
-    return UserDto.builder()
-        .id(entity.getId().toHexString())
-        .firstName(entity.getFirstName())
-        .lastName(entity.getLastName())
-        .role(entity.getRole().toString().toUpperCase())
-        .email(entity.getEmail())
-        .phone(entity.getPhone())
-        .currencyCode(entity.getCurrencyCode())
-        .country(entity.getCountry())
-        .city(entity.getCity())
-        .registered(entity.getRegistered())
-        .password(entity.getPassword())
-        .build();
+    return new UserDto(); //todo vk: add convertation
   }
 
   @Override
@@ -36,7 +24,7 @@ public class UserConverterImpl implements UserConverter {
     return User.builder()
         .firstName(dto.getFirstName())
         .lastName(dto.getLastName())
-        .role(Role.USER)
+        .role(Role.getRole(dto.getRole()))
         .email(dto.getEmail())
         .phone(dto.getPhone())
         .currencyCode(dto.getCurrencyCode())

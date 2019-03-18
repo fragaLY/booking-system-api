@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import by.vk.bookingsystem.exception.ErrorDetails;
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
+import by.vk.bookingsystem.exception.user.IncorrectPersonalInformationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,16 @@ public class ExceptionsHandler extends ResponseEntityExceptionHandler {
         new ErrorDetails(NOT_FOUND, NOT_FOUND.value(), ex.getMessage());
 
     return ResponseEntity.status(NOT_FOUND).body(errorDetails);
+  }
+
+  @ExceptionHandler({IncorrectPersonalInformationException.class})
+  public ResponseEntity<Object> handleIncorrectPersonalInformationException(
+      IncorrectPersonalInformationException ex) {
+
+    final ErrorDetails errorDetails =
+        new ErrorDetails(BAD_REQUEST, BAD_REQUEST.value(), ex.getMessage());
+
+    return ResponseEntity.status(BAD_REQUEST).body(errorDetails);
   }
 
   @ExceptionHandler(value = {AccessDeniedException.class})

@@ -6,12 +6,14 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.Range;
 
 @JsonRootName("price")
+@JsonIgnoreProperties(ignoreUnknown = true)
 @EqualsAndHashCode
 @AllArgsConstructor
 public class PriceDto {

@@ -12,6 +12,10 @@ public interface UserDao extends MongoRepository<User, ObjectId> {
 
   User findUserById(String id);
 
+  User findUserByEmail(String email);
+
+  User findUserByPhone(String phone);
+
   User save(User user);
 
   void deleteById(ObjectId id);

@@ -10,8 +10,8 @@ public enum Role {
 
   public static Role getRole(final String value) {
     return Arrays.stream(values())
-        .filter(role -> role.name().equals(value))
+        .filter(role -> role.name().equals(value.toUpperCase()))
         .findFirst()
-        .orElse(SURFER);
+        .orElse(null);
   }
 }

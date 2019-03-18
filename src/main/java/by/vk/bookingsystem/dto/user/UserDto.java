@@ -9,35 +9,37 @@ import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import by.vk.bookingsystem.validator.user.UserRole;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @JsonRootName(value = "user")
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Setter
-@Builder
+@NoArgsConstructor
 @EqualsAndHashCode(exclude = {"firstName", "lastName", "role", "email", "phone"})
 public class UserDto {
 
   private static final String LITERALS_ONLY_PATTERN = "[A-Za-z]+";
 
   private String id;
-  private final String firstName;
-  private final String lastName;
-  private final String role;
-  private final String email;
-  private final String phone;
+  private String firstName;
+  private String lastName;
+  private String role;
+  private String email;
+  private String phone;
 
   @JsonProperty("currency")
-  private final String currencyCode;
+  private String currencyCode;
 
-  private final String country;
-  private final String city;
-  private final LocalDateTime registered;
-  @JsonIgnore private String password;
+  private String country;
+  private String city;
+  private LocalDateTime registered;
+  private String password;
 
   public String getId() {
     return id;
@@ -61,6 +63,7 @@ public class UserDto {
     return lastName;
   }
 
+  @UserRole
   public String getRole() {
     return role;
   }

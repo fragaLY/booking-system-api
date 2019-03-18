@@ -6,12 +6,14 @@ import java.util.Set;
 
 import by.vk.bookingsystem.dto.home.HomeDto;
 import by.vk.bookingsystem.dto.user.UserDto;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @JsonRootName("order")
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Builder
 @Getter
 @EqualsAndHashCode(
