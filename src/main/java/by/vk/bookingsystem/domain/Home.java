@@ -11,8 +11,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "home")
 @Getter
 @ToString
-@EqualsAndHashCode
 @AllArgsConstructor
+@EqualsAndHashCode
 public class Home {
 
   @Id private final ObjectId id;

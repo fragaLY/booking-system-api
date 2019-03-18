@@ -9,4 +9,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface HomeDao extends MongoRepository<Home, ObjectId> {
 
   List<Home> findAll();
+
+  Home findHomeById(String id);
 }
