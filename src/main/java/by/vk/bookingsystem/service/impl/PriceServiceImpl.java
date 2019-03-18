@@ -11,10 +11,13 @@ import by.vk.bookingsystem.dto.price.PriceDto;
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
 import by.vk.bookingsystem.service.PriceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 @Service
+@PropertySources(@PropertySource("classpath:i18n/validation_errors.properties"))
 public class PriceServiceImpl implements PriceService {
 
   private final PriceDao priceDao;
