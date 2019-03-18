@@ -11,6 +11,7 @@ import by.vk.bookingsystem.dto.price.PriceDto;
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
 import by.vk.bookingsystem.service.PriceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,11 +19,14 @@ public class PriceServiceImpl implements PriceService {
 
   private final PriceDao priceDao;
   private final PriceConverter priceConverter;
+  private final Environment environment;
 
   @Autowired
-  public PriceServiceImpl(final PriceDao priceDao, final PriceConverter priceConverter) {
+  public PriceServiceImpl(
+      final PriceDao priceDao, final PriceConverter priceConverter, final Environment environment) {
     this.priceDao = priceDao;
     this.priceConverter = priceConverter;
+    this.environment = environment;
   }
 
   @Override
@@ -39,9 +43,10 @@ public class PriceServiceImpl implements PriceService {
 
     if (price == null) {
       throw new ObjectNotFoundException(
-          Price.class.getName().toLowerCase()
-              + "."
-              + ObjectNotFoundException.class.getName().toLowerCase());
+          environment.getProperty(
+              Price.class.getName().toLowerCase()
+                  + "."
+                  + ObjectNotFoundException.class.getName().toLowerCase()));
     }
 
     return priceConverter.convertToDto(price);
