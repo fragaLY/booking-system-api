@@ -12,6 +12,4 @@ public class UserSetDto {
 
   @JsonProperty("users")
   private final Set<UserDto> users;
-
-  // todo vk: add links
 }

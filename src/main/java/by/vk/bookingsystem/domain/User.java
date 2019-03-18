@@ -3,7 +3,6 @@ package by.vk.bookingsystem.domain;
 import java.time.LocalDateTime;
 
 import by.vk.bookingsystem.domain.role.Role;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -19,30 +18,29 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Getter
 @Setter
 @ToString
-@AllArgsConstructor
 @Builder
 @EqualsAndHashCode(exclude = "id")
 public class User {
 
   private static final int EXPIRE_IN_ONE_DAY = 86_400;
 
-  @Id private final ObjectId id;
+  @Id private ObjectId id;
 
-  private final String firstName;
-  private final String lastName;
-  private final Role role;
+  private String firstName;
+  private String lastName;
+  private Role role;
 
   @Indexed(unique = true)
-  private final String email;
+  private String email;
 
   @Indexed(unique = true, expireAfterSeconds = EXPIRE_IN_ONE_DAY)
-  private final String phone;
+  private String phone;
 
   @Field("currency")
-  private final String currencyCode;
+  private String currencyCode;
 
-  private final String country;
-  private final String city;
-  private final LocalDateTime registered;
-  private final String password;
+  private String country;
+  private String city;
+  private LocalDateTime registered;
+  private String password;
 }

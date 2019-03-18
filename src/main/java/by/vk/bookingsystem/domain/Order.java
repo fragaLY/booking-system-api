@@ -25,11 +25,11 @@ public class Order {
 
   @Id private final ObjectId id;
 
-  private final User user;
-  private final LocalDateTime from;
-  private final LocalDateTime to;
-  private final BigDecimal cost;
-  private final boolean confirmed;
-  private final Set<Home> homes;
-  private final byte guests;
+  private User user;
+  private LocalDateTime from;
+  private LocalDateTime to;
+  private BigDecimal cost;
+  private boolean confirmed;
+  private Set<Home> homes;
+  private byte guests;
 }

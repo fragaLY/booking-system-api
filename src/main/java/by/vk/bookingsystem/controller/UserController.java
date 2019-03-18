@@ -2,15 +2,15 @@ package by.vk.bookingsystem.controller;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Set;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import by.vk.bookingsystem.dto.user.UserDto;
 import by.vk.bookingsystem.service.UserService;
-import by.vk.bookingsystem.validator.user.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,26 +29,18 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class UserController {
 
   private final UserService userService;
-  private final UserValidator userValidator;
 
   @Autowired
-  public UserController(final UserService userService, final UserValidator userValidator) {
+  public UserController(final UserService userService) {
     this.userService = userService;
-    this.userValidator = userValidator;
   }
 
   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
-  public ResponseEntity<?> getUser(
-      final HttpRequest request, @PathVariable(value = "id") final String userId) {
-
-    final UserDto dto = userService.findUserById(userId);
-    final Set<String> errorMessages = userValidator.validate(dto);
-    final HttpHeaders headers = request.getHeaders();
-
-    return errors.isEmpty()
-        ? new ResponseEntity<>(dto, headers, HttpStatus.FOUND)
-        : new ResponseEntity<>(errors, headers, HttpStatus.BAD_REQUEST);
+  public ResponseEntity<UserDto> getUser(
+      @NotBlank(message = "The id cannot be blank") @PathVariable(value = "id")
+          final String userId) {
+    return ResponseEntity.ok(userService.findUserById(userId));
   }
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -59,12 +51,13 @@ public class UserController {
 
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
-  public ResponseEntity<Void> createUser(@RequestBody final UserDto userDto) {
+  public ResponseEntity<Void> createUser(
+      @NotNull(message = "The user cannot be null") @Valid @RequestBody final UserDto dto) {
 
     final URI uri =
         ServletUriComponentsBuilder.fromCurrentRequest()
             .path("/{id}")
-            .buildAndExpand(userService.saveOrUpdateUser(userDto, null))
+            .buildAndExpand(userService.createUser(dto))
             .toUri();
 
     return ResponseEntity.created(uri).build();
@@ -74,15 +67,15 @@ public class UserController {
   @ResponseBody
   public ResponseEntity<Void> updateUser(
       final HttpRequest request,
-      @RequestBody final UserDto userDto,
-      @PathVariable final String id) {
-    userService.saveOrUpdateUser(userDto, id);
+      @NotNull(message = "The user cannot be null") @Valid @RequestBody final UserDto dto,
+      @NotBlank(message = "The id cannot be blank") @PathVariable final String id) {
+    userService.updateUser(dto, id);
     return ResponseEntity.noContent().location(request.getURI()).build();
   }
 
-  @DeleteMapping
+  @DeleteMapping(value = "/{id}")
   @ResponseBody
-  public ResponseEntity<Void> deleteUser(@PathVariable String id) {
+  public ResponseEntity<Void> deleteUser(@NotBlank @PathVariable final String id) {
     userService.deleteUserById(id);
     return ResponseEntity.noContent().build();
   }

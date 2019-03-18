@@ -10,7 +10,9 @@ public interface UserService {
 
   UserDto findUserById(String id);
 
-  String saveOrUpdateUser(UserDto dto, String id);
+  String createUser(UserDto dto);
+
+  String updateUser(UserDto dto, String id);
 
   boolean deleteUserById(String id);
 }
