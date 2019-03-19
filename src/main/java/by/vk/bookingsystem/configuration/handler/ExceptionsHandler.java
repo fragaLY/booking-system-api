@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import by.vk.bookingsystem.exception.ErrorDetails;
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
 import by.vk.bookingsystem.exception.user.IncorrectPersonalInformationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,13 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class ExceptionsHandler extends ResponseEntityExceptionHandler {
+
+  private final ErrorTransformer errorTransformer;
+
+  @Autowired
+  public ExceptionsHandler(final ErrorTransformer errorTransformer) {
+    this.errorTransformer = errorTransformer;
+  }
 
   @ExceptionHandler(IllegalArgumentException.class)
   public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException ex) {
@@ -69,11 +77,9 @@ public class ExceptionsHandler extends ResponseEntityExceptionHandler {
       HttpStatus status,
       WebRequest request) {
 
-    String message =
+    final String message =
         ex.getBindingResult().getAllErrors().stream()
-            .map(
-                error ->
-                    "Cause in " + error.getObjectName() + ", reason: " + error.getDefaultMessage())
+            .map(errorTransformer)
             .collect(Collectors.joining());
 
     final ErrorDetails errorDetails = new ErrorDetails(status, status.value(), message);

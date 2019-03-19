@@ -115,70 +115,58 @@ public class UserDto {
 
   public class Builder {
 
-    private String id;
-    private String firstName;
-    private String lastName;
-    private String role;
-    private String email;
-    private String phone;
-    private String currencyCode;
-    private String country;
-    private String city;
-    private LocalDateTime registered;
-    private String password;
-
     public Builder setId(final String id) {
-      this.id = id;
+      UserDto.this.id = id;
       return this;
     }
 
     public Builder setFirstName(final String firstName) {
-      this.firstName = firstName;
+      UserDto.this.firstName = firstName;
       return this;
     }
 
     public Builder setLastName(final String lastName) {
-      this.lastName = lastName;
+      UserDto.this.lastName = lastName;
       return this;
     }
 
     public Builder setRole(final String role) {
-      this.role = role;
+      UserDto.this.role = role;
       return this;
     }
 
     public Builder setEmail(final String email) {
-      this.email = email;
+      UserDto.this.email = email;
       return this;
     }
 
     public Builder setPhone(final String phone) {
-      this.phone = phone;
+      UserDto.this.phone = phone;
       return this;
     }
 
     public Builder setCurrencyCode(final String currencyCode) {
-      this.currencyCode = currencyCode;
+      UserDto.this.currencyCode = currencyCode;
       return this;
     }
 
     public Builder setCountry(final String country) {
-      this.country = country;
+      UserDto.this.country = country;
       return this;
     }
 
     public Builder setCity(final String city) {
-      this.city = city;
+      UserDto.this.city = city;
       return this;
     }
 
     public Builder setRegistered(final LocalDateTime registered) {
-      this.registered = registered;
+      UserDto.this.registered = registered;
       return this;
     }
 
     public Builder setPassword(final String password) {
-      this.password = password;
+      UserDto.this.password = password;
       return this;
     }
 
