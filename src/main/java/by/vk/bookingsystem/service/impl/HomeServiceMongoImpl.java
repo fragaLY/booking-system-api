@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import by.vk.bookingsystem.converter.HomeConverter;
-import by.vk.bookingsystem.dao.HomeDao;
+import by.vk.bookingsystem.dao.HomeMongoDao;
 import by.vk.bookingsystem.domain.Home;
 import by.vk.bookingsystem.dto.home.HomeDto;
 import by.vk.bookingsystem.dto.home.HomeSetDto;
@@ -15,15 +15,19 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 @Service
-public class HomeServiceImpl implements HomeService {
+public class HomeServiceMongoImpl implements HomeService {
 
-  private final HomeDao homeDao;
+  private static final String HOME_NOT_FOUND = "not.found.home";
+
+  private final HomeMongoDao homeDao;
   private final HomeConverter homeConverter;
   private final Environment environment;
 
   @Autowired
-  public HomeServiceImpl(
-      final HomeDao homeDao, final HomeConverter homeConverter, final Environment environment) {
+  public HomeServiceMongoImpl(
+      final HomeMongoDao homeDao,
+      final HomeConverter homeConverter,
+      final Environment environment) {
     this.homeDao = homeDao;
     this.homeConverter = homeConverter;
     this.environment = environment;
@@ -43,11 +47,7 @@ public class HomeServiceImpl implements HomeService {
     final Home home = homeDao.findHomeById(id);
 
     if (home == null) {
-      throw new ObjectNotFoundException(
-          environment.getProperty(
-              Home.class.getSimpleName().toLowerCase()
-                  + "."
-                  + ObjectNotFoundException.class.getSimpleName().toLowerCase()));
+      throw new ObjectNotFoundException(environment.getProperty(HOME_NOT_FOUND));
     }
 
     return homeConverter.convertToDto(home);

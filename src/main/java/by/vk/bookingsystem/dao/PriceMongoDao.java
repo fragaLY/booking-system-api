@@ -6,7 +6,7 @@ import by.vk.bookingsystem.domain.Price;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface PriceDao extends MongoRepository<Price, ObjectId> {
+public interface PriceMongoDao extends MongoRepository<Price, ObjectId> {
 
   List<Price> findAll();
 

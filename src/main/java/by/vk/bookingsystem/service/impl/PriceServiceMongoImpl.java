@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import by.vk.bookingsystem.converter.PriceConverter;
-import by.vk.bookingsystem.dao.PriceDao;
+import by.vk.bookingsystem.dao.PriceMongoDao;
 import by.vk.bookingsystem.domain.Price;
 import by.vk.bookingsystem.dto.price.PriceDto;
 import by.vk.bookingsystem.dto.price.PriceSetDto;
@@ -17,16 +17,20 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 @Service
-@PropertySources(@PropertySource("classpath:i18n/validation_errors.properties"))
-public class PriceServiceImpl implements PriceService {
+@PropertySources(@PropertySource("classpath:i18n/validation_errors.yml"))
+public class PriceServiceMongoImpl implements PriceService {
 
-  private final PriceDao priceDao;
+  private static final String PRICE_NOT_FOUND = "not.found.price";
+
+  private final PriceMongoDao priceDao;
   private final PriceConverter priceConverter;
   private final Environment environment;
 
   @Autowired
-  public PriceServiceImpl(
-      final PriceDao priceDao, final PriceConverter priceConverter, final Environment environment) {
+  public PriceServiceMongoImpl(
+      final PriceMongoDao priceDao,
+      final PriceConverter priceConverter,
+      final Environment environment) {
     this.priceDao = priceDao;
     this.priceConverter = priceConverter;
     this.environment = environment;
@@ -46,11 +50,7 @@ public class PriceServiceImpl implements PriceService {
     final Price price = priceDao.findPriceById(id);
 
     if (price == null) {
-      throw new ObjectNotFoundException(
-          environment.getProperty(
-              Price.class.getSimpleName().toLowerCase()
-                  + "."
-                  + ObjectNotFoundException.class.getSimpleName().toLowerCase()));
+      throw new ObjectNotFoundException(environment.getProperty(PRICE_NOT_FOUND));
     }
 
     return priceConverter.convertToDto(price);

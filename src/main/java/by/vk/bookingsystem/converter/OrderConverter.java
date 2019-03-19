@@ -20,4 +20,6 @@ public interface OrderConverter {
    * @return the {@link Order}
    */
   Order convertToEntity(OrderDto dto);
+
+  Order enrichModel(Order order, OrderDto dto);
 }
