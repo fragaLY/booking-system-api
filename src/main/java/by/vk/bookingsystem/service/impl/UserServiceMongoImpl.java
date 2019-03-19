@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import by.vk.bookingsystem.converter.UserConverter;
-import by.vk.bookingsystem.dao.UserDao;
+import by.vk.bookingsystem.dao.UserMongoDao;
 import by.vk.bookingsystem.domain.User;
 import by.vk.bookingsystem.dto.user.UserDto;
 import by.vk.bookingsystem.dto.user.UserSetDto;
@@ -20,18 +20,22 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 @Service
-@PropertySources(@PropertySource("classpath:i18n/validation_errors.properties"))
-public class UserServiceImpl implements UserService {
+@PropertySources(@PropertySource("classpath:i18n/validation_errors.yml"))
+public class UserServiceMongoImpl implements UserService {
 
-  private static final String SPLITTER = ".";
+  private static final String USER_NOT_FOUND = "not.found.user";
+  private static final String EMAIL_ALREADY_REGISTERED = "already.registered.email";
+  private static final String PHONE_ALREADY_REGISTERED = "already.registered.phone";
 
-  private final UserDao userDao;
+  private final UserMongoDao userDao;
   private final UserConverter userConverter;
   private final Environment environment;
 
   @Autowired
-  public UserServiceImpl(
-      final UserDao userDao, final UserConverter userConverter, final Environment environment) {
+  public UserServiceMongoImpl(
+      final UserMongoDao userDao,
+      final UserConverter userConverter,
+      final Environment environment) {
     this.userDao = userDao;
     this.userConverter = userConverter;
     this.environment = environment;
@@ -51,11 +55,7 @@ public class UserServiceImpl implements UserService {
     final User user = userDao.findUserById(id);
 
     if (user == null) {
-      throw new ObjectNotFoundException(
-          environment.getProperty(
-              User.class.getSimpleName().toLowerCase()
-                  + SPLITTER
-                  + ObjectNotFoundException.class.getSimpleName().toLowerCase()));
+      throw new ObjectNotFoundException(environment.getProperty(USER_NOT_FOUND));
     }
 
     return userConverter.convertToDto(user);
@@ -67,19 +67,11 @@ public class UserServiceImpl implements UserService {
     final User userWithSamePhone = userDao.findUserByPhone(dto.getPhone());
 
     if (userWithSameEmail != null) {
-      throw new EmailAlreadyRegisteredException(
-          environment.getProperty(
-              User.class.getSimpleName().toLowerCase()
-                  + SPLITTER
-                  + EmailAlreadyRegisteredException.class.getSimpleName().toLowerCase()));
+      throw new EmailAlreadyRegisteredException(environment.getProperty(EMAIL_ALREADY_REGISTERED));
     }
 
     if (userWithSamePhone != null) {
-      throw new PhoneAlreadyRegisteredException(
-          environment.getProperty(
-              User.class.getSimpleName().toLowerCase()
-                  + SPLITTER
-                  + PhoneAlreadyRegisteredException.class.getSimpleName().toLowerCase()));
+      throw new PhoneAlreadyRegisteredException(environment.getProperty(PHONE_ALREADY_REGISTERED));
     }
 
     return userDao.save(userConverter.convertToEntity(dto)).getId().toHexString();
@@ -90,11 +82,7 @@ public class UserServiceImpl implements UserService {
     final User user = userDao.findUserById(id);
 
     if (user == null) {
-      throw new ObjectNotFoundException(
-          environment.getProperty(
-              User.class.getSimpleName().toLowerCase()
-                  + SPLITTER
-                  + ObjectNotFoundException.class.getSimpleName().toLowerCase()));
+      throw new ObjectNotFoundException(environment.getProperty(USER_NOT_FOUND));
     }
 
     return userDao.save(userConverter.enrichModel(user, dto)).getId().toHexString();
@@ -103,11 +91,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public boolean deleteUserById(final String id) {
     if (userDao.findUserById(id) == null) {
-      throw new ObjectNotFoundException(
-          environment.getProperty(
-              User.class.getSimpleName().toLowerCase()
-                  + SPLITTER
-                  + ObjectNotFoundException.class.getSimpleName().toLowerCase()));
+      throw new ObjectNotFoundException(environment.getProperty(USER_NOT_FOUND));
     }
     userDao.deleteById(new ObjectId(id));
     return true;

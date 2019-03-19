@@ -1,5 +1,6 @@
 package by.vk.bookingsystem.converter.impl;
 
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import by.vk.bookingsystem.converter.HomeConverter;
@@ -51,5 +52,20 @@ public class OrderConverterImpl implements OrderConverter {
             dto.getHomes().stream().map(homeConverter::convertToEntity).collect(Collectors.toSet()))
         .user(userConverter.convertToEntity(dto.getUser()))
         .build();
+  }
+
+  @Override
+  public Order enrichModel(final Order order, final OrderDto dto) {
+    order.setConfirmed(dto.isConfirmed());
+    order.setCost(dto.getCost());
+    order.setFrom(dto.getFrom());
+    order.setTo(dto.getTo());
+    order.setGuests(dto.getGuests());
+    order.setHomes(
+        dto.getHomes().stream()
+            .filter(Objects::nonNull)
+            .map(homeConverter::convertToEntity)
+            .collect(Collectors.toSet()));
+    return order;
   }
 }

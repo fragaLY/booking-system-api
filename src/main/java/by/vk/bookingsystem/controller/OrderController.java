@@ -2,16 +2,15 @@ package by.vk.bookingsystem.controller;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import by.vk.bookingsystem.dto.user.UserDto;
-import by.vk.bookingsystem.dto.user.UserSetDto;
-import by.vk.bookingsystem.service.UserService;
+import by.vk.bookingsystem.dto.order.OrderDto;
+import by.vk.bookingsystem.dto.order.OrderSetDto;
+import by.vk.bookingsystem.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,38 +26,31 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
-@RequestMapping("/users")
-public class UserController {
+@RequestMapping("/orders")
+public class OrderController {
 
-  private final UserService userService;
+  private final OrderService orderService;
 
   @Autowired
-  public UserController(final UserService userService) {
-    this.userService = userService;
-  }
-
-  @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-  @ResponseBody
-  public ResponseEntity<UserDto> getUser(
-      @NotBlank(message = "The id cannot be blank") @PathVariable(value = "id") final String id) {
-    return ResponseEntity.ok(userService.findUserById(id));
+  public OrderController(final OrderService orderService) {
+    this.orderService = orderService;
   }
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
-  public ResponseEntity<UserSetDto> getUsers() {
-    return ResponseEntity.ok(userService.findAllUsers());
+  public ResponseEntity<OrderSetDto> getAllOrders() {
+    return ResponseEntity.ok(orderService.findAllOrders());
   }
 
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
-  public ResponseEntity<Void> createUser(
-      @NotNull(message = "The user cannot be null") @Valid @RequestBody final UserDto dto) {
+  public ResponseEntity<Void> createOrder(
+      @NotNull(message = "The order cannot be null") @Valid @RequestBody final OrderDto dto) {
 
     final URI uri =
         ServletUriComponentsBuilder.fromCurrentRequest()
             .path("/{id}")
-            .buildAndExpand(userService.createUser(dto))
+            .buildAndExpand(orderService.createOrder(dto))
             .toUri();
 
     return ResponseEntity.created(uri).build();
@@ -66,20 +58,19 @@ public class UserController {
 
   @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
-  public ResponseEntity<Void> updateUser(
+  public ResponseEntity<Void> updateOrder(
       final HttpServletRequest request,
-      @NotNull(message = "The user cannot be null") @Valid @RequestBody final UserDto dto,
+      @NotNull(message = "The order cannot be null") @Valid @RequestBody final OrderDto dto,
       @NotBlank(message = "The id cannot be blank") @PathVariable final String id)
       throws URISyntaxException {
-    userService.updateUser(dto, id);
+    orderService.updateOrder(dto, id);
     return ResponseEntity.noContent().location(new URI(request.getRequestURI())).build();
   }
 
   @DeleteMapping(value = "/{id}")
   @ResponseBody
-  public ResponseEntity<Void> deleteUser(@NotBlank @PathVariable final String id) {
-    userService.deleteUserById(id);
+  public ResponseEntity<Void> deleteOrder(@NotBlank @PathVariable final String id) {
+    orderService.deleteOrderById(id);
     return ResponseEntity.noContent().build();
   }
-
 }
