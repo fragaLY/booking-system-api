@@ -23,9 +23,9 @@ import org.springframework.stereotype.Service;
 @PropertySources(@PropertySource("classpath:i18n/validation_errors.yml"))
 public class UserServiceMongoImpl implements UserService {
 
-  private static final String USER_NOT_FOUND = "not.found.user";
-  private static final String EMAIL_ALREADY_REGISTERED = "already.registered.email";
-  private static final String PHONE_ALREADY_REGISTERED = "already.registered.phone";
+  private static final String USER_NOT_FOUND = "user.not.found";
+  private static final String EMAIL_ALREADY_REGISTERED = "user.email.already.registered";
+  private static final String PHONE_ALREADY_REGISTERED = "user.phone.already.registered";
 
   private final UserMongoDao userDao;
   private final UserConverter userConverter;

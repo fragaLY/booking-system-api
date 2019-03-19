@@ -9,6 +9,7 @@ import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import by.vk.bookingsystem.validator.order.VacantHomes;
 import by.vk.bookingsystem.validator.user.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -22,6 +23,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {"firstName", "lastName", "role", "email", "phone"})
+@VacantHomes
 public class UserDto {
 
   private static final String LITERALS_ONLY_PATTERN = "[A-Za-z]+";

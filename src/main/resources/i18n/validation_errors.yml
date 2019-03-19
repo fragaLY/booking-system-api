@@ -1,11 +1,23 @@
-not:
-  found:
-    user: "User not found"
-    price: "Price not found"
-    home: "Home not found"
-    order: "Order not found"
+order:
+  not:
+    found: "Order not found"
+  dates:
+    intersection: "The dates intersect"
 
-already:
-  registered:
-    email: "Email already registered"
-    phone: "Phone already registered"
+home:
+  not:
+    found: "Home not found"
+
+price:
+  not:
+    found: "Price not found"
+
+user:
+  not:
+    found: "User not found"
+  phone:
+    already:
+      registered: "Phone already registered"
+  email:
+    already:
+      registered: "Email already registered"

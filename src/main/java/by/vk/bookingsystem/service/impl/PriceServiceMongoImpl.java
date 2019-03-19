@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 @PropertySources(@PropertySource("classpath:i18n/validation_errors.yml"))
 public class PriceServiceMongoImpl implements PriceService {
 
-  private static final String PRICE_NOT_FOUND = "not.found.price";
+  private static final String PRICE_NOT_FOUND = "price.not.found";
 
   private final PriceMongoDao priceDao;
   private final PriceConverter priceConverter;

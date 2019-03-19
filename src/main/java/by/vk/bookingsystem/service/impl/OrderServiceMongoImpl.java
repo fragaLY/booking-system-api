@@ -1,5 +1,6 @@
 package by.vk.bookingsystem.service.impl;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -9,6 +10,7 @@ import by.vk.bookingsystem.domain.Order;
 import by.vk.bookingsystem.dto.order.OrderDto;
 import by.vk.bookingsystem.dto.order.OrderSetDto;
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
+import by.vk.bookingsystem.exception.order.IntercesctionDatesException;
 import by.vk.bookingsystem.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -17,7 +19,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class OrderServiceMongoImpl implements OrderService {
 
-  private static final String ORDER_NOT_FOUND = "not.found.order";
+  private static final String ORDER_NOT_FOUND = "order.not.found";
+  private static final String INTERSECTING_DATES = "order.dates.intersection";
 
   private final OrderMongoDao orderDao;
   private final OrderConverter orderConverter;
@@ -53,18 +56,37 @@ public class OrderServiceMongoImpl implements OrderService {
     return orderConverter.convertToDto(order);
   }
 
-  @Override
-  public String createOrder(OrderDto dto) {
-    return null;
+  @Override //todo vk: handle intersection of dates
+  public String createOrder(final OrderDto dto) {
+    final List<Order> intersecting =
+        orderDao.findOrdersByFromBetweenAndToBetween(dto.getFrom(), dto.getTo());
+
+    if (intersecting != null && !intersecting.isEmpty()) {
+      throw new IntercesctionDatesException(INTERSECTING_DATES);
+    }
+
+    return orderDao.save(orderConverter.convertToEntity(dto)).getId().toHexString();
   }
 
   @Override
-  public String updateOrder(OrderDto dto, String id) {
-    return null;
+  public String updateOrder(final OrderDto dto, final String id) {
+    final Order order = orderDao.findOrderById(id);
+
+    if (order == null) {
+      throw new ObjectNotFoundException(ORDER_NOT_FOUND);
+    }
+
+    return orderDao.save(orderConverter.enrichModel(order, dto)).getId().toHexString();
   }
 
   @Override
-  public boolean deleteOrderById(String id) {
-    return false;
+  public boolean deleteOrderById(final String id) {
+
+    if (orderDao.findOrderById(id) == null) {
+      throw new ObjectNotFoundException(ORDER_NOT_FOUND);
+    }
+
+    orderDao.deleteById(id);
+    return true;
   }
 }
