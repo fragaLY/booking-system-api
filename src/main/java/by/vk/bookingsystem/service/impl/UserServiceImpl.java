@@ -1,6 +1,5 @@
 package by.vk.bookingsystem.service.impl;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -8,6 +7,7 @@ import by.vk.bookingsystem.converter.UserConverter;
 import by.vk.bookingsystem.dao.UserDao;
 import by.vk.bookingsystem.domain.User;
 import by.vk.bookingsystem.dto.user.UserDto;
+import by.vk.bookingsystem.dto.user.UserSetDto;
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
 import by.vk.bookingsystem.exception.user.EmailAlreadyRegisteredException;
 import by.vk.bookingsystem.exception.user.PhoneAlreadyRegisteredException;
@@ -38,11 +38,12 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public List<UserDto> findAllUsers() {
-    return userDao.findAll().stream()
-        .filter(Objects::nonNull)
-        .map(userConverter::convertToDto)
-        .collect(Collectors.toList());
+  public UserSetDto findAllUsers() {
+    return new UserSetDto(
+        userDao.findAll().stream()
+            .filter(Objects::nonNull)
+            .map(userConverter::convertToDto)
+            .collect(Collectors.toSet()));
   }
 
   @Override

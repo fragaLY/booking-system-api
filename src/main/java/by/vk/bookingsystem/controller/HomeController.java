@@ -1,10 +1,9 @@
 package by.vk.bookingsystem.controller;
 
-import java.util.List;
-
 import javax.validation.constraints.NotBlank;
 
 import by.vk.bookingsystem.dto.home.HomeDto;
+import by.vk.bookingsystem.dto.home.HomeSetDto;
 import by.vk.bookingsystem.service.HomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -28,7 +27,7 @@ public class HomeController {
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
-  public ResponseEntity<List<HomeDto>> getHomes() {
+  public ResponseEntity<HomeSetDto> getHomes() {
     return ResponseEntity.ok(homeService.findAllHomes());
   }
 

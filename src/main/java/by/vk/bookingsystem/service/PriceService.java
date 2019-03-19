@@ -1,12 +1,11 @@
 package by.vk.bookingsystem.service;
 
-import java.util.List;
-
 import by.vk.bookingsystem.dto.price.PriceDto;
+import by.vk.bookingsystem.dto.price.PriceSetDto;
 
 public interface PriceService {
 
-  List<PriceDto> findAllPrices();
+  PriceSetDto findAllPrices();
 
   PriceDto findPriceById(String id);
 }

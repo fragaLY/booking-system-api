@@ -26,6 +26,10 @@ public class UserDto {
 
   private static final String LITERALS_ONLY_PATTERN = "[A-Za-z]+";
 
+  public static Builder newBuilder() {
+    return new UserDto().new Builder();
+  }
+
   private String id;
   private String firstName;
   private String lastName;
@@ -107,5 +111,79 @@ public class UserDto {
   @NotBlank(message = "The password could not be null")
   public String getPassword() {
     return password;
+  }
+
+  public class Builder {
+
+    private String id;
+    private String firstName;
+    private String lastName;
+    private String role;
+    private String email;
+    private String phone;
+    private String currencyCode;
+    private String country;
+    private String city;
+    private LocalDateTime registered;
+    private String password;
+
+    public Builder setId(final String id) {
+      this.id = id;
+      return this;
+    }
+
+    public Builder setFirstName(final String firstName) {
+      this.firstName = firstName;
+      return this;
+    }
+
+    public Builder setLastName(final String lastName) {
+      this.lastName = lastName;
+      return this;
+    }
+
+    public Builder setRole(final String role) {
+      this.role = role;
+      return this;
+    }
+
+    public Builder setEmail(final String email) {
+      this.email = email;
+      return this;
+    }
+
+    public Builder setPhone(final String phone) {
+      this.phone = phone;
+      return this;
+    }
+
+    public Builder setCurrencyCode(final String currencyCode) {
+      this.currencyCode = currencyCode;
+      return this;
+    }
+
+    public Builder setCountry(final String country) {
+      this.country = country;
+      return this;
+    }
+
+    public Builder setCity(final String city) {
+      this.city = city;
+      return this;
+    }
+
+    public Builder setRegistered(final LocalDateTime registered) {
+      this.registered = registered;
+      return this;
+    }
+
+    public Builder setPassword(final String password) {
+      this.password = password;
+      return this;
+    }
+
+    public UserDto build() {
+      return UserDto.this;
+    }
   }
 }

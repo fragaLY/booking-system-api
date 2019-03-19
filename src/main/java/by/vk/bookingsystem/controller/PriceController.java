@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.constraints.NotBlank;
 
 import by.vk.bookingsystem.dto.price.PriceDto;
+import by.vk.bookingsystem.dto.price.PriceSetDto;
 import by.vk.bookingsystem.service.PriceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -28,7 +29,7 @@ public class PriceController {
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
-  public ResponseEntity<List<PriceDto>> getPrices() {
+  public ResponseEntity<PriceSetDto> getPrices() {
     return ResponseEntity.ok(priceService.findAllPrices());
   }
 

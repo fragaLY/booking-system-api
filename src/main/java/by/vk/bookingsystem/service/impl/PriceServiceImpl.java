@@ -1,6 +1,5 @@
 package by.vk.bookingsystem.service.impl;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -8,6 +7,7 @@ import by.vk.bookingsystem.converter.PriceConverter;
 import by.vk.bookingsystem.dao.PriceDao;
 import by.vk.bookingsystem.domain.Price;
 import by.vk.bookingsystem.dto.price.PriceDto;
+import by.vk.bookingsystem.dto.price.PriceSetDto;
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
 import by.vk.bookingsystem.service.PriceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +33,12 @@ public class PriceServiceImpl implements PriceService {
   }
 
   @Override
-  public List<PriceDto> findAllPrices() {
-    return priceDao.findAll().stream()
-        .filter(Objects::nonNull)
-        .map(priceConverter::convertToDto)
-        .collect(Collectors.toList());
+  public PriceSetDto findAllPrices() {
+    return new PriceSetDto(
+        priceDao.findAll().stream()
+            .filter(Objects::nonNull)
+            .map(priceConverter::convertToDto)
+            .collect(Collectors.toSet()));
   }
 
   @Override

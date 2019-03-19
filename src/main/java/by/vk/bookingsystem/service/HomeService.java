@@ -1,12 +1,11 @@
 package by.vk.bookingsystem.service;
 
-import java.util.List;
-
 import by.vk.bookingsystem.dto.home.HomeDto;
+import by.vk.bookingsystem.dto.home.HomeSetDto;
 
 public interface HomeService {
 
-  List<HomeDto> findAllHomes();
+  HomeSetDto findAllHomes();
 
   HomeDto findHomeById(String id);
 }

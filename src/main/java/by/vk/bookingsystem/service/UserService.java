@@ -1,12 +1,11 @@
 package by.vk.bookingsystem.service;
 
-import java.util.List;
-
 import by.vk.bookingsystem.dto.user.UserDto;
+import by.vk.bookingsystem.dto.user.UserSetDto;
 
 public interface UserService {
 
-  List<UserDto> findAllUsers();
+  UserSetDto findAllUsers();
 
   UserDto findUserById(String id);
 

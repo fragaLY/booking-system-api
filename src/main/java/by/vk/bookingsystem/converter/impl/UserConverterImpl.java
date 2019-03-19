@@ -15,8 +15,20 @@ public class UserConverterImpl implements UserConverter {
   private static final String EUROPE_MINSK = "Europe/Minsk";
 
   @Override
-  public UserDto convertToDto(final User entity) {
-    return new UserDto(); //todo vk: add convertation
+  public UserDto convertToDto(final User user) {
+    return UserDto.newBuilder()
+        .setId(user.getId().toHexString())
+        .setFirstName(user.getFirstName())
+        .setLastName(user.getLastName())
+        .setRole(user.getRole().name())
+        .setEmail(user.getEmail())
+        .setPhone(user.getPhone())
+        .setCurrencyCode(user.getCurrencyCode())
+        .setCountry(user.getCountry())
+        .setCity(user.getCity())
+        .setRegistered(user.getRegistered())
+        .setPassword(user.getPassword())
+        .build();
   }
 
   @Override

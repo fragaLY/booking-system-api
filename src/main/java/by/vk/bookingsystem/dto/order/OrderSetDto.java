@@ -12,6 +12,4 @@ public class OrderSetDto {
 
   @JsonProperty("orders")
   private final Set<OrderDto> orders;
-
-  // todo vk: add links
 }

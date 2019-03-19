@@ -10,6 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import by.vk.bookingsystem.dto.user.UserDto;
+import by.vk.bookingsystem.dto.user.UserSetDto;
 import by.vk.bookingsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -45,7 +46,7 @@ public class UserController {
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
-  public ResponseEntity<List<UserDto>> getUsers() {
+  public ResponseEntity<UserSetDto> getUsers() {
     return ResponseEntity.ok(userService.findAllUsers());
   }
 
