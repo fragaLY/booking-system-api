@@ -6,35 +6,41 @@ import java.util.Set;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-import by.vk.bookingsystem.dto.home.HomeDto;
-import by.vk.bookingsystem.dto.user.UserDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
-import org.hibernate.validator.constraints.Range;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @JsonRootName("order")
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Builder
-@EqualsAndHashCode(
-    doNotUseGetters = true,
-    exclude = {"homes", "user"})
+@Setter
+@NoArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class OrderDto {
 
-  private final String id;
-  private final LocalDateTime from;
-  private final LocalDateTime to;
-  private final BigDecimal cost;
-  private final boolean confirmed;
-  private final Set<HomeDto> homes;
-  private final UserDto user;
+  private String id;
+  private LocalDateTime from;
+  private LocalDateTime to;
+  private BigDecimal
+      cost; // todo vk: the cost should be built by calculation total day, guests and homes booked
+  private boolean confirmed;
+
+  @JsonProperty(value = "home_ids")
+  private Set<String> homeIds; // todo vk: validate
+
+  @JsonProperty(value = "owner_id")
+  private String ownerId; // todo vk: validate
+
   private byte guests;
 
-  @NotBlank(message = "Price id cannot be blank")
   public String getId() {
     return id;
   }
@@ -64,18 +70,65 @@ public class OrderDto {
 
   @NotNull(message = "The order should has home(s)")
   @Valid
-  public Set<HomeDto> getHomes() {
-    return homes;
+  public Set<String> getHomeIds() {
+    return homeIds;
   }
 
   @NotNull(message = "The order should has owner")
-  @Valid
-  public UserDto getUser() {
-    return user;
+  public String getOwnerId() {
+    return ownerId;
   }
 
-  @Range(min = 4, max = 22, message = "The guests amount should be between 4 and 22")
+  @Min(value = 4, message = "The guests amount should be equals or greater than 4")
+  @Max(value = 22, message = "The guests amount should be equals or less than 22")
   public byte getGuests() {
     return guests;
+  }
+
+  public class Builder {
+
+    public Builder setId(final String id) {
+      OrderDto.this.id = id;
+      return this;
+    }
+
+    public Builder setFrom(final LocalDateTime from) {
+      OrderDto.this.from = from;
+      return this;
+    }
+
+    public Builder setTo(final LocalDateTime to) {
+      OrderDto.this.to = to;
+      return this;
+    }
+
+    public Builder setCost(final BigDecimal cost) {
+      OrderDto.this.cost = cost;
+      return this;
+    }
+
+    public Builder setConfirmed(final boolean confirmed) {
+      OrderDto.this.confirmed = confirmed;
+      return this;
+    }
+
+    public Builder setHomeIds(final Set<String> homeIds) {
+      OrderDto.this.homeIds = homeIds;
+      return this;
+    }
+
+    public Builder setOwnerId(final String ownerId) {
+      OrderDto.this.ownerId = ownerId;
+      return this;
+    }
+
+    public Builder setGuests(final byte guests) {
+      OrderDto.this.guests = guests;
+      return this;
+    }
+
+    public OrderDto build() {
+      return OrderDto.this;
+    }
   }
 }

@@ -17,7 +17,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 @Service
-@PropertySources(@PropertySource("classpath:i18n/validation_errors.yml"))
+@PropertySources(@PropertySource("classpath:i18n/validation_errors.properties"))
 public class PriceServiceMongoImpl implements PriceService {
 
   private static final String PRICE_NOT_FOUND = "price.not.found";

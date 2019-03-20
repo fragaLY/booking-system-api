@@ -1,6 +1,6 @@
 package by.vk.bookingsystem.dao;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import by.vk.bookingsystem.domain.Order;
@@ -17,5 +17,5 @@ public interface OrderMongoDao extends MongoRepository<Order, ObjectId> {
 
   void deleteById(String id);
 
-  List<Order> findOrdersByFromBetweenAndToBetween(LocalDateTime from, LocalDateTime to);
+  List<Order> findOrdersByFromBetweenAndToBetween(LocalDate from, LocalDate to);
 }

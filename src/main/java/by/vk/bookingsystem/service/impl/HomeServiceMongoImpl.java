@@ -11,13 +11,16 @@ import by.vk.bookingsystem.dto.home.HomeSetDto;
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
 import by.vk.bookingsystem.service.HomeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 @Service
+@PropertySources(@PropertySource("classpath:i18n/validation_errors.properties"))
 public class HomeServiceMongoImpl implements HomeService {
 
-  private static final String HOME_NOT_FOUND = "not.found.home";
+  private static final String HOME_NOT_FOUND = "home.not.found";
 
   private final HomeMongoDao homeDao;
   private final HomeConverter homeConverter;

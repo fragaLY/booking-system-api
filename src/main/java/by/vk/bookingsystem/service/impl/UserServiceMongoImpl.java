@@ -20,7 +20,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 @Service
-@PropertySources(@PropertySource("classpath:i18n/validation_errors.yml"))
+@PropertySources(@PropertySource("classpath:i18n/validation_errors.properties"))
 public class UserServiceMongoImpl implements UserService {
 
   private static final String USER_NOT_FOUND = "user.not.found";

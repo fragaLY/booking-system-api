@@ -1,6 +1,5 @@
 package by.vk.bookingsystem.service.impl;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -10,13 +9,15 @@ import by.vk.bookingsystem.domain.Order;
 import by.vk.bookingsystem.dto.order.OrderDto;
 import by.vk.bookingsystem.dto.order.OrderSetDto;
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
-import by.vk.bookingsystem.exception.order.IntercesctionDatesException;
 import by.vk.bookingsystem.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 @Service
+@PropertySources(@PropertySource("classpath:i18n/validation_errors.properties"))
 public class OrderServiceMongoImpl implements OrderService {
 
   private static final String ORDER_NOT_FOUND = "order.not.found";
@@ -56,15 +57,15 @@ public class OrderServiceMongoImpl implements OrderService {
     return orderConverter.convertToDto(order);
   }
 
-  @Override //todo vk: handle intersection of dates
+  @Override // todo vk: handle intersection of dates
   public String createOrder(final OrderDto dto) {
-    final List<Order> intersecting =
-        orderDao.findOrdersByFromBetweenAndToBetween(dto.getFrom(), dto.getTo());
-
-    if (intersecting != null && !intersecting.isEmpty()) {
-      throw new IntercesctionDatesException(INTERSECTING_DATES);
-    }
-
+    //    final List<Order> intersecting =
+    //        orderDao.findOrdersByFromBetweenAndToBetween(
+    //            dto.getFrom().toLocalDate(), dto.getTo().toLocalDate());
+    //
+    //      if (intersecting != null && !intersecting.isEmpty()) {
+    //          throw new IntersectionDatesException(INTERSECTING_DATES);
+    //      }
     return orderDao.save(orderConverter.convertToEntity(dto)).getId().toHexString();
   }
 
