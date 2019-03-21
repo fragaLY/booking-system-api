@@ -6,16 +6,18 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @JsonRootName("home")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 public class HomeDto {
 
   @NotBlank(message = "Home id cannot be blank")
-  private final String id;
+  private String id;
 
   @NotBlank(message = "Home name cannot be blank")
-  private final String name;
+  private String name;
 }

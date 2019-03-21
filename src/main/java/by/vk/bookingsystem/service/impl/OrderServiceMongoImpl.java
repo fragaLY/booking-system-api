@@ -9,7 +9,9 @@ import by.vk.bookingsystem.domain.Order;
 import by.vk.bookingsystem.dto.order.OrderDto;
 import by.vk.bookingsystem.dto.order.OrderSetDto;
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
+import by.vk.bookingsystem.service.CostCalculatorService;
 import by.vk.bookingsystem.service.OrderService;
+import by.vk.bookingsystem.validator.order.OrderValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
@@ -21,19 +23,25 @@ import org.springframework.stereotype.Service;
 public class OrderServiceMongoImpl implements OrderService {
 
   private static final String ORDER_NOT_FOUND = "order.not.found";
-  private static final String INTERSECTING_DATES = "order.dates.intersection";
 
   private final OrderMongoDao orderDao;
   private final OrderConverter orderConverter;
+    private final OrderValidator orderValidator;
+    private final CostCalculatorService costCalculator;
+
   private final Environment environment;
 
   @Autowired
   public OrderServiceMongoImpl(
-      final OrderMongoDao orderDao,
-      final OrderConverter orderConverter,
-      final Environment environment) {
+          final OrderMongoDao orderDao,
+          final OrderConverter orderConverter,
+          final OrderValidator orderValidator,
+          final CostCalculatorService costCalculator,
+          final Environment environment) {
     this.orderDao = orderDao;
     this.orderConverter = orderConverter;
+      this.orderValidator = orderValidator;
+      this.costCalculator = costCalculator;
     this.environment = environment;
   }
 
@@ -57,37 +65,38 @@ public class OrderServiceMongoImpl implements OrderService {
     return orderConverter.convertToDto(order);
   }
 
-  @Override // todo vk: handle intersection of dates
+    @Override
   public String createOrder(final OrderDto dto) {
-    //    final List<Order> intersecting =
-    //        orderDao.findOrdersByFromBetweenAndToBetween(
-    //            dto.getFrom().toLocalDate(), dto.getTo().toLocalDate());
-    //
-    //      if (intersecting != null && !intersecting.isEmpty()) {
-    //          throw new IntersectionDatesException(INTERSECTING_DATES);
-    //      }
+        orderValidator.validateOwner(dto.getOwner());
+        orderValidator.validateHomes(dto.getHomes());
+        orderValidator.validateOrderDates(dto);
+        dto.setCost(costCalculator.calculateCost(dto));
     return orderDao.save(orderConverter.convertToEntity(dto)).getId().toHexString();
   }
 
   @Override
-  public String updateOrder(final OrderDto dto, final String id) {
+  public void updateOrder(final OrderDto dto, final String id) {
+
     final Order order = orderDao.findOrderById(id);
 
     if (order == null) {
       throw new ObjectNotFoundException(ORDER_NOT_FOUND);
     }
 
-    return orderDao.save(orderConverter.enrichModel(order, dto)).getId().toHexString();
+      orderValidator.validateOwner(dto.getOwner());
+      orderValidator.validateHomes(dto.getHomes());
+      orderValidator.validateOrderDates(dto);
+      dto.setCost(costCalculator.calculateCost(dto));
+      orderDao.save(orderConverter.enrichModel(order, dto)).getId().toHexString();
   }
 
   @Override
-  public boolean deleteOrderById(final String id) {
+  public void deleteOrderById(final String id) {
 
     if (orderDao.findOrderById(id) == null) {
       throw new ObjectNotFoundException(ORDER_NOT_FOUND);
     }
 
     orderDao.deleteById(id);
-    return true;
   }
 }

@@ -10,17 +10,19 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Range;
 
 @JsonRootName("price")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @EqualsAndHashCode
 @AllArgsConstructor
+@NoArgsConstructor
 public class PriceDto {
 
-  private final String id;
-  private final BigDecimal price;
-  private final byte guests;
+    private String id;
+    private BigDecimal price;
+    private int guests;
 
   @NotBlank(message = "Price id cannot be blank")
   public String getId() {
@@ -37,7 +39,7 @@ public class PriceDto {
   }
 
   @Range(min = 4, max = 22, message = "The guests amount should be between 4 and 22")
-  public byte getGuests() {
+  public int getGuests() {
     return guests;
   }
 }

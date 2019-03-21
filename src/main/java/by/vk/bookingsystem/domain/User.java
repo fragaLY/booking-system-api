@@ -21,8 +21,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @EqualsAndHashCode(exclude = "id")
 public class User {
 
-  private static final int EXPIRE_IN_ONE_DAY = 86_400;
-
   @Id private ObjectId id;
 
   private String firstName;

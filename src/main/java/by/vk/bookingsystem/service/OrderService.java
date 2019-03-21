@@ -11,7 +11,7 @@ public interface OrderService {
 
   String createOrder(OrderDto dto);
 
-  String updateOrder(OrderDto dto, String id);
+    void updateOrder(OrderDto dto, String id);
 
-  boolean deleteOrderById(String id);
+    void deleteOrderById(String id);
 }

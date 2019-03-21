@@ -30,11 +30,14 @@ public class OrderDto {
   private String id;
   private LocalDateTime from;
   private LocalDateTime to;
-  private BigDecimal
-      cost; // todo vk: the cost should be built by calculation total day, guests and homes booked
+    private BigDecimal cost;
   private boolean confirmed;
-  private Set<HomeDto> homes; // todo vk: validate
-  private UserDto owner; // todo vk: validate
+
+    @Valid
+    private Set<HomeDto> homes;
+
+    @Valid
+    private UserDto owner;
   private int guests;
 
   public String getId() {

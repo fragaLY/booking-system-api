@@ -25,9 +25,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Order {
 
   @Id private ObjectId id;
-  @DBRef private User owner;
-  @DBRef private Set<Home> homes;
-  private LocalDateTime from;
+
+    @DBRef(lazy = true)
+    private User owner;
+
+    @DBRef(lazy = true)
+    private Set<Home> homes;
+
+    private LocalDateTime from;
   private LocalDateTime to;
   private BigDecimal cost;
   private boolean confirmed;
