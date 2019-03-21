@@ -6,35 +6,40 @@ import java.util.Set;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import by.vk.bookingsystem.dto.home.HomeDto;
 import by.vk.bookingsystem.dto.user.UserDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
-import org.hibernate.validator.constraints.Range;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @JsonRootName("order")
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Builder
-@EqualsAndHashCode(
-    doNotUseGetters = true,
-    exclude = {"homes", "user"})
+@Setter
+@NoArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class OrderDto {
 
-  private final String id;
-  private final LocalDateTime from;
-  private final LocalDateTime to;
-  private final BigDecimal cost;
-  private final boolean confirmed;
-  private final Set<HomeDto> homes;
-  private final UserDto user;
-  private byte guests;
+  private String id;
+  private LocalDateTime from;
+  private LocalDateTime to;
+    private BigDecimal cost;
+  private boolean confirmed;
 
-  @NotBlank(message = "Price id cannot be blank")
+    @Valid
+    private Set<HomeDto> homes;
+
+    @Valid
+    private UserDto owner;
+  private int guests;
+
   public String getId() {
     return id;
   }
@@ -70,12 +75,60 @@ public class OrderDto {
 
   @NotNull(message = "The order should has owner")
   @Valid
-  public UserDto getUser() {
-    return user;
+  public UserDto getOwner() {
+    return owner;
   }
 
-  @Range(min = 4, max = 22, message = "The guests amount should be between 4 and 22")
-  public byte getGuests() {
+  @Min(value = 4, message = "The guests amount should be equals or greater than 4")
+  @Max(value = 22, message = "The guests amount should be equals or less than 22")
+  public int getGuests() {
     return guests;
+  }
+
+  public class Builder {
+
+    public Builder setId(final String id) {
+      OrderDto.this.id = id;
+      return this;
+    }
+
+    public Builder setFrom(final LocalDateTime from) {
+      OrderDto.this.from = from;
+      return this;
+    }
+
+    public Builder setTo(final LocalDateTime to) {
+      OrderDto.this.to = to;
+      return this;
+    }
+
+    public Builder setCost(final BigDecimal cost) {
+      OrderDto.this.cost = cost;
+      return this;
+    }
+
+    public Builder setConfirmed(final boolean confirmed) {
+      OrderDto.this.confirmed = confirmed;
+      return this;
+    }
+
+    public Builder setHomes(final Set<HomeDto> homes) {
+      OrderDto.this.homes = homes;
+      return this;
+    }
+
+    public Builder setOwner(final UserDto owner) {
+      OrderDto.this.owner = owner;
+      return this;
+    }
+
+    public Builder setGuests(final int guests) {
+      OrderDto.this.guests = guests;
+      return this;
+    }
+
+    public OrderDto build() {
+      return OrderDto.this;
+    }
   }
 }

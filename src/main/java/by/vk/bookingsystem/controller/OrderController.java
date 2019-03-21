@@ -42,6 +42,13 @@ public class OrderController {
     return ResponseEntity.ok(orderService.findAllOrders());
   }
 
+  @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseBody
+  public ResponseEntity<OrderDto> getOrder(
+      @NotBlank(message = "The id cannot be blank") @PathVariable(value = "id") final String id) {
+    return ResponseEntity.ok(orderService.findOrderById(id));
+  }
+
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
   public ResponseEntity<Void> createOrder(

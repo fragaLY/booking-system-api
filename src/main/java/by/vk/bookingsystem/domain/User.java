@@ -10,7 +10,6 @@ import lombok.Setter;
 import lombok.ToString;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -22,23 +21,16 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @EqualsAndHashCode(exclude = "id")
 public class User {
 
-  private static final int EXPIRE_IN_ONE_DAY = 86_400;
-
   @Id private ObjectId id;
 
   private String firstName;
   private String lastName;
   private Role role;
-
-  @Indexed(unique = true)
   private String email;
-
-  @Indexed(unique = true, expireAfterSeconds = EXPIRE_IN_ONE_DAY)
   private String phone;
 
   @Field("currency")
   private String currencyCode;
-
   private String country;
   private String city;
   private LocalDateTime registered;

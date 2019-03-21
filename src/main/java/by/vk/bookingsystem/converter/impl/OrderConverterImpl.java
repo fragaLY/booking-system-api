@@ -8,7 +8,6 @@ import by.vk.bookingsystem.converter.OrderConverter;
 import by.vk.bookingsystem.converter.UserConverter;
 import by.vk.bookingsystem.domain.Order;
 import by.vk.bookingsystem.dto.order.OrderDto;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,15 +26,19 @@ public class OrderConverterImpl implements OrderConverter {
   @Override
   public OrderDto convertToDto(final Order entity) {
 
-    return OrderDto.builder()
-        .id(entity.getId().toHexString())
-        .from(entity.getFrom())
-        .to(entity.getTo())
-        .cost(entity.getCost())
-        .confirmed(entity.isConfirmed())
-        .homes(
-            entity.getHomes().stream().map(homeConverter::convertToDto).collect(Collectors.toSet()))
-        .user(userConverter.convertToDto(entity.getUser()))
+    return new OrderDto().new Builder()
+        .setId(entity.getId().toHexString())
+        .setFrom(entity.getFrom())
+        .setTo(entity.getTo())
+        .setCost(entity.getCost())
+        .setConfirmed(entity.isConfirmed())
+        .setHomes(
+            entity.getHomes().stream()
+                .filter(Objects::nonNull)
+                .map(homeConverter::convertToDto)
+                .collect(Collectors.toSet()))
+        .setOwner(userConverter.convertToDto(entity.getOwner()))
+        .setGuests(entity.getGuests())
         .build();
   }
 
@@ -43,14 +46,17 @@ public class OrderConverterImpl implements OrderConverter {
   public Order convertToEntity(final OrderDto dto) {
 
     return Order.builder()
-        .id(new ObjectId(dto.getId()))
         .from(dto.getFrom())
         .to(dto.getTo())
         .cost(dto.getCost())
         .confirmed(dto.isConfirmed())
         .homes(
-            dto.getHomes().stream().map(homeConverter::convertToEntity).collect(Collectors.toSet()))
-        .user(userConverter.convertToEntity(dto.getUser()))
+            dto.getHomes().stream()
+                .filter(Objects::nonNull)
+                .map(homeConverter::convertToEntity)
+                .collect(Collectors.toSet()))
+        .owner(userConverter.convertToEntity(dto.getOwner()))
+            .guests(dto.getGuests())
         .build();
   }
 

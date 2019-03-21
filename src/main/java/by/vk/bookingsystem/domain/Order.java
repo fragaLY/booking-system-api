@@ -12,24 +12,29 @@ import lombok.Setter;
 import lombok.ToString;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "order")
 @Getter
 @Setter
-@ToString(exclude = {"homes", "user"})
+@ToString
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(exclude = {"homes", "user"})
+@EqualsAndHashCode(exclude = {"owner", "homes"})
 public class Order {
 
-  @Id private final ObjectId id;
+  @Id private ObjectId id;
 
-  private User user;
-  private LocalDateTime from;
+    @DBRef(lazy = true)
+    private User owner;
+
+    @DBRef(lazy = true)
+    private Set<Home> homes;
+
+    private LocalDateTime from;
   private LocalDateTime to;
   private BigDecimal cost;
   private boolean confirmed;
-  private Set<Home> homes;
-  private byte guests;
+  private int guests;
 }

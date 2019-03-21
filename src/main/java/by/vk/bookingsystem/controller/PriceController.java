@@ -1,7 +1,5 @@
 package by.vk.bookingsystem.controller;
 
-import java.util.List;
-
 import javax.validation.constraints.NotBlank;
 
 import by.vk.bookingsystem.dto.price.PriceDto;
@@ -35,7 +33,8 @@ public class PriceController {
 
   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
-  public ResponseEntity<PriceDto> getPrice(@NotBlank(message = "The id cannot be blank") @PathVariable final String id) {
+  public ResponseEntity<PriceDto> getPrice(
+      @NotBlank(message = "The id cannot be blank") @PathVariable final String id) {
     return ResponseEntity.ok(priceService.findPriceById(id));
   }
 }

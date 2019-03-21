@@ -2,7 +2,6 @@ package by.vk.bookingsystem.controller;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -81,5 +80,4 @@ public class UserController {
     userService.deleteUserById(id);
     return ResponseEntity.noContent().build();
   }
-
 }

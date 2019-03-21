@@ -11,4 +11,6 @@ public interface PriceMongoDao extends MongoRepository<Price, ObjectId> {
   List<Price> findAll();
 
   Price findPriceById(String id);
+
+    Price findPriceByGuests(int guests);
 }
