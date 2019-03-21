@@ -1,12 +1,27 @@
 package by.vk.bookingsystem.converter.impl;
 
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import by.vk.bookingsystem.converter.HomeConverter;
 import by.vk.bookingsystem.converter.OrderConverter;
+import by.vk.bookingsystem.converter.UserConverter;
 import by.vk.bookingsystem.domain.Order;
 import by.vk.bookingsystem.dto.order.OrderDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class OrderConverterImpl implements OrderConverter {
+
+  private final HomeConverter homeConverter;
+  private final UserConverter userConverter;
+
+  @Autowired
+  public OrderConverterImpl(final HomeConverter homeConverter, final UserConverter userConverter) {
+    this.homeConverter = homeConverter;
+    this.userConverter = userConverter;
+  }
 
   @Override
   public OrderDto convertToDto(final Order entity) {
@@ -17,8 +32,13 @@ public class OrderConverterImpl implements OrderConverter {
         .setTo(entity.getTo())
         .setCost(entity.getCost())
         .setConfirmed(entity.isConfirmed())
-        .setHomeIds(entity.getHomes())
-        .setOwnerId(entity.getOwnerId())
+        .setHomes(
+            entity.getHomes().stream()
+                .filter(Objects::nonNull)
+                .map(homeConverter::convertToDto)
+                .collect(Collectors.toSet()))
+        .setOwner(userConverter.convertToDto(entity.getOwner()))
+        .setGuests(entity.getGuests())
         .build();
   }
 
@@ -30,8 +50,12 @@ public class OrderConverterImpl implements OrderConverter {
         .to(dto.getTo())
         .cost(dto.getCost())
         .confirmed(dto.isConfirmed())
-        .homes(dto.getHomeIds())
-        .ownerId(dto.getOwnerId())
+        .homes(
+            dto.getHomes().stream()
+                .filter(Objects::nonNull)
+                .map(homeConverter::convertToEntity)
+                .collect(Collectors.toSet()))
+        .owner(userConverter.convertToEntity(dto.getOwner()))
         .build();
   }
 
@@ -42,7 +66,11 @@ public class OrderConverterImpl implements OrderConverter {
     order.setFrom(dto.getFrom());
     order.setTo(dto.getTo());
     order.setGuests(dto.getGuests());
-    order.setHomes(dto.getHomeIds());
+    order.setHomes(
+        dto.getHomes().stream()
+            .filter(Objects::nonNull)
+            .map(homeConverter::convertToEntity)
+            .collect(Collectors.toSet()));
     return order;
   }
 }

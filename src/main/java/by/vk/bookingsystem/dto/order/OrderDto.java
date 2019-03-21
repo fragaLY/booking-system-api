@@ -10,8 +10,9 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import by.vk.bookingsystem.dto.home.HomeDto;
+import by.vk.bookingsystem.dto.user.UserDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -32,14 +33,9 @@ public class OrderDto {
   private BigDecimal
       cost; // todo vk: the cost should be built by calculation total day, guests and homes booked
   private boolean confirmed;
-
-  @JsonProperty(value = "home_ids")
-  private Set<String> homeIds; // todo vk: validate
-
-  @JsonProperty(value = "owner_id")
-  private String ownerId; // todo vk: validate
-
-  private byte guests;
+  private Set<HomeDto> homes; // todo vk: validate
+  private UserDto owner; // todo vk: validate
+  private int guests;
 
   public String getId() {
     return id;
@@ -70,18 +66,19 @@ public class OrderDto {
 
   @NotNull(message = "The order should has home(s)")
   @Valid
-  public Set<String> getHomeIds() {
-    return homeIds;
+  public Set<HomeDto> getHomes() {
+    return homes;
   }
 
   @NotNull(message = "The order should has owner")
-  public String getOwnerId() {
-    return ownerId;
+  @Valid
+  public UserDto getOwner() {
+    return owner;
   }
 
   @Min(value = 4, message = "The guests amount should be equals or greater than 4")
   @Max(value = 22, message = "The guests amount should be equals or less than 22")
-  public byte getGuests() {
+  public int getGuests() {
     return guests;
   }
 
@@ -112,17 +109,17 @@ public class OrderDto {
       return this;
     }
 
-    public Builder setHomeIds(final Set<String> homeIds) {
-      OrderDto.this.homeIds = homeIds;
+    public Builder setHomes(final Set<HomeDto> homes) {
+      OrderDto.this.homes = homes;
       return this;
     }
 
-    public Builder setOwnerId(final String ownerId) {
-      OrderDto.this.ownerId = ownerId;
+    public Builder setOwner(final UserDto owner) {
+      OrderDto.this.owner = owner;
       return this;
     }
 
-    public Builder setGuests(final byte guests) {
+    public Builder setGuests(final int guests) {
       OrderDto.this.guests = guests;
       return this;
     }
