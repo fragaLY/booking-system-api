@@ -15,6 +15,11 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+/**
+ * The entity of order.
+ *
+ * @author Vadzim_Kavalkou
+ */
 @Document(collection = "order")
 @Getter
 @Setter

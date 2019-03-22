@@ -3,6 +3,11 @@ package by.vk.bookingsystem.exception;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 
+/**
+ * The container for error details.
+ *
+ * @author Vadzim_Kavalkou
+ */
 @Data
 public class ErrorDetails {
 

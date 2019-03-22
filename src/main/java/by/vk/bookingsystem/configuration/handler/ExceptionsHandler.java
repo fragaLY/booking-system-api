@@ -22,52 +22,91 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+/**
+ * The handler of exception that appears during the application work
+ *
+ * @author Vadzim_Kavalkou
+ */
 @ControllerAdvice
 public class ExceptionsHandler extends ResponseEntityExceptionHandler {
 
   private final ErrorTransformer errorTransformer;
 
+  /**
+   * The constructor of class. Uses autowiring via it.
+   *
+   * @param errorTransformer - the transformer of errors
+   */
   @Autowired
   public ExceptionsHandler(final ErrorTransformer errorTransformer) {
     this.errorTransformer = errorTransformer;
   }
 
+  /**
+   * Handles the {@link IllegalArgumentException}
+   *
+   * @param exception - the exception
+   * @return {@link ResponseEntity}
+   */
   @ExceptionHandler(IllegalArgumentException.class)
-  public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException ex) {
+  public ResponseEntity<Object> handleIllegalArgumentException(
+      final IllegalArgumentException exception) {
 
     final ErrorDetails errorDetails =
-        new ErrorDetails(BAD_REQUEST, BAD_REQUEST.value(), ex.getMessage());
+        new ErrorDetails(BAD_REQUEST, BAD_REQUEST.value(), exception.getMessage());
 
     return ResponseEntity.status(BAD_REQUEST).body(errorDetails);
   }
 
+  /**
+   * Handles the {@link ObjectNotFoundException}
+   *
+   * @param exception - the exception
+   * @return {@link ResponseEntity}
+   */
   @ExceptionHandler({ObjectNotFoundException.class})
-  public ResponseEntity<Object> handleObjectNotFoundException(ObjectNotFoundException ex) {
+  public ResponseEntity<Object> handleObjectNotFoundException(
+      final ObjectNotFoundException exception) {
 
     final ErrorDetails errorDetails =
-        new ErrorDetails(NOT_FOUND, NOT_FOUND.value(), ex.getMessage());
+        new ErrorDetails(NOT_FOUND, NOT_FOUND.value(), exception.getMessage());
 
     return ResponseEntity.status(NOT_FOUND).body(errorDetails);
   }
 
+  /**
+   * Handles the {@link AccessDeniedException}
+   *
+   * @param exception - the exception
+   * @return {@link ResponseEntity}
+   */
   @ExceptionHandler(value = {AccessDeniedException.class})
-  public ResponseEntity<Object> handleUnauthorizedException(AccessDeniedException ex) {
+  public ResponseEntity<Object> handleUnauthorizedException(final AccessDeniedException exception) {
 
     final ErrorDetails errorDetails =
-        new ErrorDetails(FORBIDDEN, FORBIDDEN.value(), ex.getMessage());
+        new ErrorDetails(FORBIDDEN, FORBIDDEN.value(), exception.getMessage());
 
     return ResponseEntity.status(FORBIDDEN).body(errorDetails);
   }
 
+  /**
+   * Handle the {@link MethodArgumentNotValidException}
+   *
+   * @param exception - the exception
+   * @param headers - the headers
+   * @param status - the status
+   * @param request - the request
+   * @return {@link ResponseEntity}
+   */
   @Override
   protected ResponseEntity<Object> handleMethodArgumentNotValid(
-      MethodArgumentNotValidException ex,
-      HttpHeaders headers,
-      HttpStatus status,
-      WebRequest request) {
+      final MethodArgumentNotValidException exception,
+      final HttpHeaders headers,
+      final HttpStatus status,
+      final WebRequest request) {
 
     final String message =
-        ex.getBindingResult().getAllErrors().stream()
+        exception.getBindingResult().getAllErrors().stream()
             .map(errorTransformer)
             .collect(Collectors.joining());
 
@@ -76,39 +115,69 @@ public class ExceptionsHandler extends ResponseEntityExceptionHandler {
     return new ResponseEntity<>(errorDetails, headers, status);
   }
 
+  /**
+   * Handle the {@link HttpRequestMethodNotSupportedException}
+   *
+   * @param exception - the exception
+   * @param headers - the headers
+   * @param status - the status
+   * @param request - the request
+   * @return {@link ResponseEntity}
+   */
   @Override
   protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(
-      HttpRequestMethodNotSupportedException ex,
-      HttpHeaders headers,
-      HttpStatus status,
-      WebRequest request) {
+      final HttpRequestMethodNotSupportedException exception,
+      final HttpHeaders headers,
+      final HttpStatus status,
+      final WebRequest request) {
 
     final ErrorDetails errorDetails =
-        new ErrorDetails(status, status.value(), ex.getLocalizedMessage());
+        new ErrorDetails(status, status.value(), exception.getLocalizedMessage());
 
     return new ResponseEntity<>(errorDetails, headers, status);
   }
 
+  /**
+   * Handle {@link NoHandlerFoundException}
+   *
+   * @param exception - the exception
+   * @param headers - the headers
+   * @param status - the status
+   * @param request - the request
+   * @return {@link ResponseEntity}
+   */
   @Override
   protected ResponseEntity<Object> handleNoHandlerFoundException(
-      NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest req) {
+      final NoHandlerFoundException exception,
+      final HttpHeaders headers,
+      final HttpStatus status,
+      final WebRequest request) {
 
     final ErrorDetails errorDetails =
-        new ErrorDetails(status, status.value(), ex.getLocalizedMessage());
+        new ErrorDetails(status, status.value(), exception.getLocalizedMessage());
 
     return new ResponseEntity<>(errorDetails, headers, status);
   }
 
+  /**
+   * Handle {@link Exception}
+   *
+   * @param exception - the exception
+   * @param headers - the headers
+   * @param status - the status
+   * @param request - the request
+   * @return {@link ResponseEntity}
+   */
   @Override
   protected ResponseEntity<Object> handleExceptionInternal(
-      Exception ex,
-      @Nullable Object body,
-      HttpHeaders headers,
-      HttpStatus status,
-      WebRequest request) {
+      final Exception exception,
+      final @Nullable Object body,
+      final HttpHeaders headers,
+      final HttpStatus status,
+      final WebRequest request) {
 
     final ErrorDetails errorDetails =
-        new ErrorDetails(status, status.value(), ex.getLocalizedMessage());
+        new ErrorDetails(status, status.value(), exception.getLocalizedMessage());
 
     return new ResponseEntity<>(errorDetails, headers, status);
   }

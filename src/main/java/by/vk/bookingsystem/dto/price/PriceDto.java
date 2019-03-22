@@ -13,6 +13,11 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Range;
 
+/**
+ * The data transfer object of price.
+ *
+ * @author Vadzim_Kavalkou
+ */
 @JsonRootName("price")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @EqualsAndHashCode

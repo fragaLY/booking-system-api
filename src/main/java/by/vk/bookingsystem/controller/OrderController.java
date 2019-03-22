@@ -25,23 +25,44 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+/**
+ * The controller to work with orders
+ *
+ * @author Vadzim_Kavalkou
+ */
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
 
   private final OrderService orderService;
 
+  /**
+   * The constructor of class. Uses autowiring via it.
+   *
+   * @param orderService - the service with business logic to work with orders
+   */
   @Autowired
   public OrderController(final OrderService orderService) {
     this.orderService = orderService;
   }
 
+  /**
+   * Returns the set of all orders.
+   *
+   * @return {@link ResponseEntity}
+   */
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
   public ResponseEntity<OrderSetDto> getAllOrders() {
     return ResponseEntity.ok(orderService.findAllOrders());
   }
 
+  /**
+   * Returns the order by its id.
+   *
+   * @param id - the id of order
+   * @return {@link ResponseEntity}
+   */
   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
   public ResponseEntity<OrderDto> getOrder(
@@ -49,6 +70,12 @@ public class OrderController {
     return ResponseEntity.ok(orderService.findOrderById(id));
   }
 
+  /**
+   * Creates the order.
+   *
+   * @param dto - the order
+   * @return {@link ResponseEntity}
+   */
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
   public ResponseEntity<Void> createOrder(
@@ -63,6 +90,13 @@ public class OrderController {
     return ResponseEntity.created(uri).build();
   }
 
+  /**
+   * Updates the order with new information.
+   *
+   * @param dto - the order
+   * @param id - the id of order
+   * @return {@link ResponseEntity}
+   */
   @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
   public ResponseEntity<Void> updateOrder(
@@ -74,6 +108,12 @@ public class OrderController {
     return ResponseEntity.noContent().location(new URI(request.getRequestURI())).build();
   }
 
+  /**
+   * Deletes the order by its id.
+   *
+   * @param id - the id of order
+   * @return {@link ResponseEntity}
+   */
   @DeleteMapping(value = "/{id}")
   @ResponseBody
   public ResponseEntity<Void> deleteOrder(@NotBlank @PathVariable final String id) {

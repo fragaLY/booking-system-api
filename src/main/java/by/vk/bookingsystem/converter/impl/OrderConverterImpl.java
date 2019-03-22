@@ -11,22 +11,39 @@ import by.vk.bookingsystem.dto.order.OrderDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * The converter implementation for {@link Order} and {@link OrderDto}
+ *
+ * @author Vadzim_Kavalkou
+ */
 @Component
 public class OrderConverterImpl implements OrderConverter {
 
   private final HomeConverter homeConverter;
   private final UserConverter userConverter;
 
+  /**
+   * The constructor of class. Uses autowiring via it.
+   *
+   * @param homeConverter - the {@link HomeConverter} implementation
+   * @param userConverter - the {@link UserConverter} implementation
+   */
   @Autowired
   public OrderConverterImpl(final HomeConverter homeConverter, final UserConverter userConverter) {
     this.homeConverter = homeConverter;
     this.userConverter = userConverter;
   }
 
+  /**
+   * Converts the entity to dto.
+   *
+   * @param entity - {@link Order}
+   * @return {@link OrderDto}
+   */
   @Override
   public OrderDto convertToDto(final Order entity) {
 
-    return new OrderDto().new Builder()
+    return OrderDto.newBuilder()
         .setId(entity.getId().toHexString())
         .setFrom(entity.getFrom())
         .setTo(entity.getTo())
@@ -42,6 +59,12 @@ public class OrderConverterImpl implements OrderConverter {
         .build();
   }
 
+  /**
+   * Converts the dto to entity.
+   *
+   * @param dto - {@link OrderDto}
+   * @return {@link Order}
+   */
   @Override
   public Order convertToEntity(final OrderDto dto) {
 
@@ -60,6 +83,13 @@ public class OrderConverterImpl implements OrderConverter {
         .build();
   }
 
+  /**
+   * Enriches the entity with new information from data transfer object.
+   *
+   * @param order - {@link Order}
+   * @param dto - {@link OrderDto}
+   * @return {@link Order}
+   */
   @Override
   public Order enrichModel(final Order order, final OrderDto dto) {
     order.setConfirmed(dto.isConfirmed());

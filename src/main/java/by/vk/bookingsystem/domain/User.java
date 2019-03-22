@@ -13,6 +13,11 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+/**
+ * The entity of user.
+ *
+ * @author Vadzim_Kavalkou
+ */
 @Document(collection = "user")
 @Getter
 @Setter

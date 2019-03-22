@@ -9,7 +9,6 @@ import by.vk.bookingsystem.dao.HomeMongoDao;
 import by.vk.bookingsystem.dao.OrderMongoDao;
 import by.vk.bookingsystem.dao.UserMongoDao;
 import by.vk.bookingsystem.domain.Home;
-import by.vk.bookingsystem.domain.Order;
 import by.vk.bookingsystem.dto.home.HomeDto;
 import by.vk.bookingsystem.dto.order.OrderDto;
 import by.vk.bookingsystem.dto.user.UserDto;
@@ -72,11 +71,12 @@ public class OrderValidatorImpl implements OrderValidator {
 
   // todo vk: rework solution
   public void validateOrderDates(final OrderDto order) {
-    final List<Order> intersecting =
-        orderDao.findOrdersByFromBetweenAndToBetween(order.getFrom(), order.getTo());
-
-    if (intersecting != null && !intersecting.isEmpty()) {
-      throw new IllegalArgumentException(environment.getProperty(INTERSECTING_DATES));
-    }
+    //    final LocalDateTime from = order.getFrom().atTime(12, 0, 0, 1);
+    //    final LocalDateTime to = order.getTo().atTime(11, 59, 59, 999_999_999);
+    //    final List<Order> intersecting = orderDao.findOrdersByFromBetweenAndToBetween(from, to);
+    //
+    //    if (intersecting != null && !intersecting.isEmpty()) {
+    //      throw new IllegalArgumentException(environment.getProperty(INTERSECTING_DATES));
+    //    }
   }
 }

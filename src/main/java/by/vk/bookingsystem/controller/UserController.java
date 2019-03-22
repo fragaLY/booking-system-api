@@ -31,11 +31,22 @@ public class UserController {
 
   private final UserService userService;
 
+  /**
+   * The constructor of class. Uses autowiring via it.
+   *
+   * @param userService - the service with business logic to work with users
+   */
   @Autowired
   public UserController(final UserService userService) {
     this.userService = userService;
   }
 
+  /**
+   * Returns the user by its id.
+   *
+   * @param id - the id of user
+   * @return {@link ResponseEntity}
+   */
   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
   public ResponseEntity<UserDto> getUser(
@@ -43,12 +54,23 @@ public class UserController {
     return ResponseEntity.ok(userService.findUserById(id));
   }
 
+  /**
+   * Returns the set of all users
+   *
+   * @return {@link ResponseEntity}
+   */
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
   public ResponseEntity<UserSetDto> getUsers() {
     return ResponseEntity.ok(userService.findAllUsers());
   }
 
+  /**
+   * Creates the user.
+   *
+   * @param dto - the user
+   * @return {@link ResponseEntity}
+   */
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
   public ResponseEntity<Void> createUser(
@@ -63,6 +85,13 @@ public class UserController {
     return ResponseEntity.created(uri).build();
   }
 
+  /**
+   * Updates the user with new information.
+   *
+   * @param dto - the user
+   * @param id - the id of user
+   * @return {@link ResponseEntity}
+   */
   @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
   public ResponseEntity<Void> updateUser(
@@ -74,6 +103,12 @@ public class UserController {
     return ResponseEntity.noContent().location(new URI(request.getRequestURI())).build();
   }
 
+  /**
+   * Deletes user by id
+   *
+   * @param id - the id of user
+   * @return {@link ResponseEntity}
+   */
   @DeleteMapping(value = "/{id}")
   @ResponseBody
   public ResponseEntity<Void> deleteUser(@NotBlank @PathVariable final String id) {
