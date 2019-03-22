@@ -69,7 +69,7 @@ public class OrderServiceMongoImpl implements OrderService {
   public String createOrder(final OrderDto dto) {
     orderValidator.validateOwner(dto.getOwner());
     orderValidator.validateHomes(dto.getHomes());
-    orderValidator.validateOrderDates(dto);
+//    orderValidator.validateOrderDates(dto);
     dto.setCost(costCalculator.calculateCost(dto));
     return orderDao.save(orderConverter.convertToEntity(dto)).getId().toHexString();
   }
@@ -85,7 +85,7 @@ public class OrderServiceMongoImpl implements OrderService {
 
     orderValidator.validateOwner(dto.getOwner());
     orderValidator.validateHomes(dto.getHomes());
-    orderValidator.validateOrderDates(dto);
+//    orderValidator.validateOrderDates(dto);
     dto.setCost(costCalculator.calculateCost(dto));
     orderDao.save(orderConverter.enrichModel(order, dto)).getId().toHexString();
   }
