@@ -1,7 +1,7 @@
 package by.vk.bookingsystem.dto.order;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -28,16 +28,14 @@ import lombok.ToString;
 public class OrderDto {
 
   private String id;
-  private LocalDateTime from;
-  private LocalDateTime to;
-    private BigDecimal cost;
+  private LocalDate from;
+  private LocalDate to;
+  private BigDecimal cost;
   private boolean confirmed;
 
-    @Valid
-    private Set<HomeDto> homes;
+  @Valid private Set<HomeDto> homes;
 
-    @Valid
-    private UserDto owner;
+  @Valid private UserDto owner;
   private int guests;
 
   public String getId() {
@@ -45,12 +43,12 @@ public class OrderDto {
   }
 
   @NotNull(message = "The start date of order cannot be null")
-  public LocalDateTime getFrom() {
+  public LocalDate getFrom() {
     return from;
   }
 
   @NotNull(message = "The end date of order cannot be null")
-  public LocalDateTime getTo() {
+  public LocalDate getTo() {
     return to;
   }
 
@@ -92,12 +90,12 @@ public class OrderDto {
       return this;
     }
 
-    public Builder setFrom(final LocalDateTime from) {
+    public Builder setFrom(final LocalDate from) {
       OrderDto.this.from = from;
       return this;
     }
 
-    public Builder setTo(final LocalDateTime to) {
+    public Builder setTo(final LocalDate to) {
       OrderDto.this.to = to;
       return this;
     }

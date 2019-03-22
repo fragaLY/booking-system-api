@@ -32,7 +32,7 @@ public class User {
   @Field("currency")
   private String currencyCode;
 
-    private String country;
+  private String country;
   private String city;
   private LocalDateTime registered;
   private String password;

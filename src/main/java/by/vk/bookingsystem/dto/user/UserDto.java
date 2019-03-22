@@ -34,10 +34,10 @@ public class UserDto {
   private String email;
   private String phone;
 
-    @JsonProperty("currency")
+  @JsonProperty("currency")
   private String currencyCode;
 
-    private String country;
+  private String country;
   private String city;
   private LocalDateTime registered;
   private String password;

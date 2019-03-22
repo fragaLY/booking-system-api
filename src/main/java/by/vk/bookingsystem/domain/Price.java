@@ -19,5 +19,5 @@ public class Price {
 
   @Id private final ObjectId id;
   private final BigDecimal price;
-    private final int guests;
+  private final int guests;
 }

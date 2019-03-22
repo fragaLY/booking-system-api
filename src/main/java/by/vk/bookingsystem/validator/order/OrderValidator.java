@@ -8,9 +8,9 @@ import by.vk.bookingsystem.dto.user.UserDto;
 
 public interface OrderValidator {
 
-    void validateOwner(UserDto owner);
+  void validateOwner(UserDto owner);
 
-    void validateHomes(Set<HomeDto> homes);
+  void validateHomes(Set<HomeDto> homes);
 
-    void validateOrderDates(OrderDto order);
+  void validateOrderDates(OrderDto order);
 }

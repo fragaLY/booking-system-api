@@ -6,5 +6,5 @@ import by.vk.bookingsystem.dto.order.OrderDto;
 
 public interface CostCalculatorService {
 
-    BigDecimal calculateCost(OrderDto dto);
+  BigDecimal calculateCost(OrderDto dto);
 }

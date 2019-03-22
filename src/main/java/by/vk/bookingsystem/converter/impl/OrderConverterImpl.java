@@ -56,7 +56,7 @@ public class OrderConverterImpl implements OrderConverter {
                 .map(homeConverter::convertToEntity)
                 .collect(Collectors.toSet()))
         .owner(userConverter.convertToEntity(dto.getOwner()))
-            .guests(dto.getGuests())
+        .guests(dto.getGuests())
         .build();
   }
 

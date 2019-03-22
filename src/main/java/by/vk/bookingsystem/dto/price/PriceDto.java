@@ -20,9 +20,9 @@ import org.hibernate.validator.constraints.Range;
 @NoArgsConstructor
 public class PriceDto {
 
-    private String id;
-    private BigDecimal price;
-    private int guests;
+  private String id;
+  private BigDecimal price;
+  private int guests;
 
   @NotBlank(message = "Price id cannot be blank")
   public String getId() {

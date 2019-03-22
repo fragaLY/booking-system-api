@@ -26,22 +26,22 @@ public class OrderServiceMongoImpl implements OrderService {
 
   private final OrderMongoDao orderDao;
   private final OrderConverter orderConverter;
-    private final OrderValidator orderValidator;
-    private final CostCalculatorService costCalculator;
+  private final OrderValidator orderValidator;
+  private final CostCalculatorService costCalculator;
 
   private final Environment environment;
 
   @Autowired
   public OrderServiceMongoImpl(
-          final OrderMongoDao orderDao,
-          final OrderConverter orderConverter,
-          final OrderValidator orderValidator,
-          final CostCalculatorService costCalculator,
-          final Environment environment) {
+      final OrderMongoDao orderDao,
+      final OrderConverter orderConverter,
+      final OrderValidator orderValidator,
+      final CostCalculatorService costCalculator,
+      final Environment environment) {
     this.orderDao = orderDao;
     this.orderConverter = orderConverter;
-      this.orderValidator = orderValidator;
-      this.costCalculator = costCalculator;
+    this.orderValidator = orderValidator;
+    this.costCalculator = costCalculator;
     this.environment = environment;
   }
 
@@ -65,12 +65,12 @@ public class OrderServiceMongoImpl implements OrderService {
     return orderConverter.convertToDto(order);
   }
 
-    @Override
+  @Override
   public String createOrder(final OrderDto dto) {
-        orderValidator.validateOwner(dto.getOwner());
-        orderValidator.validateHomes(dto.getHomes());
-        orderValidator.validateOrderDates(dto);
-        dto.setCost(costCalculator.calculateCost(dto));
+    orderValidator.validateOwner(dto.getOwner());
+    orderValidator.validateHomes(dto.getHomes());
+    orderValidator.validateOrderDates(dto);
+    dto.setCost(costCalculator.calculateCost(dto));
     return orderDao.save(orderConverter.convertToEntity(dto)).getId().toHexString();
   }
 
@@ -83,11 +83,11 @@ public class OrderServiceMongoImpl implements OrderService {
       throw new ObjectNotFoundException(ORDER_NOT_FOUND);
     }
 
-      orderValidator.validateOwner(dto.getOwner());
-      orderValidator.validateHomes(dto.getHomes());
-      orderValidator.validateOrderDates(dto);
-      dto.setCost(costCalculator.calculateCost(dto));
-      orderDao.save(orderConverter.enrichModel(order, dto)).getId().toHexString();
+    orderValidator.validateOwner(dto.getOwner());
+    orderValidator.validateHomes(dto.getHomes());
+    orderValidator.validateOrderDates(dto);
+    dto.setCost(costCalculator.calculateCost(dto));
+    orderDao.save(orderConverter.enrichModel(order, dto)).getId().toHexString();
   }
 
   @Override
