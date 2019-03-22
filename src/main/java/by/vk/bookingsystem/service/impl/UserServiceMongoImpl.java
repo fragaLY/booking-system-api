@@ -65,11 +65,11 @@ public class UserServiceMongoImpl implements UserService {
     final User userWithSamePhone = userDao.findUserByPhone(dto.getPhone());
 
     if (userWithSameEmail != null) {
-        throw new IllegalArgumentException(environment.getProperty(EMAIL_ALREADY_REGISTERED));
+      throw new IllegalArgumentException(environment.getProperty(EMAIL_ALREADY_REGISTERED));
     }
 
     if (userWithSamePhone != null) {
-        throw new IllegalArgumentException(environment.getProperty(PHONE_ALREADY_REGISTERED));
+      throw new IllegalArgumentException(environment.getProperty(PHONE_ALREADY_REGISTERED));
     }
 
     return userDao.save(userConverter.convertToEntity(dto)).getId().toHexString();
@@ -83,7 +83,7 @@ public class UserServiceMongoImpl implements UserService {
       throw new ObjectNotFoundException(environment.getProperty(USER_NOT_FOUND));
     }
 
-      userDao.save(userConverter.enrichModel(user, dto)).getId().toHexString();
+    userDao.save(userConverter.enrichModel(user, dto)).getId().toHexString();
   }
 
   @Override

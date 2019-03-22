@@ -10,11 +10,22 @@ import by.vk.bookingsystem.dto.user.UserDto;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
 
+/**
+ * The converter implementation for {@link User} and {@link UserDto}
+ *
+ * @author Vadzim_Kavalkou
+ */
 @Component
 public class UserConverterImpl implements UserConverter {
 
   private static final String EUROPE_MINSK = "Europe/Minsk";
 
+  /**
+   * Converts the entity to data transfer object
+   *
+   * @param user - {@link User}
+   * @return {@link UserDto}
+   */
   @Override
   public UserDto convertToDto(final User user) {
     return UserDto.newBuilder()
@@ -32,6 +43,12 @@ public class UserConverterImpl implements UserConverter {
         .build();
   }
 
+  /**
+   * Converts the data transfer object to entity
+   *
+   * @param dto - {@link UserDto}
+   * @return {@link User}
+   */
   @Override
   public User convertToEntity(final UserDto dto) {
     return User.builder()
@@ -49,16 +66,23 @@ public class UserConverterImpl implements UserConverter {
         .build();
   }
 
+  /**
+   * Enriches the entity with new information from data transfer object
+   *
+   * @param entity - {@link User}
+   * @param dto - {@link UserDto}
+   * @return {@link User}
+   */
   @Override
-  public User enrichModel(final User user, final UserDto dto) {
-    user.setFirstName(dto.getFirstName());
-    user.setLastName(dto.getLastName());
-    user.setEmail(dto.getEmail());
-    user.setPhone(dto.getPhone());
-    user.setCurrencyCode(dto.getCurrencyCode());
-    user.setCountry(dto.getCountry());
-    user.setCity(dto.getCity());
-    user.setPassword(dto.getPassword());
-    return user;
+  public User enrichModel(final User entity, final UserDto dto) {
+    entity.setFirstName(dto.getFirstName());
+    entity.setLastName(dto.getLastName());
+    entity.setEmail(dto.getEmail());
+    entity.setPhone(dto.getPhone());
+    entity.setCurrencyCode(dto.getCurrencyCode());
+    entity.setCountry(dto.getCountry());
+    entity.setCity(dto.getCity());
+    entity.setPassword(dto.getPassword());
+    return entity;
   }
 }

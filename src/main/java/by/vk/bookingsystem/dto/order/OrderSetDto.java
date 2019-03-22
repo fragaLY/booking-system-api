@@ -8,6 +8,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * The set of data transfer object of orders.
+ *
+ * @author Vadzim_Kavalkou
+ */
 @RequiredArgsConstructor
 @Getter
 public class OrderSetDto {

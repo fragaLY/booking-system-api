@@ -8,6 +8,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * The data transfer object of home.
+ *
+ * @author Vadzim_Kavalkou
+ */
 @JsonRootName("home")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @AllArgsConstructor

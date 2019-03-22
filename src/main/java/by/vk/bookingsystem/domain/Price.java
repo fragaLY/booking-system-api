@@ -10,6 +10,11 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+/**
+ * The entity of price.
+ *
+ * @author Vadzim_Kavalkou
+ */
 @Document(collection = "price")
 @Getter
 @ToString
@@ -19,5 +24,5 @@ public class Price {
 
   @Id private final ObjectId id;
   private final BigDecimal price;
-    private final int guests;
+  private final int guests;
 }

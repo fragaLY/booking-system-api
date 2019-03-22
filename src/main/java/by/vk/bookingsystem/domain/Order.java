@@ -1,7 +1,7 @@
 package by.vk.bookingsystem.domain;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Set;
 
 import lombok.AllArgsConstructor;
@@ -15,6 +15,11 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+/**
+ * The entity of order.
+ *
+ * @author Vadzim_Kavalkou
+ */
 @Document(collection = "order")
 @Getter
 @Setter
@@ -26,14 +31,14 @@ public class Order {
 
   @Id private ObjectId id;
 
-    @DBRef(lazy = true)
-    private User owner;
+  @DBRef(lazy = true)
+  private User owner;
 
-    @DBRef(lazy = true)
-    private Set<Home> homes;
+  @DBRef(lazy = true)
+  private Set<Home> homes;
 
-    private LocalDateTime from;
-  private LocalDateTime to;
+  private LocalDate from;
+  private LocalDate to;
   private BigDecimal cost;
   private boolean confirmed;
   private int guests;
