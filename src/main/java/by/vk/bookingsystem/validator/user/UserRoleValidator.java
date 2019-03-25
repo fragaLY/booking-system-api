@@ -18,7 +18,9 @@ public class UserRoleValidator implements ConstraintValidator<UserRole, String> 
    * @param role - {@link Role}
    */
   @Override
-  public void initialize(UserRole role) {}
+  public void initialize(UserRole role) {
+    throw new UnsupportedOperationException();
+  }
 
   /**
    * Checks if the role is correct and is in the system.

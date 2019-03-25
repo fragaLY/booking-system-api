@@ -104,13 +104,13 @@ public class OrderValidatorImpl implements OrderValidator {
     }
   }
 
-  @Override
   /**
    * Validates the order dates. In case of intersection dates with already existing orders throws
    * {@link IllegalArgumentException}
    *
    * @param order - {@link OrderDto}
    */
+  @Override
   public void validateOrderDates(final OrderDto order) {
 
     final LocalDate from = order.getFrom();

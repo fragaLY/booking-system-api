@@ -67,7 +67,7 @@ public class CostCalculatorServiceImpl implements CostCalculatorService {
       throw new IllegalArgumentException(environment.getProperty(WRONG_ORDER_DURATION));
     }
 
-    final BigDecimal cost = price.getPrice().multiply(BigDecimal.valueOf(days));
+    final BigDecimal cost = price.getPricePerPersons().multiply(BigDecimal.valueOf(days));
     LOGGER.debug(COST_ORDER, order, cost);
 
     return cost;

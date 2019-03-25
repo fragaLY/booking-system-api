@@ -9,6 +9,7 @@ import lombok.ToString;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 /**
  * The entity of price.
@@ -23,6 +24,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Price {
 
   @Id private final ObjectId id;
-  private final BigDecimal price;
+
+  @Field("price")
+  private final BigDecimal pricePerPersons;
+
   private final int guests;
 }
