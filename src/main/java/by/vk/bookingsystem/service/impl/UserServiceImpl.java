@@ -11,6 +11,8 @@ import by.vk.bookingsystem.dto.user.UserSetDto;
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
 import by.vk.bookingsystem.service.UserService;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
@@ -25,6 +27,8 @@ import org.springframework.stereotype.Service;
 @Service
 @PropertySources(@PropertySource("classpath:i18n/validation_errors.properties"))
 public class UserServiceImpl implements UserService {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
   private static final String USER_NOT_FOUND = "user.not.found";
   private static final String EMAIL_ALREADY_REGISTERED = "user.email.already.registered";
@@ -74,6 +78,7 @@ public class UserServiceImpl implements UserService {
     final User user = userDao.findUserById(id);
 
     if (user == null) {
+      LOGGER.error("User with id {0} was not found.", id);
       throw new ObjectNotFoundException(environment.getProperty(USER_NOT_FOUND));
     }
 
@@ -83,23 +88,26 @@ public class UserServiceImpl implements UserService {
   /**
    * Creates the user and returns its id
    *
-   * @param dto - {@link UserDto}
+   * @param user - {@link UserDto}
    * @return {@link String}
    */
   @Override
-  public String createUser(final UserDto dto) {
-    final User userWithSameEmail = userDao.findUserByEmail(dto.getEmail());
-    final User userWithSamePhone = userDao.findUserByPhone(dto.getPhone());
+  public String createUser(final UserDto user) {
+    final User userWithSameEmail = userDao.findUserByEmail(user.getEmail());
 
     if (userWithSameEmail != null) {
+      LOGGER.error("The user {0} uses already existed email by user {1}", user, userWithSameEmail);
       throw new IllegalArgumentException(environment.getProperty(EMAIL_ALREADY_REGISTERED));
     }
 
+    final User userWithSamePhone = userDao.findUserByPhone(user.getPhone());
+
     if (userWithSamePhone != null) {
+      LOGGER.error("The user {0} uses already existed phone by user {1}", user, userWithSamePhone);
       throw new IllegalArgumentException(environment.getProperty(PHONE_ALREADY_REGISTERED));
     }
 
-    return userDao.save(userConverter.convertToEntity(dto)).getId().toHexString();
+    return userDao.save(userConverter.convertToEntity(user)).getId().toHexString();
   }
 
   /**
@@ -113,6 +121,7 @@ public class UserServiceImpl implements UserService {
     final User user = userDao.findUserById(id);
 
     if (user == null) {
+      LOGGER.error("User with id {0} was not found.", id);
       throw new ObjectNotFoundException(environment.getProperty(USER_NOT_FOUND));
     }
 
@@ -127,6 +136,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public void deleteUserById(final String id) {
     if (userDao.findUserById(id) == null) {
+      LOGGER.error("User with id {0} was not found.", id);
       throw new ObjectNotFoundException(environment.getProperty(USER_NOT_FOUND));
     }
     userDao.deleteById(new ObjectId(id));

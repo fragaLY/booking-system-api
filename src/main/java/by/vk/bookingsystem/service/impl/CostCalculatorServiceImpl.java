@@ -8,6 +8,8 @@ import by.vk.bookingsystem.dao.PriceDao;
 import by.vk.bookingsystem.domain.Price;
 import by.vk.bookingsystem.dto.order.OrderDto;
 import by.vk.bookingsystem.service.CostCalculatorService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
@@ -22,6 +24,8 @@ import org.springframework.stereotype.Service;
 @Service
 @PropertySources(@PropertySource("classpath:i18n/validation_errors.properties"))
 public class CostCalculatorServiceImpl implements CostCalculatorService {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(CostCalculatorServiceImpl.class);
 
   private static final String WRONG_ORDER_DURATION = "order.duration.wrong";
 
@@ -43,22 +47,26 @@ public class CostCalculatorServiceImpl implements CostCalculatorService {
   /**
    * Calculates the cost of order by input values (dates and guests amount).
    *
-   * @param dto - {@link OrderDto}
+   * @param order - {@link OrderDto}
    * @return {@link BigDecimal}
    */
   @Override
-  public BigDecimal calculateCost(final OrderDto dto) {
+  public BigDecimal calculateCost(final OrderDto order) {
     final LocalTime localTime = LocalTime.of(12, 0, 0, 0);
-    final Price price = priceDao.findPriceByGuests(dto.getGuests());
+    final Price price = priceDao.findPriceByGuests(order.getGuests());
     final Duration duration =
-        Duration.between(dto.getFrom().atTime(localTime), dto.getTo().atTime(localTime));
+        Duration.between(order.getFrom().atTime(localTime), order.getTo().atTime(localTime));
 
     final long days = duration.toDays();
 
     if (days == 0) {
+      LOGGER.error("The order {0} has 0 days of duration.", order);
       throw new IllegalArgumentException(environment.getProperty(WRONG_ORDER_DURATION));
     }
 
-    return price.getPrice().multiply(BigDecimal.valueOf(days));
+    final BigDecimal cost = price.getPrice().multiply(BigDecimal.valueOf(days));
+    LOGGER.debug("The cost for order {0} is {1}.", order, cost);
+
+    return cost;
   }
 }

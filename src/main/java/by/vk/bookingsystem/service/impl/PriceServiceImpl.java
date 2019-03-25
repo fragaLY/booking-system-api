@@ -10,6 +10,8 @@ import by.vk.bookingsystem.dto.price.PriceDto;
 import by.vk.bookingsystem.dto.price.PriceSetDto;
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
 import by.vk.bookingsystem.service.PriceService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
@@ -24,6 +26,8 @@ import org.springframework.stereotype.Service;
 @Service
 @PropertySources(@PropertySource("classpath:i18n/validation_errors.properties"))
 public class PriceServiceImpl implements PriceService {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(PriceServiceImpl.class);
 
   private static final String PRICE_NOT_FOUND = "price.not.found";
 
@@ -71,6 +75,7 @@ public class PriceServiceImpl implements PriceService {
     final Price price = priceDao.findPriceById(id);
 
     if (price == null) {
+      LOGGER.error("The price with id {0} was not found.", id);
       throw new ObjectNotFoundException(environment.getProperty(PRICE_NOT_FOUND));
     }
 
