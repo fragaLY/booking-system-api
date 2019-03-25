@@ -1,17 +1,17 @@
 package by.vk.bookingsystem.dao;
 
 import java.util.List;
+import java.util.Set;
 
 import by.vk.bookingsystem.domain.Home;
 import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
  * The data access object layer for {@link Home}
  *
  * @author Vadzim_Kavalkou
  */
-public interface HomeMongoDao extends MongoRepository<Home, ObjectId> {
+public interface HomeDao {
 
   /**
    * Finds all homes that are in the system and returns it
@@ -27,4 +27,12 @@ public interface HomeMongoDao extends MongoRepository<Home, ObjectId> {
    * @return {@link Home}
    */
   Home findHomeById(String id);
+
+  /**
+   * Finds all homes by ids
+   *
+   * @param ids - the set of {@link ObjectId}
+   * @return the list of {@link Home}
+   */
+  List<Home> findAllById(Set<ObjectId> ids);
 }
