@@ -15,6 +15,8 @@ import by.vk.bookingsystem.dto.user.UserDto;
 import by.vk.bookingsystem.validator.order.OrderValidator;
 import com.google.common.collect.Lists;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
@@ -29,6 +31,8 @@ import org.springframework.stereotype.Component;
 @Component
 @PropertySources(@PropertySource("classpath:i18n/validation_errors.properties"))
 public class OrderValidatorImpl implements OrderValidator {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(OrderValidatorImpl.class);
 
   private static final String OWNER_NOT_FOUND = "owner.not.found";
   private static final String HOMES_NOT_FOUND = "homes.not.found";
@@ -64,6 +68,7 @@ public class OrderValidatorImpl implements OrderValidator {
    */
   public void validateOwner(final UserDto owner) {
     if (userDao.findUserById(owner.getId()) == null) {
+      LOGGER.error("The user {0} was not found", owner);
       throw new IllegalArgumentException(environment.getProperty(OWNER_NOT_FOUND));
     }
   }
@@ -85,6 +90,7 @@ public class OrderValidatorImpl implements OrderValidator {
                     .collect(Collectors.toSet())));
 
     if (validHomes.isEmpty()) {
+      LOGGER.error("The homes {0} were not found", homes);
       throw new IllegalArgumentException(environment.getProperty(HOMES_NOT_FOUND));
     }
   }
@@ -104,6 +110,8 @@ public class OrderValidatorImpl implements OrderValidator {
     //    final List<Order> intersecting = orderDao.findOrdersByFromBetweenAndToBetween(from, to);
     //
     //    if (intersecting != null && !intersecting.isEmpty()) {
+    //      LOGGER.error("The dates for order {0} intersect with {1}", order, intersecting);
+
     //      throw new IllegalArgumentException(environment.getProperty(INTERSECTING_DATES));
     //    }
   }

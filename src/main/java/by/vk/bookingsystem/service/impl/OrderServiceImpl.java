@@ -12,6 +12,8 @@ import by.vk.bookingsystem.exception.ObjectNotFoundException;
 import by.vk.bookingsystem.service.CostCalculatorService;
 import by.vk.bookingsystem.service.OrderService;
 import by.vk.bookingsystem.validator.order.OrderValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
@@ -26,6 +28,8 @@ import org.springframework.stereotype.Service;
 @Service
 @PropertySources(@PropertySource("classpath:i18n/validation_errors.properties"))
 public class OrderServiceImpl implements OrderService {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(OrderServiceImpl.class);
 
   private static final String ORDER_NOT_FOUND = "order.not.found";
 
@@ -83,6 +87,7 @@ public class OrderServiceImpl implements OrderService {
     final Order order = orderDao.findOrderById(id);
 
     if (order == null) {
+      LOGGER.error("The order with id {0} was not found.", id);
       throw new ObjectNotFoundException(environment.getProperty(ORDER_NOT_FOUND));
     }
 
@@ -92,16 +97,20 @@ public class OrderServiceImpl implements OrderService {
   /**
    * Creates the order and returns its id
    *
-   * @param dto - {@link OrderDto}
+   * @param order - {@link OrderDto}
    * @return {@link String}
    */
   @Override
-  public String createOrder(final OrderDto dto) {
-    orderValidator.validateOwner(dto.getOwner());
-    orderValidator.validateHomes(dto.getHomes());
-    orderValidator.validateOrderDates(dto);
-    dto.setCost(costCalculator.calculateCost(dto));
-    return orderDao.save(orderConverter.convertToEntity(dto)).getId().toHexString();
+  public String createOrder(final OrderDto order) {
+    LOGGER.debug("The validation of order {0} starts.", order);
+    orderValidator.validateOwner(order.getOwner());
+    LOGGER.debug("The owner of order {0} is valid.", order);
+    orderValidator.validateHomes(order.getHomes());
+    LOGGER.debug("The homes of order {0} are valid.", order);
+    orderValidator.validateOrderDates(order);
+    LOGGER.debug("The dates of order {0} are valid.", order);
+    order.setCost(costCalculator.calculateCost(order));
+    return orderDao.save(orderConverter.convertToEntity(order)).getId().toHexString();
   }
 
   /**
@@ -116,12 +125,16 @@ public class OrderServiceImpl implements OrderService {
     final Order order = orderDao.findOrderById(id);
 
     if (order == null) {
+      LOGGER.error("The order with id {0} was not found.", id);
       throw new ObjectNotFoundException(ORDER_NOT_FOUND);
     }
-
+    LOGGER.debug("The validation of order {0} starts.", order);
     orderValidator.validateOwner(dto.getOwner());
+    LOGGER.debug("The owner of order {0} is valid.", order);
     orderValidator.validateHomes(dto.getHomes());
+    LOGGER.debug("The homes of order {0} are valid.", order);
     orderValidator.validateOrderDates(dto);
+    LOGGER.debug("The dates of order {0} are valid.", order);
     dto.setCost(costCalculator.calculateCost(dto));
     orderDao.save(orderConverter.enrichModel(order, dto)).getId().toHexString();
   }
@@ -135,6 +148,7 @@ public class OrderServiceImpl implements OrderService {
   public void deleteOrderById(final String id) {
 
     if (orderDao.findOrderById(id) == null) {
+      LOGGER.error("The order with id {0} was not found.", id);
       throw new ObjectNotFoundException(ORDER_NOT_FOUND);
     }
 
