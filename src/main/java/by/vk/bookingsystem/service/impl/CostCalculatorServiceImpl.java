@@ -29,6 +29,9 @@ public class CostCalculatorServiceImpl implements CostCalculatorService {
 
   private static final String WRONG_ORDER_DURATION = "order.duration.wrong";
 
+  private static final String COST_ORDER = "The cost for order {0} is {1}.";
+  private static final String WRONG_ORDER_DURATION_LOG = "The order {0} has 0 days of duration.";
+
   private final PriceDao priceDao;
   private final Environment environment;
 
@@ -60,12 +63,12 @@ public class CostCalculatorServiceImpl implements CostCalculatorService {
     final long days = duration.toDays();
 
     if (days == 0) {
-      LOGGER.error("The order {0} has 0 days of duration.", order);
+      LOGGER.error(WRONG_ORDER_DURATION_LOG, order);
       throw new IllegalArgumentException(environment.getProperty(WRONG_ORDER_DURATION));
     }
 
     final BigDecimal cost = price.getPrice().multiply(BigDecimal.valueOf(days));
-    LOGGER.debug("The cost for order {0} is {1}.", order, cost);
+    LOGGER.debug(COST_ORDER, order, cost);
 
     return cost;
   }

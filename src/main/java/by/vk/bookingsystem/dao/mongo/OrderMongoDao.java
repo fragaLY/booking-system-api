@@ -46,11 +46,21 @@ public interface OrderMongoDao extends MongoRepository<Order, ObjectId>, OrderDa
   void deleteById(String id);
 
   /**
-   * Finds all the orders that intersects with new one.
+   * Finds all the orders that intersects with new one order.
    *
    * @param from - {@link LocalDate} of the starting booking time
    * @param to - {@link LocalDate} of the ending booking time
    * @return the list of {@link Order}
    */
-  List<Order> findBy(LocalDate from, LocalDate to);
+  List<Order> findOrdersByFromIsBetweenOrToIsBetween(LocalDate from, LocalDate to);
+
+  List<Order> findOrdersByToIsBetween(LocalDate from, LocalDate to);
+
+  /**
+   * Checks if order exists.
+   *
+   * @param id - the id of {@link Order}
+   * @return true if order exists, false if
+   */
+  boolean existsById(String id);
 }

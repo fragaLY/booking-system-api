@@ -49,5 +49,14 @@ public interface OrderDao {
    * @param to - {@link LocalDate} of the ending booking time
    * @return the list of {@link Order}
    */
-  List<Order> findBy(LocalDate from, LocalDate to);
+  // todo get all intersection orders
+  List<Order> findOrdersByFromBetweenOrToBetween(LocalDate from, LocalDate to);
+
+  /**
+   * Checks if order exists.
+   *
+   * @param id - the id of {@link Order}
+   * @return true if order exists, false if
+   */
+  boolean existsById(String id);
 }

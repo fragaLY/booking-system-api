@@ -35,4 +35,12 @@ public interface HomeDao {
    * @return the list of {@link Home}
    */
   List<Home> findAllById(Set<ObjectId> ids);
+
+  /**
+   * Checks if home exists.
+   *
+   * @param id - the id of {@link Home}
+   * @return true if home exists, false if
+   */
+  boolean existsById(String id);
 }

@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 
 import by.vk.bookingsystem.converter.HomeConverter;
 import by.vk.bookingsystem.dao.HomeDao;
-import by.vk.bookingsystem.domain.Home;
 import by.vk.bookingsystem.dto.home.HomeDto;
 import by.vk.bookingsystem.dto.home.HomeSetDto;
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
@@ -30,6 +29,8 @@ public class HomeServiceImpl implements HomeService {
   private static final Logger LOGGER = LoggerFactory.getLogger(HomeServiceImpl.class);
 
   private static final String HOME_NOT_FOUND = "home.not.found";
+
+  private static final String HOME_NOT_FOUND_LOG = "The home with id {0} was not found.";
 
   private final HomeDao homeDao;
   private final HomeConverter homeConverter;
@@ -67,18 +68,19 @@ public class HomeServiceImpl implements HomeService {
   /**
    * Finds the home by id.
    *
+   * <p>If entity with current id is not in the system throws the {@link ObjectNotFoundException}
+   *
    * @param id - the id of home.
    * @return {@link HomeDto}
    */
   @Override
   public HomeDto findHomeById(final String id) {
-    final Home home = homeDao.findHomeById(id);
 
-    if (home == null) {
-      LOGGER.error("The home with id {0} was not found.", id);
+    if (!homeDao.existsById(id)) {
+      LOGGER.error(HOME_NOT_FOUND_LOG, id);
       throw new ObjectNotFoundException(environment.getProperty(HOME_NOT_FOUND));
     }
 
-    return homeConverter.convertToDto(home);
+    return homeConverter.convertToDto(homeDao.findHomeById(id));
   }
 }
