@@ -1,7 +1,8 @@
-package by.vk.bookingsystem.dao;
+package by.vk.bookingsystem.dao.mongo;
 
 import java.util.List;
 
+import by.vk.bookingsystem.dao.PriceDao;
 import by.vk.bookingsystem.domain.Price;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -11,7 +12,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  *
  * @author Vadzim_Kavalkou
  */
-public interface PriceMongoDao extends MongoRepository<Price, ObjectId> {
+public interface PriceMongoDao extends MongoRepository<Price, ObjectId>, PriceDao {
 
   /**
    * Finds all prices that are in the system and returns it

@@ -4,15 +4,13 @@ import java.time.LocalDate;
 import java.util.List;
 
 import by.vk.bookingsystem.domain.Order;
-import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
  * The data access object layer for {@link Order}
  *
  * @author Vadzim_Kavalkou
  */
-public interface OrderMongoDao extends MongoRepository<Order, ObjectId> {
+public interface OrderDao {
 
   /**
    * Finds all orders that are in the system and returns it

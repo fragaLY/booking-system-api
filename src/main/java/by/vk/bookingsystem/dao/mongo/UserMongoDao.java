@@ -1,4 +1,4 @@
-package by.vk.bookingsystem.dao;
+package by.vk.bookingsystem.dao.mongo;
 
 import java.util.List;
 
@@ -11,7 +11,8 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  *
  * @author Vadzim_Kavalkou
  */
-public interface UserMongoDao extends MongoRepository<User, ObjectId> {
+public interface UserMongoDao
+    extends MongoRepository<User, ObjectId>, by.vk.bookingsystem.dao.UserDao {
 
   /**
    * Finds all users that are in the system

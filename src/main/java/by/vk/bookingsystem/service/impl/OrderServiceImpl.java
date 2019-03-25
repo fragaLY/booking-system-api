@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import by.vk.bookingsystem.converter.OrderConverter;
-import by.vk.bookingsystem.dao.OrderMongoDao;
+import by.vk.bookingsystem.dao.OrderDao;
 import by.vk.bookingsystem.domain.Order;
 import by.vk.bookingsystem.dto.order.OrderDto;
 import by.vk.bookingsystem.dto.order.OrderSetDto;
@@ -18,22 +18,35 @@ import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+/**
+ * The service implementation for {@link OrderDto}
+ *
+ * @author Vadzim_Kavalkou
+ */
 @Service
 @PropertySources(@PropertySource("classpath:i18n/validation_errors.properties"))
-public class OrderServiceMongoImpl implements OrderService {
+public class OrderServiceImpl implements OrderService {
 
   private static final String ORDER_NOT_FOUND = "order.not.found";
 
-  private final OrderMongoDao orderDao;
+  private final OrderDao orderDao;
   private final OrderConverter orderConverter;
   private final OrderValidator orderValidator;
   private final CostCalculatorService costCalculator;
-
   private final Environment environment;
 
+  /**
+   * The constructor with parameters.
+   *
+   * @param orderDao - {@link OrderDao}
+   * @param orderConverter - {@link OrderConverter}
+   * @param orderValidator - {@link OrderValidator}
+   * @param costCalculator - {@link CostCalculatorService}
+   * @param environment - {@link Environment}
+   */
   @Autowired
-  public OrderServiceMongoImpl(
-      final OrderMongoDao orderDao,
+  public OrderServiceImpl(
+      final OrderDao orderDao,
       final OrderConverter orderConverter,
       final OrderValidator orderValidator,
       final CostCalculatorService costCalculator,
@@ -45,6 +58,11 @@ public class OrderServiceMongoImpl implements OrderService {
     this.environment = environment;
   }
 
+  /**
+   * Finds all orders in the system and returns them.
+   *
+   * @return {@link OrderSetDto}
+   */
   @Override
   public OrderSetDto findAllOrders() {
     return new OrderSetDto(
@@ -54,6 +72,12 @@ public class OrderServiceMongoImpl implements OrderService {
             .collect(Collectors.toSet()));
   }
 
+  /**
+   * Finds the order by its id.
+   *
+   * @param id - the id of order
+   * @return {@link OrderDto}
+   */
   @Override
   public OrderDto findOrderById(final String id) {
     final Order order = orderDao.findOrderById(id);
@@ -65,6 +89,12 @@ public class OrderServiceMongoImpl implements OrderService {
     return orderConverter.convertToDto(order);
   }
 
+  /**
+   * Creates the order and returns its id
+   *
+   * @param dto - {@link OrderDto}
+   * @return {@link String}
+   */
   @Override
   public String createOrder(final OrderDto dto) {
     orderValidator.validateOwner(dto.getOwner());
@@ -74,6 +104,12 @@ public class OrderServiceMongoImpl implements OrderService {
     return orderDao.save(orderConverter.convertToEntity(dto)).getId().toHexString();
   }
 
+  /**
+   * Enriches the order with new information from data transfer object and updates it.
+   *
+   * @param dto - {@link OrderDto}
+   * @param id - the id of order.
+   */
   @Override
   public void updateOrder(final OrderDto dto, final String id) {
 
@@ -90,6 +126,11 @@ public class OrderServiceMongoImpl implements OrderService {
     orderDao.save(orderConverter.enrichModel(order, dto)).getId().toHexString();
   }
 
+  /**
+   * Deletes order by its id.
+   *
+   * @param id - the id of order
+   */
   @Override
   public void deleteOrderById(final String id) {
 

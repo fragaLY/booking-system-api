@@ -9,6 +9,11 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
+/**
+ * The annotation for user's role validation
+ *
+ * @author Vadzim_Kavalkou
+ */
 @Documented
 @Constraint(validatedBy = UserRoleValidator.class)
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
