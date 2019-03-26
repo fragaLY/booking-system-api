@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 public class CostCalculatorServiceImpl implements CostCalculatorService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CostCalculatorServiceImpl.class);
+  private static final LocalTime LOCAL_TIME_MIDDAY = LocalTime.of(12, 0, 0, 0);
 
   private static final String WRONG_ORDER_DURATION = "order.duration.wrong";
 
@@ -55,10 +56,10 @@ public class CostCalculatorServiceImpl implements CostCalculatorService {
    */
   @Override
   public BigDecimal calculateCost(final OrderDto order) {
-    final LocalTime localTime = LocalTime.of(12, 0, 0, 0);
     final Price price = priceDao.findPriceByGuests(order.getGuests());
     final Duration duration =
-        Duration.between(order.getFrom().atTime(localTime), order.getTo().atTime(localTime));
+        Duration.between(
+            order.getFrom().atTime(LOCAL_TIME_MIDDAY), order.getTo().atTime(LOCAL_TIME_MIDDAY));
 
     final long days = duration.toDays();
 

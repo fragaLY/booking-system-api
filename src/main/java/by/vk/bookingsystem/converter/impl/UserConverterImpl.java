@@ -1,8 +1,5 @@
 package by.vk.bookingsystem.converter.impl;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-
 import by.vk.bookingsystem.converter.UserConverter;
 import by.vk.bookingsystem.domain.User;
 import by.vk.bookingsystem.domain.role.Role;
@@ -61,7 +58,7 @@ public class UserConverterImpl implements UserConverter {
         .currencyCode(dto.getCurrencyCode())
         .country(dto.getCountry())
         .city(dto.getCity())
-        .registered(LocalDateTime.now(ZoneId.of(EUROPE_MINSK)))
+        .registered(dto.getRegistered())
         .password(dto.getPassword())
         .build();
   }

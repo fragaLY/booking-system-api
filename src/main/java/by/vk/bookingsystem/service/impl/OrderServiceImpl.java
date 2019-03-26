@@ -133,7 +133,7 @@ public class OrderServiceImpl implements OrderService {
     orderValidator.validateHomes(dto.getHomes());
     orderValidator.validateOrderDates(dto);
     dto.setCost(costCalculator.calculateCost(dto));
-    orderDao.save(orderConverter.enrichModel(order, dto)).getId().toHexString();
+    orderDao.save(orderConverter.enrichModel(order, dto));
   }
 
   /**

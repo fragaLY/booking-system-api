@@ -5,6 +5,7 @@ import java.util.Set;
 import javax.validation.Valid;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor
 @Getter
+@EqualsAndHashCode
 public class UserSetDto {
 
   @JsonProperty("users")

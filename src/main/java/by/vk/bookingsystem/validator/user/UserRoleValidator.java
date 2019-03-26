@@ -19,7 +19,7 @@ public class UserRoleValidator implements ConstraintValidator<UserRole, String> 
    */
   @Override
   public void initialize(UserRole role) {
-    throw new UnsupportedOperationException();
+    // do nothing
   }
 
   /**
@@ -31,6 +31,6 @@ public class UserRoleValidator implements ConstraintValidator<UserRole, String> 
    */
   @Override
   public boolean isValid(String value, ConstraintValidatorContext context) {
-    return value == null || Role.getRole(value) != null;
+    return value != null && Role.getRole(value) != null;
   }
 }

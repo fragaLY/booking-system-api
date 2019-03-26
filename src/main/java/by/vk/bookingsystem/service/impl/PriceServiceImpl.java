@@ -66,7 +66,7 @@ public class PriceServiceImpl implements PriceService {
   }
 
   /**
-   * Finds the price by its id. *
+   * Finds the price by its id.
    *
    * <p>If entity with current id is not in the system throws the {@link ObjectNotFoundException}
    *

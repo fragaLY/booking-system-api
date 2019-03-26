@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import by.vk.bookingsystem.converter.UserConverter;
 import by.vk.bookingsystem.dao.UserDao;
+import by.vk.bookingsystem.domain.User;
 import by.vk.bookingsystem.dto.user.UserDto;
 import by.vk.bookingsystem.dto.user.UserSetDto;
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
@@ -77,7 +78,7 @@ public class UserServiceImpl implements UserService {
    *
    * <p>If entity with current id is not in the system throws the {@link ObjectNotFoundException}
    *
-   * @param id - the id of price
+   * @param id - the id of price. Not null.
    * @return {@link UserDto}
    */
   @Override
@@ -127,22 +128,31 @@ public class UserServiceImpl implements UserService {
    */
   @Override
   public void updateUser(final UserDto user, final String id) {
+
     if (!userDao.existsById(id)) {
       LOGGER.error(USER_NOT_FOUND_LOG, id);
       throw new ObjectNotFoundException(environment.getProperty(USER_NOT_FOUND));
     }
 
-    if (userDao.existsByEmail(user.getEmail())) {
+    final User userToUpdate = userDao.findUserById(id);
+
+    final String newEmail = user.getEmail();
+    final String oldEmail = userToUpdate.getEmail();
+
+    if (!oldEmail.equalsIgnoreCase(newEmail) && userDao.existsByEmail(newEmail)) {
       LOGGER.error(EMAIL_ALREADY_REGISTERED_LOG, user);
       throw new IllegalArgumentException(environment.getProperty(EMAIL_ALREADY_REGISTERED));
     }
 
-    if (userDao.existsByPhone(user.getPhone())) {
+    final String newPhone = user.getPhone();
+    final String oldPhone = userToUpdate.getPhone();
+
+    if (!oldPhone.equalsIgnoreCase(newPhone) && userDao.existsByPhone(newPhone)) {
       LOGGER.error(PHONE_ALREADY_REGISTERED_LOG, user);
       throw new IllegalArgumentException(environment.getProperty(PHONE_ALREADY_REGISTERED));
     }
 
-    userDao.save(userConverter.enrichModel(userDao.findUserById(id), user)).getId().toHexString();
+    userDao.save(userConverter.enrichModel(userToUpdate, user));
   }
 
   /**

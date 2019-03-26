@@ -6,16 +6,16 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.validation.constraints.NotNull;
+
 import by.vk.bookingsystem.dao.HomeDao;
 import by.vk.bookingsystem.dao.OrderDao;
 import by.vk.bookingsystem.dao.UserDao;
 import by.vk.bookingsystem.domain.Home;
-import by.vk.bookingsystem.domain.Order;
 import by.vk.bookingsystem.dto.home.HomeDto;
 import by.vk.bookingsystem.dto.order.OrderDto;
 import by.vk.bookingsystem.dto.user.UserDto;
 import by.vk.bookingsystem.validator.order.OrderValidator;
-import com.google.common.collect.Lists;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +45,8 @@ public class OrderValidatorImpl implements OrderValidator {
   private static final String HOMES_NOT_FOUND_LOG = "The homes {0} were not found";
   private static final String INVALID_ORDER_DATES_LOG =
       "The from date should be before to date for order{0}.";
-  private static final String INTERSECTING_DATES_LOG = "The dates for order {0} intersect with {1}";
+  private static final String INTERSECTING_DATES_LOG =
+      "The dates for order {0} intersect with already existing";
 
   private final OrderDao orderDao;
   private final UserDao userDao;
@@ -53,6 +54,8 @@ public class OrderValidatorImpl implements OrderValidator {
   private final Environment environment;
 
   /**
+   * The constructor with parameters
+   *
    * @param userDao - {@link UserDao}
    * @param homeDao - {@link HomeDao}
    * @param orderDao - {@link OrderDao}
@@ -73,7 +76,7 @@ public class OrderValidatorImpl implements OrderValidator {
   /**
    * Validates the owner of order. In case of missing owner throws {@link IllegalArgumentException}
    *
-   * @param owner - {@link UserDto}
+   * @param owner - {@link UserDto}. Not null value.
    */
   public void validateOwner(final UserDto owner) {
     if (userDao.findUserById(owner.getId()) == null) {
@@ -86,19 +89,18 @@ public class OrderValidatorImpl implements OrderValidator {
    * Validates the homes that are in order. In case of missing home(s) throws {@link
    * IllegalArgumentException}
    *
-   * @param homes - the set of {@link HomeDto}
+   * @param homes - the set of {@link HomeDto}. Not null value.
    */
   public void validateHomes(final Set<HomeDto> homes) {
     final List<Home> validHomes =
-        Lists.newArrayList(
-            homeDao.findAllById(
-                homes.stream()
-                    .filter(Objects::nonNull)
-                    .map(HomeDto::getId)
-                    .map(ObjectId::new)
-                    .collect(Collectors.toSet())));
+        homeDao.findAllById(
+            homes.stream()
+                .filter(Objects::nonNull)
+                .map(HomeDto::getId)
+                .map(ObjectId::new)
+                .collect(Collectors.toSet()));
 
-    if (validHomes.isEmpty()) {
+    if (validHomes == null || validHomes.isEmpty()) {
       LOGGER.error(HOMES_NOT_FOUND_LOG, homes);
       throw new IllegalArgumentException(environment.getProperty(HOMES_NOT_FOUND));
     }
@@ -108,23 +110,21 @@ public class OrderValidatorImpl implements OrderValidator {
    * Validates the order dates. In case of intersection dates with already existing orders throws
    * {@link IllegalArgumentException}
    *
-   * @param order - {@link OrderDto}
+   * @param order - {@link OrderDto}. Not null value.
    */
   @Override
-  public void validateOrderDates(final OrderDto order) {
+  public void validateOrderDates(@NotNull final OrderDto order) {
 
     final LocalDate from = order.getFrom();
     final LocalDate to = order.getTo();
 
-    if (from.getDayOfMonth() <= to.getDayOfMonth()) {
+    if (from.isAfter(to)) {
       LOGGER.error(INVALID_ORDER_DATES_LOG, order);
       throw new IllegalArgumentException(environment.getProperty(INVALID_ORDER_DATES));
     }
 
-    final List<Order> intersecting = orderDao.findOrdersByFromBetweenOrToBetween(from, to);
-
-    if (intersecting != null && !intersecting.isEmpty()) {
-      LOGGER.error(INTERSECTING_DATES_LOG, order, intersecting);
+    if (orderDao.existsByFromAndTo(from, to)) {
+      LOGGER.error(INTERSECTING_DATES_LOG, order);
       throw new IllegalArgumentException(environment.getProperty(INTERSECTING_DATES));
     }
   }
