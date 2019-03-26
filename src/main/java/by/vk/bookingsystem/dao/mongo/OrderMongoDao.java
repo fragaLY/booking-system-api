@@ -7,6 +7,7 @@ import by.vk.bookingsystem.dao.OrderDao;
 import by.vk.bookingsystem.domain.Order;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 
 /**
  * The data access object layer for {@link Order}
@@ -48,9 +49,19 @@ public interface OrderMongoDao extends MongoRepository<Order, ObjectId>, OrderDa
   /**
    * Finds all the orders that intersects with new one.
    *
-   * @param from - {@link LocalDate} of the starting booking time
-   * @param to - {@link LocalDate} of the ending booking time
+   * @param from - {@link LocalDate}
+   * @param to - {@link LocalDate}
    * @return the list of {@link Order}
    */
-  List<Order> findBy(LocalDate from, LocalDate to);
+  @Query(
+      "{ $or: [{'from' : {$range:[?0, ?1]}}, {'to':{$range:[?0, ?1]}}, {$and:[{'from': {$lte: ?0}},{'to': {$gte: ?1}}]}] }")
+  boolean existsByFromAndTo(LocalDate from, LocalDate to);
+
+  /**
+   * Checks if order exists.
+   *
+   * @param id - the id of {@link Order}
+   * @return true if order exists, false if
+   */
+  boolean existsById(String id);
 }

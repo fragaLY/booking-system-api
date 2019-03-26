@@ -28,4 +28,12 @@ public interface HomeMongoDao extends MongoRepository<Home, ObjectId>, HomeDao {
    * @return {@link Home}
    */
   Home findHomeById(String id);
+
+  /**
+   * Checks if home exists.
+   *
+   * @param id - the id of {@link Home}
+   * @return true if home exists, false if
+   */
+  boolean existsById(String id);
 }

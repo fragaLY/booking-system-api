@@ -45,9 +45,17 @@ public interface OrderDao {
   /**
    * Finds all the orders that intersects with new one.
    *
-   * @param from - {@link LocalDate} of the starting booking time
-   * @param to - {@link LocalDate} of the ending booking time
+   * @param from - {@link LocalDate}
+   * @param to - {@link LocalDate}
    * @return the list of {@link Order}
    */
-  List<Order> findBy(LocalDate from, LocalDate to);
+  boolean existsByFromAndTo(LocalDate from, LocalDate to);
+
+  /**
+   * Checks if order exists.
+   *
+   * @param id - the id of {@link Order}
+   * @return true if order exists, false if
+   */
+  boolean existsById(String id);
 }

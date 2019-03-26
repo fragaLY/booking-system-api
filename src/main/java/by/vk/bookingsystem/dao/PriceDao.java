@@ -33,4 +33,12 @@ public interface PriceDao {
    * @return {@link Price}
    */
   Price findPriceByGuests(int guests);
+
+  /**
+   * Checks if price exists.
+   *
+   * @param id - the id of {@link Price}
+   * @return true if price exists, false if
+   */
+  boolean existsById(String id);
 }

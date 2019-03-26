@@ -26,8 +26,12 @@ import org.springframework.stereotype.Service;
 public class CostCalculatorServiceImpl implements CostCalculatorService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CostCalculatorServiceImpl.class);
+  private static final LocalTime LOCAL_TIME_MIDDAY = LocalTime.of(12, 0, 0, 0);
 
   private static final String WRONG_ORDER_DURATION = "order.duration.wrong";
+
+  private static final String COST_ORDER = "The cost for order {0} is {1}.";
+  private static final String WRONG_ORDER_DURATION_LOG = "The order {0} has 0 days of duration.";
 
   private final PriceDao priceDao;
   private final Environment environment;
@@ -52,20 +56,20 @@ public class CostCalculatorServiceImpl implements CostCalculatorService {
    */
   @Override
   public BigDecimal calculateCost(final OrderDto order) {
-    final LocalTime localTime = LocalTime.of(12, 0, 0, 0);
     final Price price = priceDao.findPriceByGuests(order.getGuests());
     final Duration duration =
-        Duration.between(order.getFrom().atTime(localTime), order.getTo().atTime(localTime));
+        Duration.between(
+            order.getFrom().atTime(LOCAL_TIME_MIDDAY), order.getTo().atTime(LOCAL_TIME_MIDDAY));
 
     final long days = duration.toDays();
 
     if (days == 0) {
-      LOGGER.error("The order {0} has 0 days of duration.", order);
+      LOGGER.error(WRONG_ORDER_DURATION_LOG, order);
       throw new IllegalArgumentException(environment.getProperty(WRONG_ORDER_DURATION));
     }
 
-    final BigDecimal cost = price.getPrice().multiply(BigDecimal.valueOf(days));
-    LOGGER.debug("The cost for order {0} is {1}.", order, cost);
+    final BigDecimal cost = price.getPricePerPersons().multiply(BigDecimal.valueOf(days));
+    LOGGER.debug(COST_ORDER, order, cost);
 
     return cost;
   }

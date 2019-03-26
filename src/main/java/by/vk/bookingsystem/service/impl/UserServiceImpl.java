@@ -34,6 +34,12 @@ public class UserServiceImpl implements UserService {
   private static final String EMAIL_ALREADY_REGISTERED = "user.email.already.registered";
   private static final String PHONE_ALREADY_REGISTERED = "user.phone.already.registered";
 
+  private static final String USER_NOT_FOUND_LOG = "User with id {0} was not found.";
+  private static final String EMAIL_ALREADY_REGISTERED_LOG =
+      "The user {0} uses already existed email";
+  private static final String PHONE_ALREADY_REGISTERED_LOG =
+      "The user {0} uses already existed phone";
+
   private final UserDao userDao;
   private final UserConverter userConverter;
   private final Environment environment;
@@ -70,40 +76,40 @@ public class UserServiceImpl implements UserService {
   /**
    * Finds the user by its id.
    *
-   * @param id - the id of price
+   * <p>If entity with current id is not in the system throws the {@link ObjectNotFoundException}
+   *
+   * @param id - the id of price. Not null.
    * @return {@link UserDto}
    */
   @Override
   public UserDto findUserById(final String id) {
-    final User user = userDao.findUserById(id);
 
-    if (user == null) {
-      LOGGER.error("User with id {0} was not found.", id);
+    if (!userDao.existsById(id)) {
+      LOGGER.error(USER_NOT_FOUND_LOG, id);
       throw new ObjectNotFoundException(environment.getProperty(USER_NOT_FOUND));
     }
 
-    return userConverter.convertToDto(user);
+    return userConverter.convertToDto(userDao.findUserById(id));
   }
 
   /**
-   * Creates the user and returns its id
+   * Creates the user and returns its id.
+   *
+   * <p>If email or phone are already in use throws {@link IllegalArgumentException}
    *
    * @param user - {@link UserDto}
    * @return {@link String}
    */
   @Override
   public String createUser(final UserDto user) {
-    final User userWithSameEmail = userDao.findUserByEmail(user.getEmail());
 
-    if (userWithSameEmail != null) {
-      LOGGER.error("The user {0} uses already existed email by user {1}", user, userWithSameEmail);
+    if (userDao.existsByEmail(user.getEmail())) {
+      LOGGER.error(EMAIL_ALREADY_REGISTERED_LOG, user);
       throw new IllegalArgumentException(environment.getProperty(EMAIL_ALREADY_REGISTERED));
     }
 
-    final User userWithSamePhone = userDao.findUserByPhone(user.getPhone());
-
-    if (userWithSamePhone != null) {
-      LOGGER.error("The user {0} uses already existed phone by user {1}", user, userWithSamePhone);
+    if (userDao.existsByPhone(user.getPhone())) {
+      LOGGER.error(PHONE_ALREADY_REGISTERED_LOG, user);
       throw new IllegalArgumentException(environment.getProperty(PHONE_ALREADY_REGISTERED));
     }
 
@@ -113,32 +119,57 @@ public class UserServiceImpl implements UserService {
   /**
    * Enriches the user with new information from data transfer object and updates it.
    *
-   * @param dto - {@link UserDto}
+   * <p>If entity with current id is not in the system throws the {@link ObjectNotFoundException} *
+   *
+   * <p>If new email or new phone are already in use throws {@link IllegalArgumentException}
+   *
+   * @param user - {@link UserDto}
    * @param id - the id of user.
    */
   @Override
-  public void updateUser(final UserDto dto, final String id) {
-    final User user = userDao.findUserById(id);
+  public void updateUser(final UserDto user, final String id) {
 
-    if (user == null) {
-      LOGGER.error("User with id {0} was not found.", id);
+    if (!userDao.existsById(id)) {
+      LOGGER.error(USER_NOT_FOUND_LOG, id);
       throw new ObjectNotFoundException(environment.getProperty(USER_NOT_FOUND));
     }
 
-    userDao.save(userConverter.enrichModel(user, dto)).getId().toHexString();
+    final User userToUpdate = userDao.findUserById(id);
+
+    final String newEmail = user.getEmail();
+    final String oldEmail = userToUpdate.getEmail();
+
+    if (!oldEmail.equalsIgnoreCase(newEmail) && userDao.existsByEmail(newEmail)) {
+      LOGGER.error(EMAIL_ALREADY_REGISTERED_LOG, user);
+      throw new IllegalArgumentException(environment.getProperty(EMAIL_ALREADY_REGISTERED));
+    }
+
+    final String newPhone = user.getPhone();
+    final String oldPhone = userToUpdate.getPhone();
+
+    if (!oldPhone.equalsIgnoreCase(newPhone) && userDao.existsByPhone(newPhone)) {
+      LOGGER.error(PHONE_ALREADY_REGISTERED_LOG, user);
+      throw new IllegalArgumentException(environment.getProperty(PHONE_ALREADY_REGISTERED));
+    }
+
+    userDao.save(userConverter.enrichModel(userToUpdate, user));
   }
 
   /**
    * Deletes user by its id.
    *
+   * <p>If entity with current id is not in the system throws the {@link ObjectNotFoundException}
+   *
    * @param id - the id of user
    */
   @Override
   public void deleteUserById(final String id) {
-    if (userDao.findUserById(id) == null) {
-      LOGGER.error("User with id {0} was not found.", id);
+
+    if (!userDao.existsById(id)) {
+      LOGGER.error(USER_NOT_FOUND_LOG, id);
       throw new ObjectNotFoundException(environment.getProperty(USER_NOT_FOUND));
     }
+
     userDao.deleteById(new ObjectId(id));
   }
 }

@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 
 import by.vk.bookingsystem.converter.PriceConverter;
 import by.vk.bookingsystem.dao.PriceDao;
-import by.vk.bookingsystem.domain.Price;
 import by.vk.bookingsystem.dto.price.PriceDto;
 import by.vk.bookingsystem.dto.price.PriceSetDto;
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
@@ -30,6 +29,8 @@ public class PriceServiceImpl implements PriceService {
   private static final Logger LOGGER = LoggerFactory.getLogger(PriceServiceImpl.class);
 
   private static final String PRICE_NOT_FOUND = "price.not.found";
+
+  private static final String PRICE_NOT_FOUND_LOG = "The price with id {0} was not found.";
 
   private final PriceDao priceDao;
   private final PriceConverter priceConverter;
@@ -67,18 +68,19 @@ public class PriceServiceImpl implements PriceService {
   /**
    * Finds the price by its id.
    *
+   * <p>If entity with current id is not in the system throws the {@link ObjectNotFoundException}
+   *
    * @param id - the id of price
    * @return {@link PriceDto}
    */
   @Override
   public PriceDto findPriceById(final String id) {
-    final Price price = priceDao.findPriceById(id);
 
-    if (price == null) {
-      LOGGER.error("The price with id {0} was not found.", id);
+    if (!priceDao.existsById(id)) {
+      LOGGER.error(PRICE_NOT_FOUND_LOG, id);
       throw new ObjectNotFoundException(environment.getProperty(PRICE_NOT_FOUND));
     }
 
-    return priceConverter.convertToDto(price);
+    return priceConverter.convertToDto(priceDao.findPriceById(id));
   }
 }

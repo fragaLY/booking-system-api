@@ -33,6 +33,8 @@ public class OrderServiceImpl implements OrderService {
 
   private static final String ORDER_NOT_FOUND = "order.not.found";
 
+  private static final String ORDER_NOT_FOUND_LOG = "The order with id {0} was not found.";
+
   private final OrderDao orderDao;
   private final OrderConverter orderConverter;
   private final OrderValidator orderValidator;
@@ -79,19 +81,20 @@ public class OrderServiceImpl implements OrderService {
   /**
    * Finds the order by its id.
    *
+   * <p>If entity with current id is not in the system throws the {@link ObjectNotFoundException}
+   *
    * @param id - the id of order
    * @return {@link OrderDto}
    */
   @Override
   public OrderDto findOrderById(final String id) {
-    final Order order = orderDao.findOrderById(id);
 
-    if (order == null) {
-      LOGGER.error("The order with id {0} was not found.", id);
+    if (!orderDao.existsById(id)) {
+      LOGGER.error(ORDER_NOT_FOUND_LOG, id);
       throw new ObjectNotFoundException(environment.getProperty(ORDER_NOT_FOUND));
     }
 
-    return orderConverter.convertToDto(order);
+    return orderConverter.convertToDto(orderDao.findOrderById(id));
   }
 
   /**
@@ -102,13 +105,9 @@ public class OrderServiceImpl implements OrderService {
    */
   @Override
   public String createOrder(final OrderDto order) {
-    LOGGER.debug("The validation of order {0} starts.", order);
     orderValidator.validateOwner(order.getOwner());
-    LOGGER.debug("The owner of order {0} is valid.", order);
     orderValidator.validateHomes(order.getHomes());
-    LOGGER.debug("The homes of order {0} are valid.", order);
     orderValidator.validateOrderDates(order);
-    LOGGER.debug("The dates of order {0} are valid.", order);
     order.setCost(costCalculator.calculateCost(order));
     return orderDao.save(orderConverter.convertToEntity(order)).getId().toHexString();
   }
@@ -116,39 +115,39 @@ public class OrderServiceImpl implements OrderService {
   /**
    * Enriches the order with new information from data transfer object and updates it.
    *
+   * <p>If entity with current id is not in the system throws the {@link ObjectNotFoundException}
+   *
    * @param dto - {@link OrderDto}
    * @param id - the id of order.
    */
   @Override
   public void updateOrder(final OrderDto dto, final String id) {
 
-    final Order order = orderDao.findOrderById(id);
-
-    if (order == null) {
-      LOGGER.error("The order with id {0} was not found.", id);
+    if (!orderDao.existsById(id)) {
+      LOGGER.error(ORDER_NOT_FOUND_LOG, id);
       throw new ObjectNotFoundException(ORDER_NOT_FOUND);
     }
-    LOGGER.debug("The validation of order {0} starts.", order);
+
+    final Order order = orderDao.findOrderById(id);
     orderValidator.validateOwner(dto.getOwner());
-    LOGGER.debug("The owner of order {0} is valid.", order);
     orderValidator.validateHomes(dto.getHomes());
-    LOGGER.debug("The homes of order {0} are valid.", order);
     orderValidator.validateOrderDates(dto);
-    LOGGER.debug("The dates of order {0} are valid.", order);
     dto.setCost(costCalculator.calculateCost(dto));
-    orderDao.save(orderConverter.enrichModel(order, dto)).getId().toHexString();
+    orderDao.save(orderConverter.enrichModel(order, dto));
   }
 
   /**
    * Deletes order by its id.
+   *
+   * <p>If entity with current id is not in the system throws the {@link ObjectNotFoundException}
    *
    * @param id - the id of order
    */
   @Override
   public void deleteOrderById(final String id) {
 
-    if (orderDao.findOrderById(id) == null) {
-      LOGGER.error("The order with id {0} was not found.", id);
+    if (!orderDao.existsById(id)) {
+      LOGGER.error(ORDER_NOT_FOUND_LOG, id);
       throw new ObjectNotFoundException(ORDER_NOT_FOUND);
     }
 

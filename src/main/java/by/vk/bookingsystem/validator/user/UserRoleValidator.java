@@ -18,7 +18,9 @@ public class UserRoleValidator implements ConstraintValidator<UserRole, String> 
    * @param role - {@link Role}
    */
   @Override
-  public void initialize(UserRole role) {}
+  public void initialize(UserRole role) {
+    // do nothing
+  }
 
   /**
    * Checks if the role is correct and is in the system.
@@ -29,6 +31,6 @@ public class UserRoleValidator implements ConstraintValidator<UserRole, String> 
    */
   @Override
   public boolean isValid(String value, ConstraintValidatorContext context) {
-    return value == null || Role.getRole(value) != null;
+    return value != null && Role.getRole(value) != null;
   }
 }

@@ -30,20 +30,20 @@ public interface UserMongoDao
   User findUserById(String id);
 
   /**
-   * Finds the user by email
+   * Checks if email is already in use
    *
    * @param email - the email of {@link User}
-   * @return {@link User}
+   * @return true if email in use, if not - false
    */
-  User findUserByEmail(String email);
+  boolean existsByEmail(String email);
 
   /**
-   * Finds the user by phone
+   * Checks if phone is already in use
    *
    * @param phone - the phone of {@link User}
-   * @return {@link User}
+   * @return true if phone in use, if not - false
    */
-  User findUserByPhone(String phone);
+  boolean existsByPhone(String phone);
 
   /**
    * Saves user
@@ -59,4 +59,12 @@ public interface UserMongoDao
    * @param id - the id of {@link User}
    */
   void deleteById(ObjectId id);
+
+  /**
+   * Checks if user exists.
+   *
+   * @param id - the id of {@link User}
+   * @return true if user exists, false if
+   */
+  boolean existsById(String id);
 }

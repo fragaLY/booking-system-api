@@ -21,6 +21,7 @@ public class PriceConverterImpl implements PriceConverter {
    */
   @Override
   public PriceDto convertToDto(final Price entity) {
-    return new PriceDto(entity.getId().toHexString(), entity.getPrice(), entity.getGuests());
+    return new PriceDto(
+        entity.getId().toHexString(), entity.getPricePerPersons(), entity.getGuests());
   }
 }
