@@ -37,7 +37,7 @@ public interface OrderMongoDao extends MongoRepository<Order, ObjectId>, OrderDa
    * @param order - {@link Order}
    * @return {@link Order}
    */
-  Order save(Order order);
+  <S extends Order> S insert(S order);
 
   /**
    * Deletes the order by id

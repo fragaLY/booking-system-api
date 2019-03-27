@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 import by.vk.bookingsystem.exception.ErrorDetails;
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,17 +29,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class ExceptionsHandler extends ResponseEntityExceptionHandler {
 
-  private final ErrorTransformer errorTransformer;
-
-  /**
-   * The constructor of class. Uses autowiring via it.
-   *
-   * @param errorTransformer - the transformer of errors
-   */
-  @Autowired
-  public ExceptionsHandler(final ErrorTransformer errorTransformer) {
-    this.errorTransformer = errorTransformer;
-  }
+  private static final String FORMAT = "Cause in %s , reason %s %n.";
 
   /**
    * Handles the {@link IllegalArgumentException}
@@ -107,7 +96,7 @@ public class ExceptionsHandler extends ResponseEntityExceptionHandler {
 
     final String message =
         exception.getBindingResult().getAllErrors().stream()
-            .map(errorTransformer)
+            .map(error -> String.format(FORMAT, error.getObjectName(), error.getDefaultMessage()))
             .collect(Collectors.joining());
 
     final ErrorDetails errorDetails = new ErrorDetails(status, status.value(), message);

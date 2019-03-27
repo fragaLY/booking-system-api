@@ -49,7 +49,7 @@ public interface UserDao {
    * @param user - {@link User}
    * @return {@link User}
    */
-  User save(User user);
+  <S extends User> S insert(S user);
 
   /**
    * Deletes the user by id

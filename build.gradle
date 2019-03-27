@@ -7,7 +7,7 @@ apply plugin: 'idea'
 apply plugin: 'java'
 
 group = 'by.vk'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0'
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
@@ -22,15 +22,19 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
     compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
     compileOnly 'org.apache.commons:commons-lang3:3.8.1'
     compileOnly 'com.google.guava:guava:27.0.1-jre'
     
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-    testImplementation 'org.springframework.security:spring-security-test'
+}
+compileJava {
+    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 }
 
 jar {
     baseName = 'booking-system'
-    version = '0.0.1-SNAPSHOT'
+    version = '1.0.0'
 }

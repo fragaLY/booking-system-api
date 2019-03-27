@@ -54,7 +54,7 @@ public class HomeController {
    */
   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
-  public ResponseEntity<HomeDto> getHome(
+  public ResponseEntity<HomeDto> getHomeById(
       @NotBlank(message = "The id cannot be blank") @PathVariable final String id) {
     return ResponseEntity.ok(homeService.findHomeById(id));
   }

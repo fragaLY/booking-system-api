@@ -33,7 +33,7 @@ public interface OrderDao {
    * @param order - {@link Order}
    * @return {@link Order}
    */
-  Order save(Order order);
+  <S extends Order> S insert(S order);
 
   /**
    * Deletes the order by id
