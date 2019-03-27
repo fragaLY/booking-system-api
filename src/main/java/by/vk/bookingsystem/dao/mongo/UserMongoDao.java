@@ -2,6 +2,7 @@ package by.vk.bookingsystem.dao.mongo;
 
 import java.util.List;
 
+import by.vk.bookingsystem.dao.UserDao;
 import by.vk.bookingsystem.domain.User;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -11,8 +12,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  *
  * @author Vadzim_Kavalkou
  */
-public interface UserMongoDao
-    extends MongoRepository<User, ObjectId>, by.vk.bookingsystem.dao.UserDao {
+public interface UserMongoDao extends MongoRepository<User, ObjectId>, UserDao {
 
   /**
    * Finds all users that are in the system
@@ -51,7 +51,7 @@ public interface UserMongoDao
    * @param user - {@link User}
    * @return {@link User}
    */
-  User save(User user);
+  <S extends User> S insert(S user);
 
   /**
    * Deletes the user by id
