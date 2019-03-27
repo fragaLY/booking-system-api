@@ -77,7 +77,7 @@ public class OrderConverterImplTest {
 
     final OrderDto expectedResult =
         OrderDto.newBuilder()
-            .setId("5c8fba4cc077d3614023f871")
+            .setOrderId("5c8fba4cc077d3614023f871")
             .setFrom(LocalDate.of(2019, 3, 30))
             .setTo(LocalDate.of(2019, 3, 31))
             .setGuests(1)
@@ -103,7 +103,7 @@ public class OrderConverterImplTest {
 
     final OrderDto dto =
         OrderDto.newBuilder()
-            .setId("5c8fba4cc077d3614023f871")
+            .setOrderId("5c8fba4cc077d3614023f871")
             .setFrom(LocalDate.of(2019, 3, 30))
             .setTo(LocalDate.of(2019, 3, 31))
             .setGuests(1)
@@ -157,7 +157,7 @@ public class OrderConverterImplTest {
 
     final OrderDto dto =
         OrderDto.newBuilder()
-            .setId("5c8fba4cc077d3614023f872")
+            .setOrderId("5c8fba4cc077d3614023f872")
             .setFrom(LocalDate.of(2019, 3, 31))
             .setTo(LocalDate.of(2019, 4, 1))
             .setGuests(2)

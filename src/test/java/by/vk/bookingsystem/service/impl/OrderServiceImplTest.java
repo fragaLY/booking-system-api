@@ -44,7 +44,7 @@ public class OrderServiceImplTest {
   @Before
   public void setUp() {
     order1 = Order.builder().id(new ObjectId(ORDER1_ID_VALUE)).build();
-    dto1 = OrderDto.newBuilder().setId(ORDER1_ID_VALUE).build();
+    dto1 = OrderDto.newBuilder().setOrderId(ORDER1_ID_VALUE).build();
 
     orderService =
         new OrderServiceImpl(orderDao, orderConverter, orderValidator, costCalculator, environment);
@@ -55,7 +55,7 @@ public class OrderServiceImplTest {
 
     // given
     final Order order2 = Order.builder().id(new ObjectId("5c8fba4cc077d3614023f872")).build();
-    final OrderDto dto2 = OrderDto.newBuilder().setId("5c8fba4cc077d3614023f872").build();
+    final OrderDto dto2 = OrderDto.newBuilder().setOrderId("5c8fba4cc077d3614023f872").build();
 
     final Set<OrderDto> dtoSet = new HashSet<>(2);
     dtoSet.add(dto1);
@@ -92,7 +92,7 @@ public class OrderServiceImplTest {
     Mockito.when(orderDao.findOrderById(ORDER1_ID_VALUE)).thenReturn(order1);
     Mockito.when(orderConverter.convertToDto(order1)).thenReturn(dto1);
 
-    final OrderDto expectedResult = OrderDto.newBuilder().setId(ORDER1_ID_VALUE).build();
+    final OrderDto expectedResult = OrderDto.newBuilder().setOrderId(ORDER1_ID_VALUE).build();
 
     // when
     final OrderDto actualResult = orderService.findOrderById(ORDER1_ID_VALUE);

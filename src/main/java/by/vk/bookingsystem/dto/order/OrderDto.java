@@ -18,6 +18,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.hateoas.ResourceSupport;
 
 /**
  * The data transfer object of order.
@@ -28,9 +29,9 @@ import lombok.ToString;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Setter
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @ToString
-public class OrderDto {
+public class OrderDto extends ResourceSupport {
 
   private String id;
   private LocalDate from;
@@ -57,7 +58,7 @@ public class OrderDto {
    *
    * @return {@link String}
    */
-  public String getId() {
+  public String getOrderId() {
     return id;
   }
 
@@ -146,7 +147,7 @@ public class OrderDto {
      * @param id - {@link String}
      * @return {@link Builder}
      */
-    public Builder setId(final String id) {
+    public Builder setOrderId(final String id) {
       OrderDto.this.id = id;
       return this;
     }

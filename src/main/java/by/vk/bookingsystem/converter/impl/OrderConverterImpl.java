@@ -1,8 +1,13 @@
 package by.vk.bookingsystem.converter.impl;
 
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import by.vk.bookingsystem.controller.OrderController;
+import by.vk.bookingsystem.controller.UserController;
 import by.vk.bookingsystem.converter.HomeConverter;
 import by.vk.bookingsystem.converter.OrderConverter;
 import by.vk.bookingsystem.converter.UserConverter;
@@ -19,6 +24,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class OrderConverterImpl implements OrderConverter {
+
+  private static final String OWNER = "owner";
 
   private final HomeConverter homeConverter;
   private final UserConverter userConverter;
@@ -44,20 +51,25 @@ public class OrderConverterImpl implements OrderConverter {
   @Override
   public OrderDto convertToDto(final Order entity) {
 
-    return OrderDto.newBuilder()
-        .setId(entity.getId().toHexString())
-        .setFrom(entity.getFrom())
-        .setTo(entity.getTo())
-        .setCost(entity.getCost())
-        .setConfirmed(entity.isConfirmed())
-        .setHomes(
-            entity.getHomes().stream()
-                .filter(Objects::nonNull)
-                .map(homeConverter::convertToDto)
-                .collect(Collectors.toSet()))
-        .setOwner(userConverter.convertToDto(entity.getOwner()))
-        .setGuests(entity.getGuests())
-        .build();
+    final OrderDto dto =
+        OrderDto.newBuilder()
+            .setOrderId(entity.getId().toHexString())
+            .setFrom(entity.getFrom())
+            .setTo(entity.getTo())
+            .setCost(entity.getCost())
+            .setConfirmed(entity.isConfirmed())
+            .setHomes(
+                entity.getHomes().stream()
+                    .filter(Objects::nonNull)
+                    .map(homeConverter::convertToDto)
+                    .collect(Collectors.toSet()))
+            .setOwner(userConverter.convertToDto(entity.getOwner()))
+            .setGuests(entity.getGuests())
+            .build();
+    dto.add(linkTo(OrderController.class).slash(entity.getId()).withSelfRel());
+    dto.add(
+        linkTo(methodOn(UserController.class).getUser(dto.getOwner().getId())).withRel(OWNER));
+    return dto;
   }
 
   /**
@@ -70,7 +82,7 @@ public class OrderConverterImpl implements OrderConverter {
   public Order convertToEntity(final OrderDto dto) {
 
     return Order.builder()
-        .id(dto.getId() != null ? new ObjectId(dto.getId()) : null)
+        .id(dto.getId() != null ? new ObjectId(dto.getOrderId()) : null)
         .from(dto.getFrom())
         .to(dto.getTo())
         .cost(dto.getCost())
