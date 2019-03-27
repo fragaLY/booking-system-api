@@ -1,12 +1,16 @@
 # booking-system
 
-1. To restore data in Atlas cluster run the next command from 'scr' folder:
+* To restore data in Atlas cluster run the next command from <b>'scr'</b> folder:
 ```
 mongorestore --drop --uri mongodb+srv://developer:developerPassword@development-hmiup.mongodb.net/booking-system data
 ```
 
-2. To build the application run the next commands: 
+* To build the application run the next command and follow the [link](localhost:8080 "Application Homepage"): 
 ```
 gradlew bootRun
 ``` 
-Feel free to use the application on <b>localhost</b> with port <b>8080</b>.
+
+* To generate java documentation run the next command and find the files in <b>'build/docs'</b> directory:
+```
+gradlew javadoc
+```
