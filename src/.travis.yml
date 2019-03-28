@@ -8,7 +8,7 @@ install: true
 os:
   - linux
 
-sudo: false # faster builds
+sudo: false
 
 notifications:
   email:
@@ -32,4 +32,4 @@ script:
   - gradle clean build
 
 after_success:
-  - gradle jacocoTestReport coveralls
+  - gradle jacocoTestReport

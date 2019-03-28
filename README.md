@@ -1,5 +1,7 @@
 # booking-system
 
+![alt text](https://travis-ci.com/fragaLY/booking-system.svg?branch=master "Travis CI")
+
 * To restore data in Atlas cluster run the next command from <b>'scr'</b> folder:
 ```
 mongorestore --drop --uri mongodb+srv://developer:developerPassword@development-hmiup.mongodb.net/booking-system data
