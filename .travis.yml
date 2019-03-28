@@ -13,6 +13,14 @@ os:
 
 sudo: false
 
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard //todo vk: setup github token
+  local_dir: site
+  on:
+    branch: master
+
 notifications:
   email:
     on_success: always
@@ -36,3 +44,4 @@ script:
 
 after_success:
   - ./gradlew jacocoTestReport coveralls
+  - ./gradlew javadoc
