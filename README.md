@@ -1,6 +1,6 @@
 # booking-system
 
-![alt text](https://travis-ci.com/fragaLY/booking-system.svg?branch=master "Travis CI")
+[![Build Status](https://travis-ci.com/fragaLY/booking-system.svg?branch=master)](https://travis-ci.com/fragaLY/booking-system)
 
 * To restore data in Atlas cluster run the next command from <b>'scr'</b> folder:
 ```
