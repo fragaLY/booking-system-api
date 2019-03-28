@@ -82,7 +82,7 @@ public class OrderConverterImpl implements OrderConverter {
   public Order convertToEntity(final OrderDto dto) {
 
     return Order.builder()
-        .id(dto.getId() != null ? new ObjectId(dto.getOrderId()) : null)
+        .id(dto.getOrderId() != null ? new ObjectId(dto.getOrderId()) : null)
         .from(dto.getFrom())
         .to(dto.getTo())
         .cost(dto.getCost())

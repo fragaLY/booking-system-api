@@ -5,6 +5,7 @@ plugins {
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'idea'
 apply plugin: 'java'
+apply plugin: 'jacoco'
 
 group = 'by.vk'
 version = '1.0.0'
@@ -31,6 +32,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 }
+
 compileJava {
     options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 }
@@ -38,4 +40,12 @@ compileJava {
 jar {
     baseName = 'booking-system'
     version = '1.0.0'
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination file("${buildDir}/jacocoHtml")
+    }
 }
