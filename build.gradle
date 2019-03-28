@@ -1,5 +1,17 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2"
+    }
+}
+
 plugins {
     id 'org.springframework.boot' version '2.1.2.RELEASE'
+    id "com.github.kt3k.coveralls" version "2.8.2"
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -44,8 +56,8 @@ jar {
 
 jacocoTestReport {
     reports {
-        xml.enabled false
-        csv.enabled false
+        xml.enabled true
+        csv.enabled true
         html.destination file("${buildDir}/jacocoHtml")
     }
 }

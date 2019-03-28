@@ -35,4 +35,4 @@ script:
   - ./gradlew clean build
 
 after_success:
-  - ./gradlew jacocoTestReport
+  - ./gradlew test jacocoTestReport coveralls
