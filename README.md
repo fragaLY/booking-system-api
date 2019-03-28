@@ -14,3 +14,7 @@ gradlew bootRun
 ```
 gradlew javadoc
 ```
+* To generate test reports:
+```
+gradle jacocoTestReport
+```
