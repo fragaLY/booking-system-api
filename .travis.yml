@@ -5,7 +5,6 @@ jdk:
 
 before_install:
   - chmod +x gradlew
-  - chmod +x .utility/publish-documentation.sh
 
 install: true
 
@@ -41,4 +40,4 @@ script:
 after_success:
   - ./gradlew jacocoTestReport coveralls
   - ./gradlew javadoc
-  - .utility/publish-documentation.sh
+  - utility/publish-documentation.sh
