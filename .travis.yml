@@ -18,7 +18,7 @@ deploy:
   skip_cleanup: true
   github_token: $GITHUB_TOKEN
   keep_history: true
-  local_dir: site
+  local_dir: build/docs/javadocs
   email: vadzim.kavalkou@gmail.com
   name: Vadzim Kavalkou
   on:
