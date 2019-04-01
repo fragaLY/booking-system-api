@@ -13,7 +13,7 @@ if [ "$TRAVIS_REPO_SLUG" == "fragaly/booking-system" ] && [ "$TRAVIS_JDK_VERSION
   git rm -rf ./javadoc
   cp -Rf $HOME/javadoc-latest ./javadoc
   git add -f .
-  git commit -m "Latest javadoc on successful travis build $TRAVIS_BUILD_NUMBER auto-pushed to gh-pages"
+  git commit -m "Latest javadoc on successful travis build $TRAVIS_BUILD_NUMBER auto-pushed to master"
   git push -fq origin master > /dev/null
 
   echo -e "Published Javadoc to master.\n"
