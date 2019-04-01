@@ -11,8 +11,6 @@ install: true
 os:
   - linux
 
-sudo: false
-
 before_deploy: "echo Deploy is starting..."
 after_deploy: "echo Deploy completed..."
 
