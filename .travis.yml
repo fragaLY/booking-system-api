@@ -16,18 +16,6 @@ sudo: false
 before_deploy: "echo Deploy is starting..."
 after_deploy: "echo Deploy completed..."
 
-deploy:
-  provider: pages
-  skip_cleanup: true
-  github_token: $GITHUB_TOKEN
-  keep_history: true
-  local_dir: build/docs/javadocs
-  email: vadzim.kavalkou@gmail.com
-  name: Vadzim Kavalkou
-  on:
-    branch: master
-  target_branch: master
-
 notifications:
   email:
     recipients:
@@ -54,3 +42,4 @@ script:
 after_success:
   - ./gradlew jacocoTestReport coveralls
   - ./gradlew javadoc
+  - .utility/publish-documentation.sh
