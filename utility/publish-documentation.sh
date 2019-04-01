@@ -1,3 +1,4 @@
+echo -e 1. "$TRAVIS_REPO_SLUG=" $TRAVIS_REPO_SLUG 2. "$TRAVIS_JDK_VERSION=" $TRAVIS_REPO_SLUG 3."$TRAVIS_BRANCH=" $TRAVIS_BRANCH
 if [ "$TRAVIS_REPO_SLUG" == "fragaly/booking-system" ] && [ "$TRAVIS_JDK_VERSION" == "oraclejdk8" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
 
   echo -e "Publishing javadoc...\n"
