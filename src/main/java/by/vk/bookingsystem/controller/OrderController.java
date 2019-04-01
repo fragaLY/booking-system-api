@@ -93,9 +93,11 @@ public class OrderController {
   /**
    * Updates the order with new information.
    *
+   * @param request - the request
    * @param dto - the order
    * @param id - the id of order
    * @return {@link ResponseEntity}
+   * @throws URISyntaxException throws
    */
   @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody

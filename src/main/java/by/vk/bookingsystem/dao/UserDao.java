@@ -46,7 +46,7 @@ public interface UserDao {
   /**
    * Saves user
    *
-   * @param user - {@link User}
+   * @param user - the user
    * @return {@link User}
    */
   <S extends User> S insert(S user);

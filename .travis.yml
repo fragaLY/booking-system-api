@@ -16,14 +16,18 @@ sudo: false
 deploy:
   provider: pages
   skip_cleanup: true
-  github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard //todo vk: setup github token
+  github_token: $GITHUB_TOKEN
+  keep_history: true
   local_dir: site
+  email: vadzim.kavalkou@gmail.com
+  name: Vadzim Kavalkou
   on:
     branch: master
 
 notifications:
   email:
-    on_success: always
+    - vadzim.kavalkou@gmail.com
+    on_success: never
     on_failure: always
 
 branches:
@@ -40,7 +44,7 @@ cache:
     - $HOME/.gradle/wrapper/
 
 script:
-  - ./gradlew clean build
+  - ./gradlew build
 
 after_success:
   - ./gradlew jacocoTestReport coveralls

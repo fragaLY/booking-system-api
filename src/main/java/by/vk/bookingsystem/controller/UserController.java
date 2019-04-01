@@ -88,9 +88,11 @@ public class UserController {
   /**
    * Updates the user with new information.
    *
+   * @param request - the request
    * @param dto - the user
    * @param id - the id of user
    * @return {@link ResponseEntity}
+   * @throws URISyntaxException
    */
   @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
