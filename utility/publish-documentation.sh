@@ -7,7 +7,7 @@ if [ "$TRAVIS_REPO_SLUG" == "fragaLY/booking-system" ] && [ "$TRAVIS_JDK_VERSION
   cd $HOME
   git config --global user.email "travis@travis-ci.org"
   git config --global user.name "travis-ci"
-  git clone --quiet --branch=gh-pages https://${GITHUB_TOKEN}@github.com/fragaLY/booking-systems gh-pages > /dev/null
+  git clone --quiet --branch=gh-pages https://${GITHUB_TOKEN}@github.com/fragaLY/booking-system gh-pages > /dev/null
 
   cd gh-pages
   git rm -rf ./javadoc
