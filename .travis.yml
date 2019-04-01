@@ -26,7 +26,8 @@ deploy:
 
 notifications:
   email:
-    - vadzim.kavalkou@gmail.com
+    recipients:
+      - vadzim.kavalkou@gmail.com
     on_success: never
     on_failure: always
 
