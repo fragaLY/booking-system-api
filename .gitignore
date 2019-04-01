@@ -1,5 +1,7 @@
 .gradle
-/build/
+/build/classes/
+/build/resources/
+/build/tmp/
 !gradle/wrapper/gradle-wrapper.jar
 
 ### STS ###
