@@ -13,6 +13,9 @@ os:
 
 sudo: false
 
+before_deploy: "echo Deploy is starting..."
+after_deploy: "echo Deploy completed..."
+
 deploy:
   provider: pages
   skip_cleanup: true
@@ -23,6 +26,7 @@ deploy:
   name: Vadzim Kavalkou
   on:
     branch: master
+  target_branch: master
 
 notifications:
   email:
