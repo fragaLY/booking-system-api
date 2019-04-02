@@ -10,7 +10,7 @@
 mongorestore --drop --uri mongodb+srv://developer:developerPassword@development-hmiup.mongodb.net/booking-system data
 ```
 
-* To build the application run the next command and follow the [link](localhost:8080 "Application Homepage"): 
+* To run the application use the next command and follow the [link](localhost:8080 "Application Homepage"): 
 ```
 gradlew bootRun
 ``` 
