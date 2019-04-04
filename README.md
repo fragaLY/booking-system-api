@@ -14,3 +14,7 @@ mongorestore --drop --uri mongodb+srv://developer:developerPassword@development-
 ```
 gradlew bootRun
 ``` 
+or run the latest docker image:
+```
+docker run --name demo -p 80:8080 -d fragaly/booking-system
+```
