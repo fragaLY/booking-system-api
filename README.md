@@ -16,5 +16,5 @@ gradlew bootRun
 ``` 
 or run the ':latest' [Docker](https://www.docker.com/resources/what-container) image:
 ```
-docker run --name application -p 80:8080 -d fragaly/booking-system
+docker run -p 8080:8080 fragaly/booking-system
 ```
