@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/fragaLY/booking-system/badge.svg?branch=master)](https://coveralls.io/github/fragaLY/booking-system?branch=master)
 
 [Java Docs](https://fragaly.github.io/booking-system/)
-[Docker_Hub](https://hub.docker.com/r/fragaly/booking-system)
+
 * To restore data in [Atlas](https://www.mongodb.com/cloud/atlas) cluster run the next command from <b>'scr'</b> folder:
 ```
 mongorestore --drop --uri mongodb+srv://developer:developerPassword@development-hmiup.mongodb.net/booking-system data
