@@ -14,7 +14,8 @@ mongorestore --drop --uri mongodb+srv://developer:developerPassword@development-
 ```
 gradlew bootRun
 ``` 
-or run the ':latest' [Docker](https://www.docker.com/resources/what-container) image:
+or run the [Docker](https://www.docker.com/resources/what-container) image:
+! -m is 512M set on the build stage, please override it if you need less or more memory
 ```
-docker run -p 8080:8080 fragaly/booking-system -m 512M --memoryreservation 256M
+docker run -p 8080:8080 fragaly/booking-system --memoryreservation 256M
 ```
