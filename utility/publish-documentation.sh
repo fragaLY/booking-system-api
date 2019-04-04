@@ -2,7 +2,7 @@ if [ "$TRAVIS_REPO_SLUG" == "fragaLY/booking-system" ] && [ "$TRAVIS_JDK_VERSION
 
   echo "Publishing javadoc..."
 
-  cp -R build/docs/javadoc $HOME/javadoc-latest
+  cp -R build/docs/javadoc $HOME/docs
 
 	echo "Cloning the repo to $HOME directory"
   cd $HOME
@@ -17,7 +17,7 @@ if [ "$TRAVIS_REPO_SLUG" == "fragaLY/booking-system" ] && [ "$TRAVIS_JDK_VERSION
   git rm -rf ./javadoc
 
   echo "Copying latest java docs to ./docs/ folder"
-  cp -Rf $HOME/javadoc-latest ./docs
+  cp -Rf $HOME/docs ./docs
   git add -f .
   git commit -m "Latest javadoc on successful travis build $TRAVIS_BUILD_NUMBER auto-pushed to master"
 
