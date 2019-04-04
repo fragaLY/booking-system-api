@@ -7,6 +7,11 @@ spring:
     mongodb:
       database: "booking-system"
       uri: "mongodb+srv://developer:developerPassword@development-hmiup.mongodb.net/booking-system?retryWrites=true"
+  jackson:
+    mapper:
+      accept_case_insensitive_enums: true
+    parser:
+      allow_comments: true
 
 logging:
   level:
