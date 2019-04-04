@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
    *
    * @param id - the id of price. Not null.
    * @return {@link UserDto}
-   * @throws ObjectNotFoundException
+   * @throws ObjectNotFoundException the exception of absence any instance
    */
   @Override
   public UserDto findUserById(final String id) {

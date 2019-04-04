@@ -92,7 +92,7 @@ public class UserController {
    * @param dto - the user
    * @param id - the id of user
    * @return {@link ResponseEntity}
-   * @throws URISyntaxException
+   * @throws URISyntaxException the exception of URI syntax
    */
   @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody

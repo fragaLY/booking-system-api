@@ -30,7 +30,8 @@ public interface OrderDao {
   /**
    * Saves the order.
    *
-   * @param order - the order
+   * @param order the {@link Order}
+   * @param <S> the instance of {@link Order}
    * @return {@link Order}
    */
   <S extends Order> S insert(S order);
