@@ -20,10 +20,10 @@ if [ "$TRAVIS_REPO_SLUG" == "fragaLY/booking-system" ] && [ "$TRAVIS_JDK_VERSION
   echo "Copying latest java docs to ./docs/ folder"
   cp -Rf $HOME/javadoc-latest .
   git add -f .
-  git commit -m "Latest javadoc on successful travis build $TRAVIS_BUILD_NUMBER auto-pushed to master"
+  git commit -m "Latest javadoc on successful travis build $TRAVIS_BUILD_NUMBER auto-pushed to gh-pages"
 
 	if ! git push -fq origin gh-pages &> /dev/null; then
-     echo "Error pushing master to origin."
+     echo "Error pushing gh-pages to origin."
   else
      echo "Published Javadoc to master."
   fi
