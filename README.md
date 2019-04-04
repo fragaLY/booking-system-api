@@ -5,16 +5,16 @@
 
 * Javadocs are available [here](https://fragaly.github.io/booking-system/).
 
-* To restore data in Atlas cluster run the next command from <b>'scr'</b> folder:
+* To restore data in [Atlas](https://www.mongodb.com/cloud/atlas) cluster run the next command from <b>'scr'</b> folder:
 ```
 mongorestore --drop --uri mongodb+srv://developer:developerPassword@development-hmiup.mongodb.net/booking-system data
 ```
 
-* To run the application use the next command and follow the [link](localhost:8080 "Application Homepage"): 
+* To run the application using [gradlew](https://docs.gradle.org/current/userguide/gradle_wrapper.html) the next command and follow the [link](localhost:8080 "Application Homepage"): 
 ```
 gradlew bootRun
 ``` 
-or run the latest docker image:
+or run the ':latest' [Docker](https://www.docker.com/resources/what-container) image:
 ```
 docker run --name application -p 80:8080 -d fragaly/booking-system
 ```
