@@ -13,7 +13,7 @@
 mongorestore --drop --uri mongodb+srv://developer:developerPassword@development-hmiup.mongodb.net/booking-system data
 ```
 
-##How to up the application:
+# How to up the application:
 * > To up the application using [gradlew](https://docs.gradle.org/current/userguide/gradle_wrapper.html) run the script and follow the [link](http://localhost:8080)
 ```
 gradlew bootRun
