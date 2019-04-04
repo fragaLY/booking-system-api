@@ -20,7 +20,7 @@ apply plugin: 'java'
 apply plugin: 'jacoco'
 
 group = 'by.vk'
-version = '1.0.0'
+version = '1.1.0'
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
