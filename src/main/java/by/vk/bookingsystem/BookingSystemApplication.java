@@ -14,7 +14,7 @@ public class BookingSystemApplication {
   /**
    * The main method.
    *
-   * @param args - {@link String}
+   * @param args the array of {@link String}
    */
   public static void main(String[] args) {
     SpringApplication.run(BookingSystemApplication.class, args);
