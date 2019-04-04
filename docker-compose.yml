@@ -8,3 +8,13 @@ services:
       - 8080
     ports:
       - 8080:8080
+    #todo vk: use stack to work with swarm
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 512M
+        reservations:
+          cpus: '0.05'
+          memory: 128M
+      replicas: 3
