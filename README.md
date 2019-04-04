@@ -14,7 +14,8 @@ mongorestore --drop --uri mongodb+srv://developer:developerPassword@development-
 ```
 gradlew bootRun
 ``` 
-OR run the [Docker](https://www.docker.com/resources/what-container) image:
+
+* Also you can run the [Docker](https://www.docker.com/resources/what-container) container without any presets:
 ```
 docker run -p 8080:8080 fragaly/booking-system -m 512M --memoryreservation 256M
 ```
