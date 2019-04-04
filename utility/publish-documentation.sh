@@ -14,8 +14,8 @@ if [ "$TRAVIS_REPO_SLUG" == "fragaLY/booking-system" ] && [ "$TRAVIS_JDK_VERSION
 	echo "Switching to master /dev/null"
   cd master
 
-  echo "Removing indexes"
-  git rm -rf ./javadoc
+#  echo "Removing indexes"
+#  git rm -rf ./javadoc
 
   echo "Copying latest java docs to ./docs/ folder"
   cp -Rf $HOME/javadoc-latest .
