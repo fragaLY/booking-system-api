@@ -5,7 +5,6 @@
 
 [Java Docs](https://fragaly.github.io/booking-system/)
 [Docker_Hub](https://hub.docker.com/r/fragaly/booking-system)
-
 * To restore data in [Atlas](https://www.mongodb.com/cloud/atlas) cluster run the next command from <b>'scr'</b> folder:
 ```
 mongorestore --drop --uri mongodb+srv://developer:developerPassword@development-hmiup.mongodb.net/booking-system data
@@ -20,3 +19,6 @@ OR run the [Docker](https://www.docker.com/resources/what-container) image:
 docker run -p 8080:8080 fragaly/booking-system -m 512M --memoryreservation 256M
 ```
 Feel free follow the [link](localhost:8080 "Application Homepage") and check the REST API.
+
+[![Docker_Hub](https://avatars0.githubusercontent.com/u/7739233?s=400&v=4
+)](https://hub.docker.com/r/fragaly/booking-system)
