@@ -16,5 +16,5 @@ gradlew bootRun
 ``` 
 or run the ':latest' [Docker](https://www.docker.com/resources/what-container) image:
 ```
-docker run -p 8080:8080 fragaly/booking-system
+docker run -p 8080:8080 fragaly/booking-system -m 512M --memoryreservation 256M
 ```
