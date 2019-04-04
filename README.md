@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.com/fragaLY/booking-system.svg?branch=master)](https://travis-ci.com/fragaLY/booking-system) 
 [![Coverage Status](https://coveralls.io/repos/github/fragaLY/booking-system/badge.svg?branch=master)](https://coveralls.io/github/fragaLY/booking-system?branch=master)
-[![Java Docs](https://png.pngtree.com/element_pic/17/02/09/8cd5cb93144a40bb4fdc66fb64b41ae5.jpg)](https://fragaly.github.io/booking-system/)
+[Java Docs](https://fragaly.github.io/booking-system/)
 
 * Javadocs are available [here](https://fragaly.github.io/booking-system/).
 
