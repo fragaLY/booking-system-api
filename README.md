@@ -18,7 +18,7 @@ OR run the [Docker](https://www.docker.com/resources/what-container) image:
 ```
 docker run -p 8080:8080 fragaly/booking-system -m 512M --memoryreservation 256M
 ```
-Feel free follow the [link](http://localhost:8080) and check the REST API.
+Now you are able may follow the [link](http://localhost:8080) and check the REST API.
 
 [![Docker_Hub](https://avatars0.githubusercontent.com/u/7739233?s=400&v=4
 )](https://hub.docker.com/r/fragaly/booking-system)
