@@ -13,12 +13,19 @@
 mongorestore --drop --uri mongodb+srv://developer:developerPassword@development-hmiup.mongodb.net/booking-system data
 ```
 
-> To run the application using [gradlew](https://docs.gradle.org/current/userguide/gradle_wrapper.html) and follow the [link](http://localhost:8080)
+##How to up the application:
+* > To up the application using [gradlew](https://docs.gradle.org/current/userguide/gradle_wrapper.html) run the script and follow the [link](http://localhost:8080)
 ```
 gradlew bootRun
 ``` 
 
-> Also you can run the [Docker](https://www.docker.com/resources/what-container) container and follow the [link](http://localhost:8080)
+* > To up from [Docker Hub](https://hub.docker.com/) run the script and follow the [link](http://localhost:8080)
 ```
 docker run -p 8080:8080 -d --restart always --memory="512m" --memory-reservation="256M" fragaly/booking-system
+```
+
+* > To up with [Docker Compose](https://docs.docker.com/compose/) run the script and follow the [link](http://localhost:8080)
+```
+gradle docker
+docker-compose up
 ```

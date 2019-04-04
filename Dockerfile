@@ -1,10 +1,7 @@
-FROM gradle:jdk8-alpine as builder
-COPY --chown=gradle:gradle . /home/gradle/src
-WORKDIR /home/gradle/src
-RUN gradle build -x test
-
 FROM java:8-alpine
+VOLUME /tmp
 ENV JAVA_XMX=512m
-COPY --from=builder /home/gradle/src/build/libs/booking-system-1.0.0.jar /opt/
+ARG JAR_FILE
+ADD ${JAR_FILE} app.jar
 EXPOSE 8080
-ENTRYPOINT ["sh", "-c", "java -Xmx${JAVA_XMX} -jar /opt/booking-system-1.0.0.jar"]
+ENTRYPOINT ["sh", "-c", "java -Xmx${JAVA_XMX} -jar /app.jar"]

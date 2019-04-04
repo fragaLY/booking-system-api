@@ -12,6 +12,7 @@ buildscript {
 plugins {
     id 'org.springframework.boot' version '2.1.2.RELEASE'
     id "com.github.kt3k.coveralls" version "2.8.2"
+    id 'com.palantir.docker' version '0.21.0'
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -20,7 +21,6 @@ apply plugin: 'java'
 apply plugin: 'jacoco'
 
 group = 'by.vk'
-version = '1.1.0'
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
@@ -49,11 +49,6 @@ compileJava {
     options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 }
 
-jar {
-    baseName = 'booking-system'
-    version = '1.1.0'
-}
-
 jacocoTestReport {
     reports {
         xml.enabled = true
@@ -64,3 +59,14 @@ jacocoTestReport {
 coveralls {
     jacocoReportPath 'build/reports/jacoco/test/jacocoTestReport.xml'
 }
+
+docker {
+    name "fragaly/booking-system"
+    dockerfile file('Dockerfile')
+    files bootJar.archivePath
+    buildArgs(['JAR_FILE': "${bootJar.archiveName}"])
+    pull true
+    noCache true
+}
+
+docker.dependsOn tasks.build
