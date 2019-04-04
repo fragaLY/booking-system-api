@@ -16,5 +16,5 @@ gradlew bootRun
 ``` 
 or run the latest docker image:
 ```
-docker run --name demo -p 80:8080 -d fragaly/booking-system
+docker run --name application -p 80:8080 -d fragaly/booking-system
 ```
