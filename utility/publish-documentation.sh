@@ -11,17 +11,17 @@ if [ "$TRAVIS_REPO_SLUG" == "fragaLY/booking-system" ] && [ "$TRAVIS_JDK_VERSION
   git clone --quiet --branch=master https://${GITHUB_TOKEN}@github.com/fragaLY/booking-system master > /dev/null
 
 	echo "Switching to master /dev/null"
-	cd master
+  cd master
 
   echo "Removing indexes"
   git rm -rf ./javadoc
 
   echo "Copying latest java docs to ./docs/ folder"
-  cp -Rf $HOME/javadoc-latest ./docs/javadoc
+  cp -Rf $HOME/javadoc-latest .
   git add -f .
   git commit -m "Latest javadoc on successful travis build $TRAVIS_BUILD_NUMBER auto-pushed to master"
 
-	if ! git push -fq origin master &> /dev/null; then
+	if ! git push -fq origin gh-pages &> /dev/null; then
      echo "Error pushing master to origin."
   else
      echo "Published Javadoc to master."
