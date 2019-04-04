@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 if [ "$TRAVIS_REPO_SLUG" == "fragaLY/booking-system" ] && [ "$TRAVIS_JDK_VERSION" == "oraclejdk8" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
 
   echo "Publishing javadoc..."
