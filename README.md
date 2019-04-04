@@ -6,7 +6,7 @@
 | Links        | Description     |
 | ------------- |:-------------:|
 | [Java Docs](https://fragaly.github.io/booking-system/)     | The latest javadocs |
-| [Docker_Hub](https://hub.docker.com/r/fragaly/booking-system)   | The docker hub |
+| [Docker Hub](https://hub.docker.com/r/fragaly/booking-system)   | The docker hub |
 
 > To restore data in [Atlas](https://www.mongodb.com/cloud/atlas) cluster run the next command from <b>'scr'</b> folder:
 ```
