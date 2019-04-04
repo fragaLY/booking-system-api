@@ -20,5 +20,5 @@ gradlew bootRun
 
 > Also you can run the [Docker](https://www.docker.com/resources/what-container) container and follow the [link](http://localhost:8080)
 ```
-docker run -p 8080:8080 --restart always fragaly/booking-system -m 512M --memoryreservation 256M
+docker run -p 8080:8080 -d --restart always fragaly/booking-system -m 512M --memoryreservation 256M
 ```
