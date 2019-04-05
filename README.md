@@ -27,5 +27,5 @@ docker run -p 8080:8080 -d --restart always --memory="512m" --memory-reservation
 * > To up with [Docker Compose](https://docs.docker.com/compose/) run the script and follow the [link](http://localhost:8080)
 ```
 gradle docker
-docker-compose up
+docker-compose up -d
 ```
