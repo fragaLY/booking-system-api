@@ -61,7 +61,7 @@ coveralls {
 
 docker {
     name "fragaly/booking-system"
-    dockerfile file('Dockerfile')
+    dockerfile file('docker/Dockerfile')
     files bootJar.archivePath
     buildArgs(['JAR_FILE': "${bootJar.archiveName}"])
     pull true

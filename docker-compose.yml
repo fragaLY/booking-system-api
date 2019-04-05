@@ -29,9 +29,9 @@ services:
       replicas: 3
 
   #cadvisor service
-  cadvisor:
+  monitoring:
     image: google/cadvisor
-    container_name: cadvisor
+    container_name: monitoring
     volumes:
       - c:\:/rootfs:ro
       - /var/run:/var/run:rw
