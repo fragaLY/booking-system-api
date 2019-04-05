@@ -14,8 +14,8 @@ if [ "$TRAVIS_REPO_SLUG" == "fragaLY/booking-system" ] && [ "$TRAVIS_JDK_VERSION
 	echo "Switching to master /dev/null"
   cd master
 
-#  echo "Removing indexes"
-#  git rm -rf ./javadoc
+  echo "Removing indexes"
+  git rm -rf ./javadoc
 
   echo "Copying latest java docs to ./docs/ folder"
   cp -Rf $HOME/javadoc-latest .
@@ -23,7 +23,7 @@ if [ "$TRAVIS_REPO_SLUG" == "fragaLY/booking-system" ] && [ "$TRAVIS_JDK_VERSION
   git commit -m "Latest javadoc on successful travis build $TRAVIS_BUILD_NUMBER auto-pushed to gh-pages"
 
 	if ! git push -fq origin gh-pages &> /dev/null; then
-     echo "Error pushing gh-pages to origin."
+     echo "Error pushing gh-pages to origin gh-pages."
   else
      echo "Published Javadoc to master."
   fi
