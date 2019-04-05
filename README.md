@@ -25,8 +25,8 @@ docker run -p 8080:8080 -d --restart always --memory="512m" --memory-reservation
 ```
 
 * > To up with [Docker Compose](https://docs.docker.com/compose/) run the script and follow the [link](http://localhost:8080)
+To check statistics of containers please follow the [link](http://localhost:8081/containers/)
 ```
 gradle docker
 docker-compose up -d
-#To check statistics of containers please follow the [link](http://localhost:8081/containers/)
 ```
