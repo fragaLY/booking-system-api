@@ -36,7 +36,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
 
     compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
 
     compileOnly 'org.apache.commons:commons-lang3:3.8.1'
     compileOnly 'com.google.guava:guava:27.0.1-jre'
@@ -67,6 +66,7 @@ docker {
     buildArgs(['JAR_FILE': "${bootJar.archiveName}"])
     pull true
     noCache true
+    version 3.7
 }
 
 docker.dependsOn tasks.build

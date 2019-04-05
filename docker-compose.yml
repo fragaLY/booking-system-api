@@ -1,9 +1,15 @@
-version: '3'
+version: '3.7'
 services:
   api:
     container_name: api
-    restart: always
     image: "fragaly/booking-system"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost || exit 1"]
+      interval: 30m
+      timeout: 10s
+      retries: 3
+      start_period: 2m
+    restart: always
     expose:
       - 8080
     ports:
