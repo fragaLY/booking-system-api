@@ -35,7 +35,7 @@ cache:
     - $HOME/.gradle/wrapper/
 
 script:
-  - ./gradlew docker
+  - ./gradlew build
 
 after_success:
   - ./gradlew jacocoTestReport coveralls
