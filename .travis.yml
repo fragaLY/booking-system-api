@@ -1,7 +1,7 @@
 language: java
 
 jdk:
-  - oraclejdk8
+  - java:8-alpine
 
 before_install:
   - chmod +x gradlew
@@ -10,9 +10,6 @@ install: true
 
 os:
   - linux
-
-before_deploy: "echo Deploy is starting..."
-after_deploy: "echo Deploy completed..."
 
 notifications:
   email:
@@ -40,4 +37,5 @@ script:
 after_success:
   - ./gradlew jacocoTestReport coveralls
   - ./gradlew javadoc
+  #todo vk: fix documentation publishing
   - utility/publish-documentation.sh
