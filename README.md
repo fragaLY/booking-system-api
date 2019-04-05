@@ -21,7 +21,7 @@ gradlew bootRun
 
 * > To up from [Docker Hub](https://hub.docker.com/) run the script and follow the [link](http://localhost:8080)
 ```
-docker run -p 8080:8080 -d --restart always --memory="512m" --memory-reservation="256M" fragaly/booking-system
+docker run -p 8080:8080 -d --restart always --memory="512m" --memory-reservation="256M" fragaly/booking-system:1.1.0
 ```
 
 * > To up with [Docker Compose](https://docs.docker.com/compose/) run the script and follow the [link](http://localhost:8080)
