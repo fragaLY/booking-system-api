@@ -14,15 +14,18 @@ mongorestore --drop --uri mongodb+srv://developer:developerPassword@development-
 ```
 
 # How to up the application:
-* > To up the application using [gradlew](https://docs.gradle.org/current/userguide/gradle_wrapper.html) run the script and follow the [link](http://localhost:8080)
-```
-gradlew bootRun
-``` 
+* > To up the application using [gradlew](https://docs.gradle.org/current/userguide/gradle_wrapper.html) run the script and follow the [link](http://localhost:8080): ```gradlew bootRun``` 
 
-* > To up with [Docker Compose](https://docs.docker.com/compose/) run the script and follow the [link](http://localhost:8080)
+* > To up with [Docker Compose](https://docs.docker.com/compose/) run the script:
 
--To check statistics of containers please follow the [link](http://localhost:8081/containers/)
-```
-gradle docker
-docker-compose up -d
-```
+|Script| Links        | Description     |
+|----| ------------- |:-------------:|
+|```gradle docker```|   | Create image from Dockerfile|
+|```docker-compose up -d```| [REST API](http://localhost:8080) | Compose the containers and up application |
+| | [Statistics](http://localhost:8081/containers/)   | Check statistics |
+
+* > Work with a swarm:
+
+|Run Swarm| Leave Swarm|
+|---------| -----------|
+| ```swarm/swarm-cluster.sh```| ```docker swarm leave --x``` |

@@ -17,16 +17,6 @@ services:
       - 8080
     ports:
       - 8080:8080
-    #todo vk: use stack to work with swarm
-    deploy:
-      resources:
-        limits:
-          cpus: '0.20'
-          memory: 512M
-        reservations:
-          cpus: '0.05'
-          memory: 128M
-      replicas: 3
 
   #cadvisor service
   monitoring:
@@ -49,11 +39,3 @@ services:
       timeout: 10s
       retries: 3
       start_period: 1m
-    deploy:
-      resources:
-          limits:
-            cpus: '0.20'
-            memory: 512m
-          reservations:
-            cpus: '0.05'
-            memory: 64M
