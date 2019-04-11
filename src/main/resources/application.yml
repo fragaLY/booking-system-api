@@ -13,11 +13,5 @@ spring:
     parser:
       allow_comments: true
 
-logging:
-  level:
-    ROOT: INFO
-    org.springframework.web: INFO
-    guru.springframework.controllers: INFO
-
 server:
   port: 8080

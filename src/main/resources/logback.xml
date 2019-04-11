@@ -1,0 +1,18 @@
+<configuration>
+
+    <property name="API_LOG" value="logs/api.log"/>
+
+    <appender name="STASH" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${API_LOG}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/api.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>7</maxHistory> <!--one week-->
+        </rollingPolicy>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+    </appender>
+        
+    <root level="DEBUG">
+        <appender-ref ref="STASH"/>
+    </root>
+
+</configuration>

@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 services:
 
@@ -20,14 +20,14 @@ services:
 
   #cadvisor service
   monitoring:
-    image: google/cadvisor
     container_name: monitoring
+    image: google/cadvisor
     volumes:
-      - c:\:/rootfs:ro
+      - /:/rootfs:ro
       - /var/run:/var/run:rw
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
-      - /cgroup:/cgroup:ro
+
     restart: always
     expose:
       - 8081
@@ -42,15 +42,17 @@ services:
 
   #elk
   elk:
-    image: sebp/elk
     container_name: elk
+    image: sebp/elk
     restart: always
     expose:
-      - 9200
+      - 8082
     ports:
-      - 9200:8080
+      - 5601:5601 #kibana port
+      - 9200:9200 #elasticsearch port
+      - 5044:5044 #logstash port
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9200 || exit 1"]
+      test: ["CMD", "curl", "-f", "http://localhost:5601 || exit 1"]
       interval: 10m
       timeout: 10s
       retries: 3
