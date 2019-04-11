@@ -28,13 +28,29 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
       - /cgroup:/cgroup:ro
-    restart: unless-stopped
+    restart: always
     expose:
       - 8081
     ports:
       - 8081:8080
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8081/containers/ || exit 1"]
+      interval: 10m
+      timeout: 10s
+      retries: 3
+      start_period: 1m
+
+  #elk
+  elk:
+    image: sebp/elk
+    container_name: elk
+    restart: always
+    expose:
+      - 9200
+    ports:
+      - 9200:8080
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200 || exit 1"]
       interval: 10m
       timeout: 10s
       retries: 3
