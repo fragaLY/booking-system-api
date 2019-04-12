@@ -18,6 +18,7 @@ services:
       - 5080:5080
       - 38080:38080
 
+  #cadvisor service
   monitoring:
     container_name: monitoring
     image: google/cadvisor
@@ -41,6 +42,7 @@ services:
       retries: 3
       start_period: 1m
 
+  #elk
   elk:
     container_name: elk
     image: fragaly/elk
