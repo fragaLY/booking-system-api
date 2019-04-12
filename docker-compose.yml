@@ -22,7 +22,7 @@ services:
     container_name: monitoring
     image: google/cadvisor
     volumes:
-      - c:\/:/rootfs:ro
+      - /:/rootfs:ro
       - /var/run:/var/run:rw
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
