@@ -43,9 +43,6 @@ dependencies {
     compileOnly 'org.apache.commons:commons-lang3:3.8.1'
     compileOnly 'com.google.guava:guava:27.0.1-jre'
 
-    //todo vk: remove comments
-//    compile 'ch.qos.logback:logback-classic:1.2.3'
-//    compile 'ch.qos.logback:logback-core:1.2.3'
     compile 'net.logstash.logback:logstash-logback-encoder:5.3'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -74,7 +71,10 @@ docker {
     buildArgs(['JAR_FILE': "${bootJar.archiveName}"])
     pull true
     noCache true
-    version 3.7
 }
 
-docker.dependsOn tasks.build
+docker.dependsOn tasks.clean, tasks.build
+//
+//task creatAllImages{
+//    dependsOn["elk:docker", "docker"]
+//}

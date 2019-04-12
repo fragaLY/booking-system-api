@@ -1,0 +1,14 @@
+plugins {
+    id 'com.palantir.docker'
+}
+
+group 'by.vk'
+
+docker {
+    name "fragaly/elk"
+    dockerfile file('docker/Dockerfile')
+    pull false
+    noCache true
+}
+
+docker.dependsOn dockerClean
