@@ -1,5 +1,4 @@
 version: "3.7"
-
 services:
 
   #api service
@@ -23,12 +22,14 @@ services:
     container_name: monitoring
     image: google/cadvisor
     volumes:
-      - /:/rootfs:ro
+      - c:\/:/rootfs:ro
       - /var/run:/var/run:rw
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
 
     restart: always
+    depends_on:
+      - api
     expose:
       - 8081
     ports:
@@ -43,14 +44,15 @@ services:
   #elk
   elk:
     container_name: elk
-    image: sebp/elk
+    image: fragaly/elk
     restart: always
-    expose:
-      - 8082
+    depends_on:
+      - api
+      - monitoring
     ports:
       - 5601:5601 #kibana port
       - 9200:9200 #elasticsearch port
-      - 5044:5044 #logstash port
+#      - 5044:5044 #logstash port
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5601 || exit 1"]
       interval: 10m

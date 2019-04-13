@@ -4,3 +4,4 @@ pluginManagement {
     }
 }
 rootProject.name = 'booking-system'
+include 'elk'

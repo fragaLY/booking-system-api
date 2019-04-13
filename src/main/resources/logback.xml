@@ -1,18 +1,20 @@
 <configuration>
+	<include resource="org/springframework/boot/logging/logback/base.xml"/>
+	<logger name="org.springframework" level="INFO"/>
 
-    <property name="API_LOG" value="logs/api.log"/>
+	<appender name="STASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+		<destination>elk:4560</destination>
+		<encoder class="net.logstash.logback.encoder.LogstashEncoder">
+			<customFields>{"service_name":"api"}</customFields>
+			<fieldNames>
+				<message>log_message</message>
+			</fieldNames>
+		</encoder>
+		<keepAliveDuration>5 minutes</keepAliveDuration>
+	</appender>
 
-    <appender name="STASH" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${API_LOG}</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>logs/api.%d{yyyy-MM-dd}.log</fileNamePattern>
-            <maxHistory>7</maxHistory> <!--one week-->
-        </rollingPolicy>
-        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
-    </appender>
-        
-    <root level="DEBUG">
-        <appender-ref ref="STASH"/>
-    </root>
+	<root level="INFO">
+		<appender-ref ref="STASH"/>
+	</root>
 
 </configuration>
