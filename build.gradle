@@ -38,7 +38,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
     compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
+//    annotationProcessor 'org.projectlombok:lombok'
 
     compileOnly 'org.apache.commons:commons-lang3:3.8.1'
     compileOnly 'com.google.guava:guava:27.0.1-jre'
@@ -73,8 +73,4 @@ docker {
     noCache true
 }
 
-docker.dependsOn tasks.clean, tasks.build
-//
-//task creatAllImages{
-//    dependsOn["elk:docker", "docker"]
-//}
+docker.dependsOn tasks.build
