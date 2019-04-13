@@ -34,5 +34,12 @@ mongorestore --drop --uri mongodb+srv://developer:developerPassword@development-
 | ```swarm/swarm-cluster.sh```| ```docker swarm leave --x``` |
 
 # How to debug the application:
+
 * > To debug the application feel free to use the exposed 5080 port. The example for IntelliJ IDEA is below:
+
 ![debug](screenshot/debug.jpg)
+
+* > To analyze the application in Java VisualVM feel free to use the exposed 38080 port. The example:
+
+![jvm](screenshot/visualvm_jmx_connection.jpg)
+![jvm](screenshot/visualvm_jmx_connection_1.jpg)
