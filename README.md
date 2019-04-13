@@ -24,7 +24,7 @@ mongorestore --drop --uri mongodb+srv://developer:developerPassword@development-
 |----| ------------- |:-------------:|
 |```gradle docker```|   | Create images from Dockerfiles|
 |```docker-compose up -d```| [REST API](http://localhost:8080) | Compose the containers and up application |
-| | [Statistics](http://localhost:8081/containers/)   | Check statistics |
+| | [Statistics](http://localhost:8081/containers/)   | CAdvisor |
 | | [Kibana](http://localhost:5601)   | Kibana |
 
 * > Work with a swarm:
