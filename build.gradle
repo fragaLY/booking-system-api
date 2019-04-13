@@ -30,6 +30,7 @@ repositories {
 
 dependencies {
 
+    //spring
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     implementation 'org.springframework.boot:spring-boot-starter-data-rest'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -37,14 +38,18 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
+    //lombok
     compileOnly 'org.projectlombok:lombok'
-//    annotationProcessor 'org.projectlombok:lombok'
+//    annotationProcessor 'org.projectlombok:lombok' todo vk: use it on linux only
 
+    //3rd party
     compileOnly 'org.apache.commons:commons-lang3:3.8.1'
     compileOnly 'com.google.guava:guava:27.0.1-jre'
 
+    //logstash
     compile 'net.logstash.logback:logstash-logback-encoder:5.3'
 
+    //test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 }
@@ -64,6 +69,10 @@ coveralls {
     jacocoReportPath 'build/reports/jacoco/test/jacocoTestReport.xml'
 }
 
+bootJar {
+    mainClassName = 'by.vk.bookingsystem.BookingSystemApplication'
+}
+
 docker {
     name "fragaly/booking-system"
     dockerfile file('docker/Dockerfile')
@@ -73,4 +82,4 @@ docker {
     noCache true
 }
 
-docker.dependsOn dockerClean, tasks.build
+docker.dependsOn tasks.build

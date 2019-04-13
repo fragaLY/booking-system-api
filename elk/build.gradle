@@ -4,11 +4,13 @@ plugins {
 
 group 'by.vk'
 
+def logStash = "logstash-tcp-input.conf"
+
 docker {
     name "fragaly/elk"
-    dockerfile file('docker/Dockerfile')
+    dockerfile file('Dockerfile')
+    files projectDir.absolutePath
+    buildArgs(['LOGSTASH_INPUT_CONFIG': logStash])
     pull false
     noCache true
 }
-
-docker.dependsOn dockerClean
