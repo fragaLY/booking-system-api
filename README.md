@@ -42,4 +42,3 @@ mongorestore --drop --uri mongodb+srv://developer:developerPassword@development-
 * > To analyze the application in Java VisualVM feel free to use the exposed 38080 port. The example:
 
 ![jvm](screenshot/visualvm_jmx_connection.jpg)
-![jvm](screenshot/visualvm_jmx_connection_1.jpg)
