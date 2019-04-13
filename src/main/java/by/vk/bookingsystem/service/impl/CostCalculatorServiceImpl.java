@@ -30,8 +30,8 @@ public class CostCalculatorServiceImpl implements CostCalculatorService {
 
   private static final String WRONG_ORDER_DURATION = "order.duration.wrong";
 
-  private static final String COST_ORDER = "The cost for order {0} is {1}.";
-  private static final String WRONG_ORDER_DURATION_LOG = "The order {0} has 0 days of duration.";
+  private static final String COST_ORDER = "The cost for order {} is {}.";
+  private static final String WRONG_ORDER_DURATION_LOG = "The order {} has 0 days of duration.";
 
   private final PriceDao priceDao;
   private final Environment environment;

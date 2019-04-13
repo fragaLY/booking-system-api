@@ -30,7 +30,7 @@ public class HomeServiceImpl implements HomeService {
 
   private static final String HOME_NOT_FOUND = "home.not.found";
 
-  private static final String HOME_NOT_FOUND_LOG = "The home with id {0} was not found.";
+  private static final String HOME_NOT_FOUND_LOG = "The home with id {} was not found.";
 
   private final HomeDao homeDao;
   private final HomeConverter homeConverter;

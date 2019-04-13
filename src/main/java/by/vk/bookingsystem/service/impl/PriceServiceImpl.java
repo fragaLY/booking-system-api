@@ -30,7 +30,7 @@ public class PriceServiceImpl implements PriceService {
 
   private static final String PRICE_NOT_FOUND = "price.not.found";
 
-  private static final String PRICE_NOT_FOUND_LOG = "The price with id {0} was not found.";
+  private static final String PRICE_NOT_FOUND_LOG = "The price with id {} was not found.";
 
   private final PriceDao priceDao;
   private final PriceConverter priceConverter;

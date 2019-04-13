@@ -34,11 +34,11 @@ public class UserServiceImpl implements UserService {
   private static final String EMAIL_ALREADY_REGISTERED = "user.email.already.registered";
   private static final String PHONE_ALREADY_REGISTERED = "user.phone.already.registered";
 
-  private static final String USER_NOT_FOUND_LOG = "User with id {0} was not found.";
+  private static final String USER_NOT_FOUND_LOG = "User with id {} was not found.";
   private static final String EMAIL_ALREADY_REGISTERED_LOG =
-      "The user {0} uses already existed email";
+      "The user {} uses already existed email";
   private static final String PHONE_ALREADY_REGISTERED_LOG =
-      "The user {0} uses already existed phone";
+      "The user {} uses already existed phone";
 
   private final UserDao userDao;
   private final UserConverter userConverter;

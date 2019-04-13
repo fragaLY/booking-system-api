@@ -33,7 +33,7 @@ public class OrderServiceImpl implements OrderService {
 
   private static final String ORDER_NOT_FOUND = "order.not.found";
 
-  private static final String ORDER_NOT_FOUND_LOG = "The order with id {0} was not found.";
+  private static final String ORDER_NOT_FOUND_LOG = "The order with id {} was not found.";
 
   private final OrderDao orderDao;
   private final OrderConverter orderConverter;
