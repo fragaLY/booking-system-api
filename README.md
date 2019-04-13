@@ -32,3 +32,7 @@ mongorestore --drop --uri mongodb+srv://developer:developerPassword@development-
 |Run Swarm| Leave Swarm|
 |---------| -----------|
 | ```swarm/swarm-cluster.sh```| ```docker swarm leave --x``` |
+
+# How to debug the application:
+* > To debug the application feel free to use the exposed 5080 port. The example for IntelliJ IDEA is below:
+![debug](screenshot/debug.png)
