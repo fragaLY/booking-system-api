@@ -8,10 +8,36 @@ spring:
       database: "booking-system"
       uri: "mongodb+srv://developer:developerPassword@development-hmiup.mongodb.net/booking-system?retryWrites=true"
   jackson:
+    serialization:
+      INDENT_OUTPUT: true
+      write-dates-as-timestamps: false
     mapper:
       accept_case_insensitive_enums: true
     parser:
       allow_comments: true
+    default-property-inclusion: non_null
+    date-format: "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+    time-zone: "UTC"
+  resources:
+    cache:
+      cachecontrol:
+        max-age: 120
+        must-revalidate: true
+        cache-private: true
+        cache-public: false
 
 server:
   port: 8080
+  servlet:
+    context-path: /api
+    session:
+      timeout: 3600
+    compression:
+      enabled: true
+      mime-types: "text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json"
+      min-response-size: 1024
+    http2:
+      enabled: true
+    tomcat:
+      max-threads: 0
+      uri-encoding: "UTF-8"

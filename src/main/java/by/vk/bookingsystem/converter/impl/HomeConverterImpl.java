@@ -33,6 +33,6 @@ public class HomeConverterImpl implements HomeConverter {
    */
   @Override
   public Home convertToEntity(final HomeDto dto) {
-    return new Home(new ObjectId(dto.getId()), dto.getName());
+    return new Home(new ObjectId(dto.getHomeId()), dto.getName());
   }
 }

@@ -1,22 +1,24 @@
 package by.vk.bookingsystem.dto.user;
 
-import java.time.LocalDateTime;
-
+import by.vk.bookingsystem.validator.user.UserRole;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonRootName;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
-import by.vk.bookingsystem.validator.user.UserRole;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.hateoas.ResourceSupport;
+
+import java.time.LocalDateTime;
 
 /**
  * The user's data transfer object presentation.
@@ -27,13 +29,27 @@ import lombok.ToString;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Setter
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @ToString
-public class UserDto {
+@JsonPropertyOrder({
+  "id",
+  "firstName",
+  "lastName",
+  "email",
+  "phone",
+  "country",
+  "city",
+  "registered",
+  "role",
+  "currency"
+})
+public class UserDto extends ResourceSupport {
 
   private static final String LITERALS_ONLY_PATTERN = "[A-Za-z]+";
 
+  @JsonProperty("id")
   private String id;
+
   private String firstName;
   private String lastName;
   private String role;
@@ -46,7 +62,8 @@ public class UserDto {
   private String country;
   private String city;
   private LocalDateTime registered;
-  private String password;
+
+  @JsonIgnore private String password;
 
   /**
    * Creates new {@link UserDto} and the new one {@link Builder} for it.
@@ -62,7 +79,7 @@ public class UserDto {
    *
    * @return {@link String}
    */
-  public String getId() {
+  public String getUserId() {
     return id;
   }
 

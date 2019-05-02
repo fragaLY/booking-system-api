@@ -1,13 +1,14 @@
 package by.vk.bookingsystem.dao.mongo;
 
-import java.time.LocalDate;
-import java.util.List;
-
 import by.vk.bookingsystem.dao.OrderDao;
 import by.vk.bookingsystem.domain.Order;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * The data access object layer for {@link Order}
@@ -55,7 +56,7 @@ public interface OrderMongoDao extends MongoRepository<Order, ObjectId>, OrderDa
    */
   @Query(
       "{ $or: [{'from' : {$range:[?0, ?1]}}, {'to':{$range:[?0, ?1]}}, {$and:[{'from': {$lte: ?0}},{'to': {$gte: ?1}}]}] }")
-  boolean existsByFromAndTo(LocalDate from, LocalDate to);
+  boolean existsByFromAndTo(LocalDateTime from, LocalDateTime to);
 
   /**
    * Checks if order exists.

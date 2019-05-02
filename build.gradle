@@ -1,24 +1,11 @@
-buildscript {
-    repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-    dependencies {
-        classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2"
-    }
-}
-
 plugins {
     id 'org.springframework.boot' version '2.1.2.RELEASE'
-    id "com.github.kt3k.coveralls" version "2.8.2"
     id 'com.palantir.docker' version '0.21.0'
 }
 
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'idea'
 apply plugin: 'java'
-apply plugin: 'jacoco'
 
 group = 'by.vk'
 sourceCompatibility = '1.8'
@@ -37,14 +24,18 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    
+    //swagger
+    compile 'io.springfox:springfox-swagger2:2.9.2'
+    compile 'io.springfox:springfox-swagger-ui:2.9.2'
 
     //lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
     //3rd party
-    compileOnly 'org.apache.commons:commons-lang3:3.8.1'
-    compileOnly 'com.google.guava:guava:27.0.1-jre'
+    compile 'org.apache.commons:commons-lang3:3.8.1'
+    compile 'com.google.guava:guava:27.0.1-jre'
 
     //logstash
     compile 'net.logstash.logback:logstash-logback-encoder:5.3'
@@ -58,23 +49,13 @@ compileJava {
     options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 }
 
-jacocoTestReport {
-    reports {
-        xml.enabled = true
-        html.enabled = true
-    }
-}
-
-coveralls {
-    jacocoReportPath 'build/reports/jacoco/test/jacocoTestReport.xml'
-}
-
 bootJar {
     mainClassName = 'by.vk.bookingsystem.BookingSystemApplication'
 }
 
 docker {
     name "fragaly/booking-system"
+    version "lite"
     dockerfile file('docker/Dockerfile')
     files bootJar.archivePath
     buildArgs(['JAR_FILE': "${bootJar.archiveName}"])

@@ -1,17 +1,19 @@
 package by.vk.bookingsystem.dto.price;
 
-import java.math.BigDecimal;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonRootName;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.hateoas.ResourceSupport;
+
+import java.math.BigDecimal;
 
 /**
  * The data transfer object of price.
@@ -20,17 +22,20 @@ import org.hibernate.validator.constraints.Range;
  */
 @JsonRootName("price")
 @JsonIgnoreProperties(ignoreUnknown = true)
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
-public class PriceDto {
+@JsonPropertyOrder({"id", "price", "guests"})
+public class PriceDto extends ResourceSupport {
 
+  @JsonProperty("id")
   private String id;
+
   private BigDecimal price;
   private int guests;
 
   @NotBlank(message = "Price id cannot be blank")
-  public String getId() {
+  public String getPriceId() {
     return id;
   }
 

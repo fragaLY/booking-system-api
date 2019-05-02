@@ -1,20 +1,32 @@
 <configuration>
-	<include resource="org/springframework/boot/logging/logback/base.xml"/>
-	<logger name="org.springframework" level="INFO"/>
 
-	<appender name="STASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-		<destination>elk:4560</destination>
-		<encoder class="net.logstash.logback.encoder.LogstashEncoder">
-			<customFields>{"service_name":"api"}</customFields>
-			<fieldNames>
-				<message>log_message</message>
-			</fieldNames>
-		</encoder>
-		<keepAliveDuration>5 minutes</keepAliveDuration>
-	</appender>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <logger name="org.springframework" level="INFO"/>
 
-	<root level="INFO">
-		<appender-ref ref="STASH"/>
-	</root>
+    <property name="FILE_PATH" value="/tmp/booking-system.log"/>
+
+    <appender name="FILE_STASH" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${FILE_PATH}</File>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <maxIndex>5</maxIndex>
+            <fileNamePattern>${FILE_PATH}.%i</fileNamePattern>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>10MB</MaxFileSize>
+        </triggeringPolicy>
+    </appender>
+
+    <appender name="CONSOLE_STASH" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE_STASH"/>
+    </root>
+
+    <root level="DEBUG">
+        <appender-ref ref="FILE_STASH"/>
+    </root>
 
 </configuration>

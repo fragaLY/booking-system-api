@@ -1,24 +1,26 @@
 package by.vk.bookingsystem.dto.order;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Set;
-
+import by.vk.bookingsystem.dto.home.HomeDto;
+import by.vk.bookingsystem.dto.user.UserDto;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonRootName;
 import javax.validation.Valid;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-
-import by.vk.bookingsystem.dto.home.HomeDto;
-import by.vk.bookingsystem.dto.user.UserDto;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.hateoas.ResourceSupport;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Set;
 
 /**
  * The data transfer object of order.
@@ -31,11 +33,18 @@ import org.springframework.hateoas.ResourceSupport;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @ToString
+@JsonPropertyOrder({"id", "from", "to", "cost", "guests", "confirmed", "owner", "homes"})
 public class OrderDto extends ResourceSupport {
 
+  @JsonProperty("id")
   private String id;
+
+  @JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "UTC")
   private LocalDate from;
+
+  @JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "UTC")
   private LocalDate to;
+
   private BigDecimal cost;
   private boolean confirmed;
 

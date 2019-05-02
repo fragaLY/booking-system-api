@@ -1,17 +1,18 @@
 package by.vk.bookingsystem.controller;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
+import by.vk.bookingsystem.dto.order.OrderDto;
+import by.vk.bookingsystem.dto.order.OrderSetDto;
+import by.vk.bookingsystem.exception.ObjectNotFoundException;
+import by.vk.bookingsystem.service.OrderService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-
-import by.vk.bookingsystem.dto.order.OrderDto;
-import by.vk.bookingsystem.dto.order.OrderSetDto;
-import by.vk.bookingsystem.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,6 +25,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * The controller to work with orders
@@ -51,6 +59,25 @@ public class OrderController {
    *
    * @return {@link ResponseEntity}
    */
+  @ApiOperation(
+      value = "Get all orders",
+      notes = "Orders will be sent in the location response",
+      response = OrderSetDto.class)
+  @ApiResponses(
+      value = {
+        @ApiResponse(code = 200, message = "Orders were retrieved", response = OrderSetDto.class),
+        @ApiResponse(
+            code = 400,
+            message = "Bad request",
+            response = IllegalArgumentException.class),
+        @ApiResponse(code = 401, message = "Unauthorized client"),
+        @ApiResponse(code = 403, message = "Access denied"),
+        @ApiResponse(
+            code = 404,
+            message = "Orders were not found",
+            response = ObjectNotFoundException.class),
+        @ApiResponse(code = 500, message = "Internal Error")
+      })
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
   public ResponseEntity<OrderSetDto> getAllOrders() {
@@ -63,11 +90,51 @@ public class OrderController {
    * @param id - the id of order
    * @return {@link ResponseEntity}
    */
+  @ApiOperation(
+      value = "Get order by id",
+      notes = "Order will be sent in the location response",
+      response = OrderDto.class)
+  @ApiResponses(
+      value = {
+        @ApiResponse(code = 200, message = "Order was retrieved", response = OrderDto.class),
+        @ApiResponse(
+            code = 400,
+            message = "Bad request",
+            response = IllegalArgumentException.class),
+        @ApiResponse(code = 401, message = "Unauthorized client"),
+        @ApiResponse(code = 403, message = "Access denied"),
+        @ApiResponse(
+            code = 404,
+            message = "Order was not found",
+            response = ObjectNotFoundException.class),
+        @ApiResponse(code = 500, message = "Internal Error")
+      })
   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
   public ResponseEntity<OrderDto> getOrder(
       @NotBlank(message = "The id cannot be blank") @PathVariable(value = "id") final String id) {
-    return ResponseEntity.ok(orderService.findOrderById(id));
+    final OrderDto order = orderService.findOrderById(id);
+
+    final Link selfRel = linkTo(OrderController.class).slash(id).withSelfRel();
+
+    // todo vk: fix double links in references
+    final Link ownerRel =
+        linkTo(UserController.class).slash(order.getOwner().getUserId()).withRel("owner");
+
+    final List<Link> homeLinks =
+        order.getHomes().stream()
+            .map(
+                home ->
+                    linkTo(HomeController.class)
+                        .slash(home.getHomeId())
+                        .withRel("home_" + home.getName()))
+            .collect(Collectors.toList());
+
+    order.add(selfRel);
+    order.add(ownerRel);
+    order.add(homeLinks);
+
+    return ResponseEntity.ok(order);
   }
 
   /**
@@ -76,6 +143,14 @@ public class OrderController {
    * @param dto - the order
    * @return {@link ResponseEntity}
    */
+  @ApiResponses(
+      value = {
+        @ApiResponse(code = 201, message = "Order created"),
+        @ApiResponse(code = 400, message = "Bad request"),
+        @ApiResponse(code = 401, message = "Unauthorized client"),
+        @ApiResponse(code = 403, message = "Access denied"),
+        @ApiResponse(code = 500, message = "Error getting statistic")
+      })
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
   public ResponseEntity<Void> createOrder(
@@ -99,6 +174,17 @@ public class OrderController {
    * @return {@link ResponseEntity}
    * @throws URISyntaxException throws
    */
+  @ApiResponses(
+      value = {
+        @ApiResponse(code = 200, message = "Order was updated"),
+        @ApiResponse(
+            code = 400,
+            message = "Bad request",
+            response = IllegalArgumentException.class),
+        @ApiResponse(code = 401, message = "Unauthorized client"),
+        @ApiResponse(code = 403, message = "Access denied"),
+        @ApiResponse(code = 500, message = "Internal Error")
+      })
   @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
   public ResponseEntity<Void> updateOrder(
@@ -116,6 +202,14 @@ public class OrderController {
    * @param id - the id of order
    * @return {@link ResponseEntity}
    */
+  @ApiResponses(
+      value = {
+        @ApiResponse(code = 200, message = "Order deleted"),
+        @ApiResponse(code = 400, message = "Bad request"),
+        @ApiResponse(code = 401, message = "Unauthorized client"),
+        @ApiResponse(code = 403, message = "Access denied"),
+        @ApiResponse(code = 500, message = "Internal Error")
+      })
   @DeleteMapping(value = "/{id}")
   @ResponseBody
   public ResponseEntity<Void> deleteOrder(@NotBlank @PathVariable final String id) {

@@ -1,9 +1,5 @@
 package by.vk.bookingsystem.domain;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Set;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -14,6 +10,10 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Set;
 
 /**
  * The entity of order.
