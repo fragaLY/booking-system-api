@@ -132,15 +132,17 @@ public class OrderServiceImpl implements OrderService {
   @Override
   public void updateOrder(final OrderDto dto, final String id) {
 
+    orderValidator.validateOwner(dto.getOwner());
+    orderValidator.validateHomes(dto.getHomes());
+    orderValidator.validateOrderDates(dto);
+
     if (!orderDao.existsById(id)) {
       LOGGER.warn(ORDER_NOT_FOUND_LOG, id);
       throw new ObjectNotFoundException(ORDER_NOT_FOUND);
     }
 
     final Order order = orderDao.findOrderById(id);
-    orderValidator.validateOwner(dto.getOwner());
-    orderValidator.validateHomes(dto.getHomes());
-    orderValidator.validateOrderDates(dto);
+
     dto.setCost(costCalculator.calculateCost(dto));
     orderDao.insert(orderConverter.enrichModel(order, dto));
   }
