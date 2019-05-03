@@ -2,12 +2,14 @@ package by.vk.bookingsystem;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 /**
  * The Booking System Application
  *
  * @author Vadzim_Kavalkou
  */
+@EnableWebMvc
 @SpringBootApplication
 public class BookingSystemApplication {
 

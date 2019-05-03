@@ -78,7 +78,7 @@ public class OrderController {
             response = ObjectNotFoundException.class),
         @ApiResponse(code = 500, message = "Internal Error")
       })
-  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
   @ResponseBody
   public ResponseEntity<OrderSetDto> getAllOrders() {
     return ResponseEntity.ok(orderService.findAllOrders());
@@ -109,17 +109,11 @@ public class OrderController {
             response = ObjectNotFoundException.class),
         @ApiResponse(code = 500, message = "Internal Error")
       })
-  @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
   @ResponseBody
   public ResponseEntity<OrderDto> getOrder(
       @NotBlank(message = "The id cannot be blank") @PathVariable(value = "id") final String id) {
     final OrderDto order = orderService.findOrderById(id);
-
-    final Link selfRel = linkTo(OrderController.class).slash(id).withSelfRel();
-
-    // todo vk: fix double links in references
-    final Link ownerRel =
-        linkTo(UserController.class).slash(order.getOwner().getUserId()).withRel("owner");
 
     final List<Link> homeLinks =
         order.getHomes().stream()
@@ -127,11 +121,9 @@ public class OrderController {
                 home ->
                     linkTo(HomeController.class)
                         .slash(home.getHomeId())
-                        .withRel("home_" + home.getName()))
+                        .withRel("home_" + home.getName().toLowerCase()))
             .collect(Collectors.toList());
 
-    order.add(selfRel);
-    order.add(ownerRel);
     order.add(homeLinks);
 
     return ResponseEntity.ok(order);
@@ -151,7 +143,7 @@ public class OrderController {
         @ApiResponse(code = 403, message = "Access denied"),
         @ApiResponse(code = 500, message = "Error getting statistic")
       })
-  @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
   @ResponseBody
   public ResponseEntity<Void> createOrder(
       @NotNull(message = "The order cannot be null") @Valid @RequestBody final OrderDto dto) {
@@ -185,7 +177,7 @@ public class OrderController {
         @ApiResponse(code = 403, message = "Access denied"),
         @ApiResponse(code = 500, message = "Internal Error")
       })
-  @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+  @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
   @ResponseBody
   public ResponseEntity<Void> updateOrder(
       final HttpServletRequest request,

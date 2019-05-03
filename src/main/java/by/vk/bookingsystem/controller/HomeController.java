@@ -65,7 +65,7 @@ public class HomeController {
             response = ObjectNotFoundException.class),
         @ApiResponse(code = 500, message = "Internal Error")
       })
-  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
   @ResponseBody
   public ResponseEntity<HomeSetDto> getHomes() {
     return ResponseEntity.ok(homeService.findAllHomes());
@@ -96,7 +96,7 @@ public class HomeController {
             response = ObjectNotFoundException.class),
         @ApiResponse(code = 500, message = "Internal Error")
       })
-  @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
   @ResponseBody
   public ResponseEntity<HomeDto> getHomeById(
       @NotBlank(message = "The id cannot be blank") @PathVariable final String id) {

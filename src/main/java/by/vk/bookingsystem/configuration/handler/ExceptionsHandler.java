@@ -1,5 +1,34 @@
 package by.vk.bookingsystem.configuration.handler;
 
+import by.vk.bookingsystem.exception.ErrorDetails;
+import by.vk.bookingsystem.exception.ObjectNotFoundException;
+import org.springframework.beans.ConversionNotSupportedException;
+import org.springframework.beans.TypeMismatchException;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.converter.HttpMessageNotWritableException;
+import org.springframework.lang.Nullable;
+import org.springframework.validation.BindException;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingPathVariableException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.ServletRequestBindingException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.context.request.async.AsyncRequestTimeoutException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
+import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -7,26 +36,13 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 import java.nio.file.AccessDeniedException;
 import java.util.stream.Collectors;
 
-import by.vk.bookingsystem.exception.ErrorDetails;
-import by.vk.bookingsystem.exception.ObjectNotFoundException;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.NoHandlerFoundException;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
 /**
  * The handler of exception that appears during the application work
  *
  * @author Vadzim_Kavalkou
  */
-@ControllerAdvice
+@RestControllerAdvice
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class ExceptionsHandler extends ResponseEntityExceptionHandler {
 
   private static final String FORMAT = "Cause in %s , reason %s %n.";
@@ -165,6 +181,132 @@ public class ExceptionsHandler extends ResponseEntityExceptionHandler {
       final HttpStatus status,
       final WebRequest request) {
 
+    final ErrorDetails errorDetails =
+        new ErrorDetails(status, status.value(), exception.getLocalizedMessage());
+
+    return new ResponseEntity<>(errorDetails, headers, status);
+  }
+
+  @Override
+  protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(
+      HttpMediaTypeNotSupportedException exception,
+      HttpHeaders headers,
+      HttpStatus status,
+      WebRequest request) {
+    final ErrorDetails errorDetails =
+        new ErrorDetails(status, status.value(), exception.getLocalizedMessage());
+
+    return new ResponseEntity<>(errorDetails, headers, status);
+  }
+
+  @Override
+  protected ResponseEntity<Object> handleMissingServletRequestPart(
+      MissingServletRequestPartException exception,
+      HttpHeaders headers,
+      HttpStatus status,
+      WebRequest request) {
+    final ErrorDetails errorDetails =
+        new ErrorDetails(status, status.value(), exception.getLocalizedMessage());
+
+    return new ResponseEntity<>(errorDetails, headers, status);
+  }
+
+  @Override
+  protected ResponseEntity<Object> handleHttpMessageNotWritable(
+      HttpMessageNotWritableException exception,
+      HttpHeaders headers,
+      HttpStatus status,
+      WebRequest request) {
+    final ErrorDetails errorDetails =
+        new ErrorDetails(status, status.value(), exception.getLocalizedMessage());
+
+    return new ResponseEntity<>(errorDetails, headers, status);
+  }
+
+  @Override
+  protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(
+      HttpMediaTypeNotAcceptableException exception,
+      HttpHeaders headers,
+      HttpStatus status,
+      WebRequest request) {
+    final ErrorDetails errorDetails =
+        new ErrorDetails(status, status.value(), exception.getLocalizedMessage());
+
+    return new ResponseEntity<>(errorDetails, headers, status);
+  }
+
+  @Override
+  protected ResponseEntity<Object> handleTypeMismatch(
+      TypeMismatchException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    final ErrorDetails errorDetails =
+        new ErrorDetails(status, status.value(), exception.getLocalizedMessage());
+
+    return new ResponseEntity<>(errorDetails, headers, status);
+  }
+
+  @Override
+  protected ResponseEntity<Object> handleMissingServletRequestParameter(
+      MissingServletRequestParameterException exception,
+      HttpHeaders headers,
+      HttpStatus status,
+      WebRequest request) {
+    final ErrorDetails errorDetails =
+        new ErrorDetails(status, status.value(), exception.getLocalizedMessage());
+
+    return new ResponseEntity<>(errorDetails, headers, status);
+  }
+
+  @Override
+  protected ResponseEntity<Object> handleServletRequestBindingException(
+      ServletRequestBindingException exception,
+      HttpHeaders headers,
+      HttpStatus status,
+      WebRequest request) {
+    final ErrorDetails errorDetails =
+        new ErrorDetails(status, status.value(), exception.getLocalizedMessage());
+
+    return new ResponseEntity<>(errorDetails, headers, status);
+  }
+
+  @Override
+  protected ResponseEntity<Object> handleConversionNotSupported(
+      ConversionNotSupportedException exception,
+      HttpHeaders headers,
+      HttpStatus status,
+      WebRequest request) {
+    final ErrorDetails errorDetails =
+        new ErrorDetails(status, status.value(), exception.getLocalizedMessage());
+
+    return new ResponseEntity<>(errorDetails, headers, status);
+  }
+
+  @Override
+  protected ResponseEntity<Object> handleMissingPathVariable(
+      MissingPathVariableException exception,
+      HttpHeaders headers,
+      HttpStatus status,
+      WebRequest request) {
+    final ErrorDetails errorDetails =
+        new ErrorDetails(status, status.value(), exception.getLocalizedMessage());
+
+    return new ResponseEntity<>(errorDetails, headers, status);
+  }
+
+  @Override
+  protected ResponseEntity<Object> handleBindException(
+      BindException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    final ErrorDetails errorDetails =
+        new ErrorDetails(status, status.value(), exception.getLocalizedMessage());
+
+    return new ResponseEntity<>(errorDetails, headers, status);
+  }
+
+  @Override
+  protected ResponseEntity<Object> handleAsyncRequestTimeoutException(
+      AsyncRequestTimeoutException exception,
+      HttpHeaders headers,
+      HttpStatus status,
+      WebRequest webRequest) {
     final ErrorDetails errorDetails =
         new ErrorDetails(status, status.value(), exception.getLocalizedMessage());
 

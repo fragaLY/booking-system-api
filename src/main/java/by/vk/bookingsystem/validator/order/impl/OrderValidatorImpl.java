@@ -79,7 +79,7 @@ public class OrderValidatorImpl implements OrderValidator {
    */
   public void validateOwner(final UserDto owner) {
     if (userDao.findUserById(owner.getUserId()) == null) {
-      LOGGER.error(OWNER_NOT_FOUND_LOG, owner);
+      LOGGER.warn(OWNER_NOT_FOUND_LOG, owner);
       throw new IllegalArgumentException(environment.getProperty(OWNER_NOT_FOUND));
     }
   }
@@ -100,7 +100,7 @@ public class OrderValidatorImpl implements OrderValidator {
                 .collect(Collectors.toSet()));
 
     if (validHomes == null || validHomes.isEmpty()) {
-      LOGGER.error(HOMES_NOT_FOUND_LOG, homes);
+      LOGGER.warn(HOMES_NOT_FOUND_LOG, homes);
       throw new IllegalArgumentException(environment.getProperty(HOMES_NOT_FOUND));
     }
   }
@@ -118,12 +118,12 @@ public class OrderValidatorImpl implements OrderValidator {
     final LocalDate to = order.getTo();
 
     if (from.isAfter(to)) {
-      LOGGER.error(INVALID_ORDER_DATES_LOG, order);
+      LOGGER.warn(INVALID_ORDER_DATES_LOG, order);
       throw new IllegalArgumentException(environment.getProperty(INVALID_ORDER_DATES));
     }
 
     if (orderDao.existsByFromAndTo(from, to)) {
-      LOGGER.error(INTERSECTING_DATES_LOG, order);
+      LOGGER.warn(INTERSECTING_DATES_LOG, order);
       throw new IllegalArgumentException(environment.getProperty(INTERSECTING_DATES));
     }
   }

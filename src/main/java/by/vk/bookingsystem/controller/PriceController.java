@@ -65,7 +65,7 @@ public class PriceController {
             response = ObjectNotFoundException.class),
         @ApiResponse(code = 500, message = "Internal Error")
       })
-  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
   @ResponseBody
   public ResponseEntity<PriceSetDto> getPrices() {
     return ResponseEntity.ok(priceService.findAllPrices());
@@ -96,7 +96,7 @@ public class PriceController {
             response = ObjectNotFoundException.class),
         @ApiResponse(code = 500, message = "Internal Error")
       })
-  @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
   @ResponseBody
   public ResponseEntity<PriceDto> getPrice(
       @NotBlank(message = "The id cannot be blank") @PathVariable final String id) {

@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
   public UserDto findUserById(final String id) {
 
     if (!userDao.existsById(id)) {
-      LOGGER.error(USER_NOT_FOUND_LOG, id);
+      LOGGER.warn(USER_NOT_FOUND_LOG, id);
       throw new ObjectNotFoundException(environment.getProperty(USER_NOT_FOUND));
     }
 
@@ -105,12 +105,12 @@ public class UserServiceImpl implements UserService {
   public String createUser(final UserDto user) {
 
     if (userDao.existsByEmail(user.getEmail())) {
-      LOGGER.error(EMAIL_ALREADY_REGISTERED_LOG, user);
+      LOGGER.warn(EMAIL_ALREADY_REGISTERED_LOG, user);
       throw new IllegalArgumentException(environment.getProperty(EMAIL_ALREADY_REGISTERED));
     }
 
     if (userDao.existsByPhone(user.getPhone())) {
-      LOGGER.error(PHONE_ALREADY_REGISTERED_LOG, user);
+      LOGGER.warn(PHONE_ALREADY_REGISTERED_LOG, user);
       throw new IllegalArgumentException(environment.getProperty(PHONE_ALREADY_REGISTERED));
     }
 
@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService {
   public void updateUser(final UserDto user, final String id) {
 
     if (!userDao.existsById(id)) {
-      LOGGER.error(USER_NOT_FOUND_LOG, id);
+      LOGGER.warn(USER_NOT_FOUND_LOG, id);
       throw new ObjectNotFoundException(environment.getProperty(USER_NOT_FOUND));
     }
 
@@ -141,7 +141,7 @@ public class UserServiceImpl implements UserService {
     final String oldEmail = userToUpdate.getEmail();
 
     if (!oldEmail.equalsIgnoreCase(newEmail) && userDao.existsByEmail(newEmail)) {
-      LOGGER.error(EMAIL_ALREADY_REGISTERED_LOG, user);
+      LOGGER.warn(EMAIL_ALREADY_REGISTERED_LOG, user);
       throw new IllegalArgumentException(environment.getProperty(EMAIL_ALREADY_REGISTERED));
     }
 
@@ -149,7 +149,7 @@ public class UserServiceImpl implements UserService {
     final String oldPhone = userToUpdate.getPhone();
 
     if (!oldPhone.equalsIgnoreCase(newPhone) && userDao.existsByPhone(newPhone)) {
-      LOGGER.error(PHONE_ALREADY_REGISTERED_LOG, user);
+      LOGGER.warn(PHONE_ALREADY_REGISTERED_LOG, user);
       throw new IllegalArgumentException(environment.getProperty(PHONE_ALREADY_REGISTERED));
     }
 
@@ -167,7 +167,7 @@ public class UserServiceImpl implements UserService {
   public void deleteUserById(final String id) {
 
     if (!userDao.existsById(id)) {
-      LOGGER.error(USER_NOT_FOUND_LOG, id);
+      LOGGER.warn(USER_NOT_FOUND_LOG, id);
       throw new ObjectNotFoundException(environment.getProperty(USER_NOT_FOUND));
     }
 

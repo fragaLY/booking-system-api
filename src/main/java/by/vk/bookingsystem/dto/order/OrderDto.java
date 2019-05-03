@@ -36,7 +36,6 @@ import java.util.Set;
 @JsonPropertyOrder({"id", "from", "to", "cost", "guests", "confirmed", "owner", "homes"})
 public class OrderDto extends ResourceSupport {
 
-  @JsonProperty("id")
   private String id;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "UTC")
@@ -46,6 +45,7 @@ public class OrderDto extends ResourceSupport {
   private LocalDate to;
 
   private BigDecimal cost;
+
   private boolean confirmed;
 
   @Valid private Set<HomeDto> homes;
@@ -67,6 +67,7 @@ public class OrderDto extends ResourceSupport {
    *
    * @return {@link String}
    */
+  @JsonProperty("id")
   public String getOrderId() {
     return id;
   }

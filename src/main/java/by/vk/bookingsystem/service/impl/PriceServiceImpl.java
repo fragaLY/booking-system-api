@@ -77,7 +77,7 @@ public class PriceServiceImpl implements PriceService {
   public PriceDto findPriceById(final String id) {
 
     if (!priceDao.existsById(id)) {
-      LOGGER.error(PRICE_NOT_FOUND_LOG, id);
+      LOGGER.warn(PRICE_NOT_FOUND_LOG, id);
       throw new ObjectNotFoundException(environment.getProperty(PRICE_NOT_FOUND));
     }
 

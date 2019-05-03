@@ -1,15 +1,15 @@
 spring:
   profiles:
     active: "development"
-  main:
-    banner-mode: "off"
+  mvc:
+    throw-exception-if-no-handler-found: true
   data:
     mongodb:
       database: "booking-system"
       uri: "mongodb+srv://developer:developerPassword@development-hmiup.mongodb.net/booking-system?retryWrites=true"
   jackson:
     serialization:
-      INDENT_OUTPUT: true
+      indent_output: true
       write-dates-as-timestamps: false
     mapper:
       accept_case_insensitive_enums: true
@@ -25,6 +25,8 @@ spring:
         must-revalidate: true
         cache-private: true
         cache-public: false
+  banner:
+    location: banner/api-banner.txt
 
 server:
   port: 8080
@@ -35,9 +37,13 @@ server:
     compression:
       enabled: true
       mime-types: "text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json"
-      min-response-size: 1024
+      min-response-size: 512
     http2:
       enabled: true
     tomcat:
       max-threads: 0
       uri-encoding: "UTF-8"
+  error:
+    include-stacktrace: always
+    whitelabel:
+      enabled: false

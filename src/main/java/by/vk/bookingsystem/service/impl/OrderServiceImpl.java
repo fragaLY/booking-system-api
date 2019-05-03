@@ -90,7 +90,7 @@ public class OrderServiceImpl implements OrderService {
   public OrderDto findOrderById(final String id) {
 
     if (!orderDao.existsById(id)) {
-      LOGGER.error(ORDER_NOT_FOUND_LOG, id);
+      LOGGER.warn(ORDER_NOT_FOUND_LOG, id);
       throw new ObjectNotFoundException(environment.getProperty(ORDER_NOT_FOUND));
     }
 
@@ -124,7 +124,7 @@ public class OrderServiceImpl implements OrderService {
   public void updateOrder(final OrderDto dto, final String id) {
 
     if (!orderDao.existsById(id)) {
-      LOGGER.error(ORDER_NOT_FOUND_LOG, id);
+      LOGGER.warn(ORDER_NOT_FOUND_LOG, id);
       throw new ObjectNotFoundException(ORDER_NOT_FOUND);
     }
 
@@ -147,7 +147,7 @@ public class OrderServiceImpl implements OrderService {
   public void deleteOrderById(final String id) {
 
     if (!orderDao.existsById(id)) {
-      LOGGER.error(ORDER_NOT_FOUND_LOG, id);
+      LOGGER.warn(ORDER_NOT_FOUND_LOG, id);
       throw new ObjectNotFoundException(ORDER_NOT_FOUND);
     }
 

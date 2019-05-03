@@ -72,7 +72,7 @@ public class UserController {
             response = ObjectNotFoundException.class),
         @ApiResponse(code = 500, message = "Internal Error")
       })
-  @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
   @ResponseBody
   public ResponseEntity<UserDto> getUserById(
       @NotBlank(message = "The id cannot be blank") @PathVariable(value = "id") final String id) {
@@ -107,7 +107,7 @@ public class UserController {
             response = ObjectNotFoundException.class),
         @ApiResponse(code = 500, message = "Internal Error")
       })
-  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
   @ResponseBody
   public ResponseEntity<UserSetDto> getUsers() {
     return ResponseEntity.ok(userService.findAllUsers());
@@ -127,7 +127,7 @@ public class UserController {
         @ApiResponse(code = 403, message = "Access denied"),
         @ApiResponse(code = 500, message = "Internal Error")
       })
-  @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
   @ResponseBody
   public ResponseEntity<Void> createUser(
       @NotNull(message = "The user cannot be null") @Valid @RequestBody final UserDto dto) {
@@ -158,7 +158,7 @@ public class UserController {
         @ApiResponse(code = 403, message = "Access denied"),
         @ApiResponse(code = 500, message = "Internal Error")
       })
-  @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+  @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
   @ResponseBody
   public ResponseEntity<Void> updateUser(
       final HttpServletRequest request,

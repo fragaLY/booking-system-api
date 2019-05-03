@@ -77,7 +77,7 @@ public class HomeServiceImpl implements HomeService {
   public HomeDto findHomeById(final String id) {
 
     if (!homeDao.existsById(id)) {
-      LOGGER.error(HOME_NOT_FOUND_LOG, id);
+      LOGGER.warn(HOME_NOT_FOUND_LOG, id);
       throw new ObjectNotFoundException(environment.getProperty(HOME_NOT_FOUND));
     }
 

@@ -64,7 +64,7 @@ public class CostCalculatorServiceImpl implements CostCalculatorService {
     final long days = duration.toDays();
 
     if (days == 0) {
-      LOGGER.error(WRONG_ORDER_DURATION_LOG, order);
+      LOGGER.warn(WRONG_ORDER_DURATION_LOG, order);
       throw new IllegalArgumentException(environment.getProperty(WRONG_ORDER_DURATION));
     }
 
