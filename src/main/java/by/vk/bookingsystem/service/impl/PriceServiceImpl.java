@@ -12,6 +12,8 @@ import by.vk.bookingsystem.service.PriceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
  * @author Vadzim_Kavalkou
  */
 @Service
+@CacheConfig(cacheNames = "prices")
 @PropertySources(@PropertySource("classpath:i18n/validation_errors.properties"))
 public class PriceServiceImpl implements PriceService {
 
@@ -56,6 +59,7 @@ public class PriceServiceImpl implements PriceService {
    *
    * @return {@link PriceSetDto}
    */
+  @Cacheable
   @Override
   public PriceSetDto findAllPrices() {
     return new PriceSetDto(
@@ -73,6 +77,7 @@ public class PriceServiceImpl implements PriceService {
    * @param id - the id of price
    * @return {@link PriceDto}
    */
+  @Cacheable
   @Override
   public PriceDto findPriceById(final String id) {
 

@@ -196,7 +196,7 @@ public class OrderController {
    */
   @ApiResponses(
       value = {
-        @ApiResponse(code = 200, message = "Order deleted"),
+        @ApiResponse(code = 204, message = "Order deleted"),
         @ApiResponse(code = 400, message = "Bad request"),
         @ApiResponse(code = 401, message = "Unauthorized client"),
         @ApiResponse(code = 403, message = "Access denied"),

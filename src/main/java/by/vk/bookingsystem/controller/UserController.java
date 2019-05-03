@@ -177,7 +177,7 @@ public class UserController {
    */
   @ApiResponses(
       value = {
-        @ApiResponse(code = 200, message = "User deleted"),
+        @ApiResponse(code = 204, message = "User deleted"),
         @ApiResponse(code = 400, message = "Bad request"),
         @ApiResponse(code = 401, message = "Unauthorized client"),
         @ApiResponse(code = 403, message = "Access denied"),
