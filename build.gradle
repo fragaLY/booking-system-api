@@ -1,6 +1,6 @@
 plugins {
     id 'org.springframework.boot' version '2.1.2.RELEASE'
-    id 'com.palantir.docker' version '0.21.0'
+    id 'com.palantir.docker' version '0.22.1'
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -54,8 +54,7 @@ bootJar {
 }
 
 docker {
-    name "fragaly/booking-system"
-    version "lite"
+    name "fragaly/booking-system:lite"
     dockerfile file('docker/Dockerfile')
     files bootJar.archivePath
     buildArgs(['JAR_FILE': "${bootJar.archiveName}"])
