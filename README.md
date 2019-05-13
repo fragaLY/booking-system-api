@@ -16,3 +16,6 @@ mongorestore --drop --uri mongodb+srv://developer:developerPassword@development-
 |Script| Links        | Description     |
 |----| ------------- |:-------------:|
 |```docker run -p 8080:8080 fragaly/booking-system:lite -d```| [REST API](http://localhost:8080/api/) | Run the containers and up application |
+
+To test performance using wrk:
+```wrk -t100 -c500 -d10m http://localhost:8080/api/orders```
