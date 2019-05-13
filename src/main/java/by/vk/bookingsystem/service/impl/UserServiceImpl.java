@@ -1,5 +1,8 @@
 package by.vk.bookingsystem.service.impl;
 
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 import by.vk.bookingsystem.converter.UserConverter;
 import by.vk.bookingsystem.dao.UserDao;
 import by.vk.bookingsystem.domain.User;
@@ -11,17 +14,14 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
-
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * The service implementation for {@link UserDto}
@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
  * @author Vadzim_Kavalkou
  */
 @Service
-@CacheConfig(cacheNames = "users")
 @PropertySources(@PropertySource("classpath:i18n/validation_errors.properties"))
 public class UserServiceImpl implements UserService {
 
@@ -69,7 +68,7 @@ public class UserServiceImpl implements UserService {
    *
    * @return {@link UserSetDto}
    */
-  @Cacheable
+  @Cacheable(value = "users")
   @Override
   public UserSetDto findAllUsers() {
     return new UserSetDto(
@@ -88,7 +87,7 @@ public class UserServiceImpl implements UserService {
    * @return {@link UserDto}
    * @throws ObjectNotFoundException the exception of absence any instance
    */
-  @Cacheable
+  @Cacheable(value = "user", key = "#id")
   @Override
   public UserDto findUserById(final String id) {
 
@@ -108,7 +107,7 @@ public class UserServiceImpl implements UserService {
    * @param user - {@link UserDto}
    * @return {@link String}
    */
-  @CachePut
+  @CachePut(value = "users")
   @Override
   public String createUser(final UserDto user) {
 
@@ -135,7 +134,7 @@ public class UserServiceImpl implements UserService {
    * @param user - {@link UserDto}
    * @param id - the id of user.
    */
-  @CachePut
+  @Caching(put = {@CachePut(value = "users"), @CachePut(value = "user", key = "#id")})
   @Override
   public void updateUser(final UserDto user, final String id) {
 
@@ -172,7 +171,7 @@ public class UserServiceImpl implements UserService {
    *
    * @param id - the id of user
    */
-  @CacheEvict(allEntries = true)
+  @Caching(evict = {@CacheEvict(value = "users"), @CacheEvict(value = "user", key = "#id")})
   @Override
   public void deleteUserById(final String id) {
 

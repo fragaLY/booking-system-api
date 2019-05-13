@@ -1,5 +1,8 @@
 package by.vk.bookingsystem.service.impl;
 
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 import by.vk.bookingsystem.converter.OrderConverter;
 import by.vk.bookingsystem.dao.OrderDao;
 import by.vk.bookingsystem.domain.Order;
@@ -12,17 +15,14 @@ import by.vk.bookingsystem.validator.order.OrderValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
-
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * The service implementation for {@link OrderDto}
@@ -30,7 +30,6 @@ import java.util.stream.Collectors;
  * @author Vadzim_Kavalkou
  */
 @Service
-@CacheConfig(cacheNames = "orders")
 @PropertySources(@PropertySource("classpath:i18n/validation_errors.properties"))
 public class OrderServiceImpl implements OrderService {
 
@@ -75,7 +74,7 @@ public class OrderServiceImpl implements OrderService {
    * @return {@link OrderSetDto}
    */
   @Override
-  @Cacheable
+  @Cacheable(value = "orders")
   public OrderSetDto findAllOrders() {
     return new OrderSetDto(
         orderDao.findAll().stream()
@@ -92,7 +91,7 @@ public class OrderServiceImpl implements OrderService {
    * @param id - the id of order
    * @return {@link OrderDto}
    */
-  @Cacheable
+  @Cacheable(value = "order", key = "#id")
   @Override
   public OrderDto findOrderById(final String id) {
 
@@ -110,7 +109,7 @@ public class OrderServiceImpl implements OrderService {
    * @param order - {@link OrderDto}
    * @return {@link String}
    */
-  @CachePut
+  @CachePut(value = "orders")
   @Override
   public String createOrder(final OrderDto order) {
     orderValidator.validateOwner(order.getOwner());
@@ -128,7 +127,7 @@ public class OrderServiceImpl implements OrderService {
    * @param dto - {@link OrderDto}
    * @param id - the id of order.
    */
-  @CachePut
+  @Caching(put = {@CachePut(value = "orders"), @CachePut(value = "order", key = "#id")})
   @Override
   public void updateOrder(final OrderDto dto, final String id) {
 
@@ -154,7 +153,7 @@ public class OrderServiceImpl implements OrderService {
    *
    * @param id - the id of order
    */
-  @CacheEvict(allEntries = true)
+  @Caching(evict = {@CacheEvict(value = "orders"), @CacheEvict(value = "order", key = "#id")})
   @Override
   public void deleteOrderById(final String id) {
 

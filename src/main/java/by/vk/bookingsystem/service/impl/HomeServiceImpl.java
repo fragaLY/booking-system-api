@@ -12,7 +12,6 @@ import by.vk.bookingsystem.service.HomeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
@@ -25,7 +24,6 @@ import org.springframework.stereotype.Service;
  * @author Vadzim_Kavalkou
  */
 @Service
-@CacheConfig(cacheNames = "homes")
 @PropertySources(@PropertySource("classpath:i18n/validation_errors.properties"))
 public class HomeServiceImpl implements HomeService {
 
@@ -59,7 +57,7 @@ public class HomeServiceImpl implements HomeService {
    *
    * @return {@link HomeSetDto}
    */
-  @Cacheable
+  @Cacheable(value = "homes")
   @Override
   public HomeSetDto findAllHomes() {
     return new HomeSetDto(
@@ -77,7 +75,7 @@ public class HomeServiceImpl implements HomeService {
    * @param id - the id of home.
    * @return {@link HomeDto}
    */
-  @Cacheable
+  @Cacheable(value = "home", key = "#id")
   @Override
   public HomeDto findHomeById(final String id) {
 
