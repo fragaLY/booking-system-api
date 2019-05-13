@@ -6,7 +6,7 @@ spring:
   data:
     mongodb:
       database: "booking-system"
-      uri: "mongodb+srv://developer:developerPassword@development-hmiup.mongodb.net/booking-system?retryWrites=true"
+      uri: "mongodb+srv://developer:Password@development-hmiup.mongodb.net/booking-system?retryWrites=true"
   jackson:
     serialization:
       indent_output: true
