@@ -10,6 +10,8 @@ import lombok.Setter;
 import lombok.ToString;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -28,11 +30,11 @@ public class User {
 
   @Id private ObjectId id;
 
-  private String firstName;
-  private String lastName;
+  @TextIndexed private String firstName;
+  @TextIndexed private String lastName;
+  @Indexed private String email;
+  @Indexed private String phone;
   private Role role;
-  private String email;
-  private String phone;
 
   @Field("currency")
   private String currencyCode;

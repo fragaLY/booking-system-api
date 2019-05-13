@@ -192,7 +192,6 @@ public class UserDto extends ResourceSupport {
    *
    * @return {@link String}
    */
-  @NotBlank(message = "The password could not be null")
   public String getPassword() {
     return password;
   }
