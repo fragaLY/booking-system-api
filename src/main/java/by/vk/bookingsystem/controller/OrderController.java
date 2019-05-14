@@ -141,7 +141,7 @@ public class OrderController {
         @ApiResponse(code = 400, message = "Bad request"),
         @ApiResponse(code = 401, message = "Unauthorized client"),
         @ApiResponse(code = 403, message = "Access denied"),
-        @ApiResponse(code = 500, message = "Error getting statistic")
+        @ApiResponse(code = 500, message = "Error getting orders")
       })
   @PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
   @ResponseBody
