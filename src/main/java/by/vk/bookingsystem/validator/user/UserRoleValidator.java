@@ -4,6 +4,8 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 import by.vk.bookingsystem.domain.role.Role;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The validator of {@link Role}
@@ -12,6 +14,8 @@ import by.vk.bookingsystem.domain.role.Role;
  */
 public class UserRoleValidator implements ConstraintValidator<UserRole, String> {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(UserRoleValidator.class);
+
   /**
    * Before the validation prepares the data.
    *
@@ -19,7 +23,7 @@ public class UserRoleValidator implements ConstraintValidator<UserRole, String> 
    */
   @Override
   public void initialize(UserRole role) {
-    // do nothing
+    LOGGER.debug("UserRoleValidator had been initialized");
   }
 
   /**

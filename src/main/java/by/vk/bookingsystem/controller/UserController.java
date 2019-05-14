@@ -31,6 +31,11 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+/**
+ * The controller to work with users
+ *
+ * @author Vadzim_Kavalkou
+ */
 @RestController
 @RequestMapping("/users")
 public class UserController {

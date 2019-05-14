@@ -1,5 +1,7 @@
 package by.vk.bookingsystem.configuration.swagger;
 
+import java.util.Collections;
+
 import by.vk.bookingsystem.BookingSystemApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -12,8 +14,11 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import java.util.Collections;
-
+/**
+ * The config for swagger2
+ *
+ * @author Vadzim_Kavalkou
+ */
 @Configuration
 @ComponentScan("by.vk.bookingsystem.controller")
 @EnableSwagger2
