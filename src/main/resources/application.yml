@@ -40,6 +40,9 @@ logging:
 server:
   port: 8080
   servlet:
+    jetty:
+      acceptors: -1
+      selectors: -1
     context-path: /api
     session:
       timeout: 3600
@@ -49,9 +52,6 @@ server:
       min-response-size: 512
     http2:
       enabled: true
-    tomcat:
-      max-threads: 0
-      uri-encoding: "UTF-8"
   error:
     include-stacktrace: always
     whitelabel:
