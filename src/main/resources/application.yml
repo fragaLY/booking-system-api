@@ -28,6 +28,7 @@ spring:
         cache-public: false
   banner:
     location: banner/api-banner.txt
+    charset: UTF-8
 
 logging:
   pattern:
