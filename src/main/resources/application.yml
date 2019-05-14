@@ -3,6 +3,7 @@ spring:
     active: "development"
   mvc:
     throw-exception-if-no-handler-found: true
+    static-path-pattern: "/swagger*"
   data:
     mongodb:
       database: "booking-system"
