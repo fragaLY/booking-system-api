@@ -29,6 +29,13 @@ spring:
   banner:
     location: banner/api-banner.txt
 
+logging:
+  pattern:
+    console: "%cyan(%date{\"yyyy-MM-dd'T'HH:mm:ss,SSSXXX\", UTC}) %red(UTC) - [%yellow(%msg)]%n"
+    file: "%date{\"yyyy-MM-dd'T'HH:mm:ss,SSSXXX\", UTC} UTC [%thread] %-5level %logger{36} - %msg%n"
+    dateformat:
+    level: "%5p"
+
 server:
   port: 8080
   servlet:
