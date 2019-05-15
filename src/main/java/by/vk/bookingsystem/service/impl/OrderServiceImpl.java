@@ -1,8 +1,12 @@
 package by.vk.bookingsystem.service.impl;
 
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import by.vk.bookingsystem.controller.OrderController;
 import by.vk.bookingsystem.converter.OrderConverter;
 import by.vk.bookingsystem.dao.OrderDao;
 import by.vk.bookingsystem.domain.Order;
@@ -22,6 +26,9 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Service;
 
 /**
@@ -36,8 +43,11 @@ public class OrderServiceImpl implements OrderService {
   private static final Logger LOGGER = LoggerFactory.getLogger(OrderServiceImpl.class);
 
   private static final String ORDER_NOT_FOUND = "order.not.found";
-
   private static final String ORDER_NOT_FOUND_LOG = "The order with id {} was not found.";
+
+  private static final String PARAMETER_FORMAT = "?page=%d";
+  private static final String PREVIOUS = "previous";
+  private static final String NEXT = "next";
 
   private final OrderDao orderDao;
   private final OrderConverter orderConverter;
@@ -69,18 +79,41 @@ public class OrderServiceImpl implements OrderService {
   }
 
   /**
-   * Finds all orders in the system and returns them.
+   * Finds page orders in the system and returns it
    *
+   * @param pageable {@link Pageable}
    * @return {@link OrderSetDto}
    */
   @Override
   @Cacheable(value = "orders")
-  public OrderSetDto findAllOrders() {
-    return new OrderSetDto(
-        orderDao.findAll().stream()
+  public OrderSetDto findAllOrders(final Pageable pageable) {
+    final Page<Order> orders = orderDao.findAll(pageable);
+
+    final Set<OrderDto> orderSet =
+        orders.getContent().stream()
             .filter(Objects::nonNull)
             .map(orderConverter::convertToDto)
-            .collect(Collectors.toSet()));
+            .collect(Collectors.toSet());
+
+    int page = orders.getNumber();
+    final int pages = orders.getTotalPages();
+
+    final OrderSetDto orderSetDto = new OrderSetDto(orderSet, page, pages);
+    final String linkToOrders = linkTo(OrderController.class).toString();
+
+    orderSetDto.add(
+        new Link(linkToOrders.concat(String.format(PARAMETER_FORMAT, page))).withSelfRel());
+
+    if (page > 0 && pages > page) {
+      orderSetDto.add(
+          new Link(linkToOrders.concat(String.format(PARAMETER_FORMAT, --page))).withRel(PREVIOUS));
+    }
+    if (pages > ++page) {
+      orderSetDto.add(
+          new Link(linkToOrders.concat(String.format(PARAMETER_FORMAT, ++page))).withRel(NEXT));
+    }
+
+    return orderSetDto;
   }
 
   /**

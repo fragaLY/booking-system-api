@@ -1,14 +1,15 @@
 package by.vk.bookingsystem.dao.mongo;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import by.vk.bookingsystem.dao.OrderDao;
 import by.vk.bookingsystem.domain.Order;
 import org.bson.types.ObjectId;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * The data access object layer for {@link Order}
@@ -20,9 +21,10 @@ public interface OrderMongoDao extends MongoRepository<Order, ObjectId>, OrderDa
   /**
    * Finds all orders that are in the system and returns it
    *
-   * @return the list of {@link Order}
+   * @param pageable {@link Pageable}
+   * @return {@link Page} of {@link Order}
    */
-  List<Order> findAll();
+  Page<Order> findAll(Pageable pageable);
 
   /**
    * Finds the order by its id and returns it

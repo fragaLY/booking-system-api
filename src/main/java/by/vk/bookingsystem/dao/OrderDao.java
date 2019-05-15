@@ -1,9 +1,10 @@
 package by.vk.bookingsystem.dao;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import by.vk.bookingsystem.domain.Order;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * The data access object layer for {@link Order}
@@ -15,9 +16,10 @@ public interface OrderDao {
   /**
    * Finds all orders that are in the system and returns it
    *
-   * @return the list of {@link Order}
+   * @param pageable {@link Pageable}
+   * @return {@link Page} of {@link Order}
    */
-  List<Order> findAll();
+  Page<Order> findAll(Pageable pageable);
 
   /**
    * Finds the order by its id and returns it

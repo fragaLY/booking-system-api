@@ -62,41 +62,6 @@ public class UserServiceImplTest {
     userService = new UserServiceImpl(userDao, userConverter, environment);
   }
 
-  @Test
-  public void findAllUsers() {
-
-    // given
-    final User user2 =
-        User.builder()
-            .id(new ObjectId(USER2_ID_VALUE))
-            .email(USER2_EMAIL)
-            .phone(USER2_PHONE)
-            .build();
-
-    final UserDto userDto2 =
-        UserDto.newBuilder()
-            .setId(USER2_ID_VALUE)
-            .setEmail(USER2_EMAIL)
-            .setPhone(USER2_PHONE)
-            .build();
-
-    Mockito.when(userDao.findAll()).thenReturn(Lists.list(user1, user2));
-    Mockito.when(userConverter.convertToDto(user1)).thenReturn(userDto1);
-    Mockito.when(userConverter.convertToDto(user2)).thenReturn(userDto2);
-
-    final Set<UserDto> users = new HashSet<>(2);
-    users.add(userDto1);
-    users.add(userDto2);
-
-    final UserSetDto expectedResult = new UserSetDto(users);
-
-    // when
-    final UserSetDto actualResult = userService.findAllUsers();
-
-    // then
-    assertEquals(expectedResult, actualResult);
-  }
-
   @Test(expected = ObjectNotFoundException.class)
   public void findUserById_whenUserNotExists() {
 

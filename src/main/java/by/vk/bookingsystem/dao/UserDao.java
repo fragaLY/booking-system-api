@@ -1,9 +1,9 @@
 package by.vk.bookingsystem.dao;
 
-import java.util.List;
-
 import by.vk.bookingsystem.domain.User;
 import org.bson.types.ObjectId;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * The data access object layer for {@link User}
@@ -15,9 +15,10 @@ public interface UserDao {
   /**
    * Finds all users that are in the system
    *
-   * @return the list of {@link User}
+   * @param pageable {@link Pageable}
+   * @return {@link Page} of {@link User}
    */
-  List<User> findAll();
+  Page<User> findAll(Pageable pageable);
 
   /**
    * Finds the user by id

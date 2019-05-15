@@ -2,6 +2,7 @@ package by.vk.bookingsystem.service;
 
 import by.vk.bookingsystem.dto.user.UserDto;
 import by.vk.bookingsystem.dto.user.UserSetDto;
+import org.springframework.data.domain.Pageable;
 
 /**
  * The service for {@link UserDto}
@@ -11,11 +12,12 @@ import by.vk.bookingsystem.dto.user.UserSetDto;
 public interface UserService {
 
   /**
-   * Finds all users in the system and returns them.
+   * Finds all users in the system and returns them
    *
+   * @param pageable {@link Pageable}
    * @return {@link UserSetDto}
    */
-  UserSetDto findAllUsers();
+  UserSetDto findAllUsers(Pageable pageable);
 
   /**
    * Finds the user by its id.

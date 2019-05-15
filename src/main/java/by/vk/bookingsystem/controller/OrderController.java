@@ -1,5 +1,17 @@
 package by.vk.bookingsystem.controller;
 
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import by.vk.bookingsystem.dto.order.OrderDto;
 import by.vk.bookingsystem.dto.order.OrderSetDto;
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
@@ -7,11 +19,9 @@ import by.vk.bookingsystem.service.OrderService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.hateoas.Link;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,13 +35,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * The controller to work with orders
@@ -55,13 +58,15 @@ public class OrderController {
   }
 
   /**
-   * Returns the set of all orders.
+   * Returns the page with orders.
    *
+   * @param pageable {@link Pageable}
    * @return {@link ResponseEntity}
    */
   @ApiOperation(
       value = "Get all orders",
-      notes = "Orders will be sent in the location response",
+      notes =
+          "Orders will be sent in the location response page with default size = 10, page = 0, sorting by order date from. Also, you are able to find links for next or previous page if they needed",
       response = OrderSetDto.class)
   @ApiResponses(
       value = {
@@ -80,8 +85,9 @@ public class OrderController {
       })
   @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
   @ResponseBody
-  public ResponseEntity<OrderSetDto> getAllOrders() {
-    return ResponseEntity.ok(orderService.findAllOrders());
+  public ResponseEntity<OrderSetDto> getAllOrders(
+      @PageableDefault(sort = "from") final Pageable pageable) {
+    return ResponseEntity.ok(orderService.findAllOrders(pageable));
   }
 
   /**

@@ -1,8 +1,12 @@
 package by.vk.bookingsystem.service.impl;
 
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import by.vk.bookingsystem.controller.UserController;
 import by.vk.bookingsystem.converter.UserConverter;
 import by.vk.bookingsystem.dao.UserDao;
 import by.vk.bookingsystem.domain.User;
@@ -21,6 +25,9 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Service;
 
 /**
@@ -44,6 +51,10 @@ public class UserServiceImpl implements UserService {
   private static final String PHONE_ALREADY_REGISTERED_LOG =
       "The user {} uses already existed phone";
 
+  private static final String PARAMETER_FORMAT = "?page=%d";
+  private static final String PREVIOUS = "previous";
+  private static final String NEXT = "next";
+
   private final UserDao userDao;
   private final UserConverter userConverter;
   private final Environment environment;
@@ -64,18 +75,42 @@ public class UserServiceImpl implements UserService {
   }
 
   /**
-   * Finds all users in the system and returns them.
+   * Finds page of users in the system and returns it
    *
+   * @param pageable {@link Pageable}
    * @return {@link UserSetDto}
    */
   @Cacheable(value = "users")
   @Override
-  public UserSetDto findAllUsers() {
-    return new UserSetDto(
-        userDao.findAll().stream()
+  public UserSetDto findAllUsers(final Pageable pageable) {
+
+    final Page<User> users = userDao.findAll(pageable);
+
+    final Set<UserDto> userSet =
+        users.stream()
             .filter(Objects::nonNull)
             .map(userConverter::convertToDto)
-            .collect(Collectors.toSet()));
+            .collect(Collectors.toSet());
+
+    int page = users.getNumber();
+    final int pages = users.getTotalPages();
+
+    final UserSetDto userSetDto = new UserSetDto(userSet, page, pages);
+    final String linkToOrders = linkTo(UserController.class).toString();
+
+    userSetDto.add(
+        new Link(linkToOrders.concat(String.format(PARAMETER_FORMAT, page))).withSelfRel());
+
+    if (page > 0 && pages > page) {
+      userSetDto.add(
+          new Link(linkToOrders.concat(String.format(PARAMETER_FORMAT, --page))).withRel(PREVIOUS));
+    }
+    if (pages > ++page) {
+      userSetDto.add(
+          new Link(linkToOrders.concat(String.format(PARAMETER_FORMAT, ++page))).withRel(NEXT));
+    }
+
+    return userSetDto;
   }
 
   /**

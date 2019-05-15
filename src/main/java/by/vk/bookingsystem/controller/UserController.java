@@ -1,5 +1,15 @@
 package by.vk.bookingsystem.controller;
 
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import by.vk.bookingsystem.dto.user.UserDto;
 import by.vk.bookingsystem.dto.user.UserSetDto;
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
@@ -7,11 +17,9 @@ import by.vk.bookingsystem.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.hateoas.Link;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,11 +33,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-
-import java.net.URI;
-import java.net.URISyntaxException;
 
 /**
  * The controller to work with users
@@ -89,13 +92,14 @@ public class UserController {
   }
 
   /**
-   * Returns the set of all users
+   * Returns the page with users
    *
    * @return {@link ResponseEntity}
    */
   @ApiOperation(
       value = "Get all users",
-      notes = "Users will be sent in the location response",
+      notes =
+          "Users will be sent in the location response page with default size = 10, page = 0, sorting by user registration date. Also, you are able to find links for next or previous page if they needed",
       response = UserSetDto.class)
   @ApiResponses(
       value = {
@@ -114,8 +118,8 @@ public class UserController {
       })
   @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
   @ResponseBody
-  public ResponseEntity<UserSetDto> getUsers() {
-    return ResponseEntity.ok(userService.findAllUsers());
+  public ResponseEntity<UserSetDto> getUsers(@PageableDefault(sort = "registered") final Pageable pageable) {
+    return ResponseEntity.ok(userService.findAllUsers(pageable));
   }
 
   /**

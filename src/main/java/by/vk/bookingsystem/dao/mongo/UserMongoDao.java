@@ -1,10 +1,10 @@
 package by.vk.bookingsystem.dao.mongo;
 
-import java.util.List;
-
 import by.vk.bookingsystem.dao.UserDao;
 import by.vk.bookingsystem.domain.User;
 import org.bson.types.ObjectId;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
@@ -17,9 +17,10 @@ public interface UserMongoDao extends MongoRepository<User, ObjectId>, UserDao {
   /**
    * Finds all users that are in the system
    *
-   * @return the list of {@link User}
+   * @param pageable {@link Pageable}
+   * @return {@link Page} of {@link User}
    */
-  List<User> findAll();
+  Page<User> findAll(Pageable pageable);
 
   /**
    * Finds the user by id

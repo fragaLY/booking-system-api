@@ -15,14 +15,17 @@ import by.vk.bookingsystem.exception.ObjectNotFoundException;
 import by.vk.bookingsystem.service.CostCalculatorService;
 import by.vk.bookingsystem.service.OrderService;
 import by.vk.bookingsystem.validator.order.OrderValidator;
-import org.assertj.core.util.Lists;
 import org.bson.types.ObjectId;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
@@ -48,30 +51,6 @@ public class OrderServiceImplTest {
 
     orderService =
         new OrderServiceImpl(orderDao, orderConverter, orderValidator, costCalculator, environment);
-  }
-
-  @Test
-  public void findAllOrders() {
-
-    // given
-    final Order order2 = Order.builder().id(new ObjectId("5c8fba4cc077d3614023f872")).build();
-    final OrderDto dto2 = OrderDto.newBuilder().setOrderId("5c8fba4cc077d3614023f872").build();
-
-    final Set<OrderDto> dtoSet = new HashSet<>(2);
-    dtoSet.add(dto1);
-    dtoSet.add(dto2);
-
-    final OrderSetDto expectedResult = new OrderSetDto(dtoSet);
-
-    Mockito.when(orderDao.findAll()).thenReturn(Lists.list(order1, order2));
-    Mockito.when(orderConverter.convertToDto(order1)).thenReturn(dto1);
-    Mockito.when(orderConverter.convertToDto(order2)).thenReturn(dto2);
-
-    // when
-    final OrderSetDto actualResult = orderService.findAllOrders();
-
-    // then
-    assertEquals(expectedResult, actualResult);
   }
 
   @Test(expected = ObjectNotFoundException.class)
@@ -172,6 +151,6 @@ public class OrderServiceImplTest {
     orderService.deleteOrderById(ORDER1_ID_VALUE);
 
     // then
-    Mockito.verify(orderDao, Mockito.atLeastOnce()).deleteById(ORDER1_ID_VALUE );
+    Mockito.verify(orderDao, Mockito.atLeastOnce()).deleteById(ORDER1_ID_VALUE);
   }
 }

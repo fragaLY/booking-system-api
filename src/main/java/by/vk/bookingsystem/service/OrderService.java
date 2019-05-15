@@ -2,6 +2,7 @@ package by.vk.bookingsystem.service;
 
 import by.vk.bookingsystem.dto.order.OrderDto;
 import by.vk.bookingsystem.dto.order.OrderSetDto;
+import org.springframework.data.domain.Pageable;
 
 /**
  * The service for {@link OrderDto}
@@ -11,11 +12,12 @@ import by.vk.bookingsystem.dto.order.OrderSetDto;
 public interface OrderService {
 
   /**
-   * Finds all orders in the system and returns them.
+   * Finds all orders in the system and returns them
    *
+   * @param pageable {@link Pageable}
    * @return {@link OrderSetDto}
    */
-  OrderSetDto findAllOrders();
+  OrderSetDto findAllOrders(Pageable pageable);
 
   /**
    * Finds the order by its id.
