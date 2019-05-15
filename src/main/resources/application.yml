@@ -39,10 +39,10 @@ logging:
 
 server:
   port: 8080
+  jetty:
+    acceptors: -1
+    selectors: -1
   servlet:
-    jetty:
-      acceptors: -1
-      selectors: -1
     context-path: /api
     session:
       timeout: 3600
