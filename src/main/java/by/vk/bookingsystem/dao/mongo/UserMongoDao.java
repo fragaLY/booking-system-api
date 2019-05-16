@@ -1,11 +1,15 @@
 package by.vk.bookingsystem.dao.mongo;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import by.vk.bookingsystem.dao.UserDao;
 import by.vk.bookingsystem.domain.User;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 
 /**
  * The data access object layer for {@link User}
@@ -68,4 +72,14 @@ public interface UserMongoDao extends MongoRepository<User, ObjectId>, UserDao {
    * @return true if user exists, false if
    */
   boolean existsById(String id);
+
+  /**
+   * Retrieves all users that were registered between selected dates
+   *
+   * @param from {@link LocalDate}
+   * @param to {@link LocalDate}
+   * @return {@link List}
+   */
+  @Query(value = "{ 'registered' : {$gte: ?0, $lte:?1 }}", sort = "{ registered : -1 }")
+  List<User> findUsersRegisteredBetweenDates(LocalDate from, LocalDate to);
 }

@@ -2,6 +2,7 @@ package by.vk.bookingsystem.dao.mongo;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import by.vk.bookingsystem.dao.OrderDao;
 import by.vk.bookingsystem.domain.Order;
@@ -67,4 +68,14 @@ public interface OrderMongoDao extends MongoRepository<Order, ObjectId>, OrderDa
    * @return true if order exists, false if
    */
   boolean existsById(String id);
+
+  /**
+   * Retrieves all orders that were registered between selected dates
+   *
+   * @param from {@link LocalDate}
+   * @param to {@link LocalDate}
+   * @return {@link List} of {@link Order}
+   */
+  @Query(value = "{ 'from' : {$gte: ?0, $lte:?1 }}", sort = "{ from : -1 }")
+  List<Order> findOrdersRegisteredBetweenDates(LocalDate from, LocalDate to);
 }

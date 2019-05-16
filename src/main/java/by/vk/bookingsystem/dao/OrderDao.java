@@ -1,6 +1,7 @@
 package by.vk.bookingsystem.dao;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import by.vk.bookingsystem.domain.Order;
 import org.springframework.data.domain.Page;
@@ -61,4 +62,13 @@ public interface OrderDao {
    * @return true if order exists, false if
    */
   boolean existsById(String id);
+
+  /**
+   * Retrieves all orders that were registered between selected dates
+   *
+   * @param from {@link LocalDate}
+   * @param to {@link LocalDate}
+   * @return {@link List} of {@link Order}
+   */
+  List<Order> findOrdersRegisteredBetweenDates(LocalDate from, LocalDate to);
 }

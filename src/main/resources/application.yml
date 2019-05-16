@@ -29,6 +29,11 @@ spring:
   banner:
     location: banner/api-banner.txt
     charset: UTF-8
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 10MB
+      max-file-size: 50MB
 
 logging:
   pattern:
@@ -49,7 +54,7 @@ server:
     compression:
       enabled: true
       mime-types: "text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json"
-      min-response-size: 512
+      min-response-size: 1024
     http2:
       enabled: true
   error:

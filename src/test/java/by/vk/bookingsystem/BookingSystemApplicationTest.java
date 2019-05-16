@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import by.vk.bookingsystem.controller.HomeController;
 import by.vk.bookingsystem.controller.OrderController;
 import by.vk.bookingsystem.controller.PriceController;
+import by.vk.bookingsystem.controller.ReportController;
 import by.vk.bookingsystem.controller.UserController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +21,7 @@ public class BookingSystemApplicationTest {
   @Autowired private OrderController orderController;
   @Autowired private PriceController priceController;
   @Autowired private UserController userController;
+  @Autowired private ReportController reportController;
 
   @Test
   public void contextLoads() {
@@ -27,5 +29,6 @@ public class BookingSystemApplicationTest {
     assertThat(orderController).isNotNull();
     assertThat(priceController).isNotNull();
     assertThat(userController).isNotNull();
+    assertThat(reportController).isNotNull();
   }
 }

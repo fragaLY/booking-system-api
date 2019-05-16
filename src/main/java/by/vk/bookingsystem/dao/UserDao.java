@@ -1,5 +1,8 @@
 package by.vk.bookingsystem.dao;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import by.vk.bookingsystem.domain.User;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
@@ -67,4 +70,13 @@ public interface UserDao {
    * @return true if user exists, false if
    */
   boolean existsById(String id);
+
+  /**
+   * Retrieves all users that were registered between selected dates
+   *
+   * @param from {@link LocalDate}
+   * @param to {@link LocalDate}
+   * @return {@link List} of {@link User}
+   */
+  List<User> findUsersRegisteredBetweenDates(LocalDate from, LocalDate to);
 }
