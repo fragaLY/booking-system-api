@@ -17,6 +17,7 @@ import by.vk.bookingsystem.dto.order.OrderSetDto;
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
 import by.vk.bookingsystem.service.OrderService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,7 +87,8 @@ public class OrderController {
   @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
   @ResponseBody
   public ResponseEntity<OrderSetDto> getAllOrders(
-      @PageableDefault(sort = "from") final Pageable pageable) {
+      @ApiParam("RequestParam: ?page=XXX&size=YYY&sort=ZZZ") @PageableDefault(sort = "from")
+          final Pageable pageable) {
     return ResponseEntity.ok(orderService.findAllOrders(pageable));
   }
 
@@ -210,7 +212,7 @@ public class OrderController {
       })
   @DeleteMapping(value = "/{id}")
   @ResponseBody
-  public ResponseEntity<Void> deleteOrder(@NotBlank @PathVariable final String id) {
+  public ResponseEntity<Void> deleteOrder(@NotBlank(message = "The id cannot be blank") @PathVariable final String id) {
     orderService.deleteOrderById(id);
     return ResponseEntity.noContent().build();
   }

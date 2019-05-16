@@ -37,13 +37,13 @@ public class OrderValidatorImpl implements OrderValidator {
 
   private static final String OWNER_NOT_FOUND = "owner.not.found";
   private static final String HOMES_NOT_FOUND = "homes.not.found";
-  private static final String INVALID_ORDER_DATES = "order.dates.invalid";
+  private static final String INVALID_DATES = "dates.invalid";
   private static final String INTERSECTING_DATES = "order.dates.intersection";
 
   private static final String OWNER_NOT_FOUND_LOG = "The user {} was not found";
   private static final String HOMES_NOT_FOUND_LOG = "The homes {} were not found";
   private static final String INVALID_ORDER_DATES_LOG =
-      "The from date should be before to date for order{}.";
+      "The from date should be before to date for order {}.";
   private static final String INTERSECTING_DATES_LOG =
       "The dates for order {} intersect with already existing";
 
@@ -119,7 +119,7 @@ public class OrderValidatorImpl implements OrderValidator {
 
     if (from.isAfter(to)) {
       LOGGER.warn(INVALID_ORDER_DATES_LOG, order);
-      throw new IllegalArgumentException(environment.getProperty(INVALID_ORDER_DATES));
+      throw new IllegalArgumentException(environment.getProperty(INVALID_DATES));
     }
 
     if (orderDao.existsByFromAndTo(from, to)) {
