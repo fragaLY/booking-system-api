@@ -1,10 +1,9 @@
 package by.vk.bookingsystem.report;
 
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -106,19 +105,21 @@ public abstract class WordDocument {
    *
    * @return {@link WordDocument}
    */
-  @SneakyThrows({URISyntaxException.class, IOException.class, InvalidFormatException.class})
+  @SneakyThrows({IOException.class, InvalidFormatException.class})
   public WordDocument addImage() {
 
     final XWPFParagraph image = document.createParagraph();
     image.setAlignment(ParagraphAlignment.CENTER);
 
+    final File imageFile = new File(ReportSettings.LOGO_PATH.getValue());
+    final DataInputStream imageDataStream = new DataInputStream(new FileInputStream(imageFile));
+
     final XWPFRun imageRun = image.createRun();
-    final Path imagePath =
-        Paths.get(ClassLoader.getSystemResource(ReportSettings.LOGO_PATH.getValue()).toURI());
+
     imageRun.addPicture(
-        Files.newInputStream(imagePath),
+        imageDataStream,
         XWPFDocument.PICTURE_TYPE_PNG,
-        imagePath.getFileName().toString(),
+        imageFile.getName(),
         Units.toEMU(132),
         Units.toEMU(40));
 
