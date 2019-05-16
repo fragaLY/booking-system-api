@@ -15,8 +15,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserConverterImpl implements UserConverter {
 
-  private static final String EUROPE_MINSK = "Europe/Minsk";
-
   /**
    * Converts the entity to data transfer object
    *

@@ -15,6 +15,7 @@ import by.vk.bookingsystem.dto.user.UserSetDto;
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
 import by.vk.bookingsystem.service.UserService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,7 +119,9 @@ public class UserController {
       })
   @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
   @ResponseBody
-  public ResponseEntity<UserSetDto> getUsers(@PageableDefault(sort = "registered") final Pageable pageable) {
+  public ResponseEntity<UserSetDto> getUsers(
+      @ApiParam("RequestParam: ?page=XXX&size=YYY&sort=ZZZ") @PageableDefault(sort = "registered")
+          final Pageable pageable) {
     return ResponseEntity.ok(userService.findAllUsers(pageable));
   }
 
@@ -194,7 +197,8 @@ public class UserController {
       })
   @DeleteMapping(value = "/{id}")
   @ResponseBody
-  public ResponseEntity<Void> deleteUser(@NotBlank @PathVariable final String id) {
+  public ResponseEntity<Void> deleteUser(
+      @NotBlank(message = "The id cannot be blank") @PathVariable final String id) {
     userService.deleteUserById(id);
     return ResponseEntity.noContent().build();
   }
