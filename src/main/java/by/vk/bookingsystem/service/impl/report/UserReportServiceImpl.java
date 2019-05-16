@@ -101,7 +101,7 @@ public class UserReportServiceImpl implements ReportService {
         new UsersWordDocument(new XWPFDocument(), userDtos)
             .addTableHeader(UsersWordDocument.USER_HEADERS)
             .addTableRows()
-            .addImage()
+//            .addImage() //todo vk: fix it
             .addFooter(from, to, userDtos.size(), ReportType.USERS, now);
 
     byte[] outputByteArray;

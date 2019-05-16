@@ -101,7 +101,7 @@ public class OrderReportServiceImpl implements ReportService {
         new OrdersWordDocument(new XWPFDocument(), ordersDto)
             .addTableHeader(OrdersWordDocument.ORDERS_HEADERS)
             .addTableRows()
-            .addImage()
+//            .addImage() //todo vk: fix it
             .addFooter(from, to, ordersDto.size(), ReportType.ORDERS, now);
 
     byte[] outputByteArray;
