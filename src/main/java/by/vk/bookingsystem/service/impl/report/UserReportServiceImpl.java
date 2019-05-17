@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 
 import by.vk.bookingsystem.converter.UserConverter;
 import by.vk.bookingsystem.dao.UserDao;
-import by.vk.bookingsystem.domain.User;
 import by.vk.bookingsystem.dto.user.UserDto;
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
 import by.vk.bookingsystem.report.UsersWordDocument;
@@ -53,10 +52,10 @@ public class UserReportServiceImpl implements ReportService {
   private final UserDao userDao;
   private final UserConverter userConverter;
   private final Environment environment;
-  private final ResourceLoader resourceLoader;
+  private final Resource imageResource;
 
   /**
-   * The constructor with parameters.
+   * The constructor with parameters
    *
    * @param userDao {@link UserDao}
    * @param userConverter {@link UserConverter}
@@ -72,7 +71,7 @@ public class UserReportServiceImpl implements ReportService {
     this.userDao = userDao;
     this.userConverter = userConverter;
     this.environment = environment;
-    this.resourceLoader = resourceLoader;
+    this.imageResource = resourceLoader.getResource(ReportSettings.LOGO_RESOURCE.getValue());
   }
 
   /**
@@ -90,31 +89,27 @@ public class UserReportServiceImpl implements ReportService {
       throw new IllegalArgumentException(environment.getProperty(INVALID_DATES));
     }
 
-    final List<User> users = userDao.findUsersRegisteredBetweenDates(from, to);
-
-    if (users == null || users.isEmpty()) {
-      LOGGER.warn(USERS_NOT_FOUND_LOG, from, to);
-      throw new ObjectNotFoundException(String.format(USERS_NOT_FOUND, from, to));
-    }
-
-    final List<UserDto> userDtos =
-        users.stream()
+    final List<UserDto> users =
+        userDao.findUsersRegisteredBetweenDates(from, to).stream()
             .filter(Objects::nonNull)
             .map(userConverter::convertToDto)
             .collect(Collectors.toList());
 
-    final LocalDateTime now = LocalDateTime.now(Clock.systemUTC());
+    if (users.isEmpty()) {
+      LOGGER.warn(USERS_NOT_FOUND_LOG, from, to);
+      throw new ObjectNotFoundException(String.format(USERS_NOT_FOUND, from, to));
+    }
 
     final WordDocument wordDocument;
-    final Resource resource = resourceLoader.getResource(ReportSettings.LOGO_RESOURCE.getValue());
 
-    try (final InputStream imageInputStream = resource.getInputStream()) {
+    try (final InputStream imageInputStream = imageResource.getInputStream()) {
       wordDocument =
-          new UsersWordDocument(new XWPFDocument(), userDtos)
+          new UsersWordDocument(new XWPFDocument(), users)
               .addTableHeader(UsersWordDocument.USER_HEADERS)
               .addTableRows()
               .addImage(imageInputStream)
-              .addFooter(from, to, userDtos.size(), ReportType.USERS, now);
+              .addFooter(
+                  from, to, users.size(), ReportType.USERS, LocalDateTime.now(Clock.systemUTC()));
     }
 
     byte[] outputByteArray;

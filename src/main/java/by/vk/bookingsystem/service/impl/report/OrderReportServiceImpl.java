@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 
 import by.vk.bookingsystem.converter.OrderConverter;
 import by.vk.bookingsystem.dao.OrderDao;
-import by.vk.bookingsystem.domain.Order;
 import by.vk.bookingsystem.dto.order.OrderDto;
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
 import by.vk.bookingsystem.report.OrdersWordDocument;
@@ -57,7 +56,7 @@ public class OrderReportServiceImpl implements ReportService {
   private final OrderDao orderDao;
   private final OrderConverter orderConverter;
   private final Environment environment;
-  private final ResourceLoader resourceLoader;
+  private final Resource imageResource;
   /**
    * The constructor with parameters.
    *
@@ -75,7 +74,7 @@ public class OrderReportServiceImpl implements ReportService {
     this.orderDao = orderDao;
     this.orderConverter = orderConverter;
     this.environment = environment;
-    this.resourceLoader = resourceLoader;
+    this.imageResource = resourceLoader.getResource(ReportSettings.LOGO_RESOURCE.getValue());
   }
 
   /**
@@ -86,7 +85,6 @@ public class OrderReportServiceImpl implements ReportService {
    */
   @SneakyThrows(IOException.class)
   @Override
-  // todo vk: investigate possibility of caching
   public Resource generateReportResource(final LocalDate from, final LocalDate to) {
 
     if (from.isAfter(to)) {
@@ -94,47 +92,43 @@ public class OrderReportServiceImpl implements ReportService {
       throw new IllegalArgumentException(environment.getProperty(INVALID_DATES));
     }
 
-    final List<Order> orders = orderDao.findOrdersRegisteredBetweenDates(from, to);
-
-    if (orders == null || orders.isEmpty()) {
-      LOGGER.warn(ORDERS_NOT_FOUND_LOG, from, to);
-      throw new ObjectNotFoundException(String.format(ORDERS_NOT_FOUND, from, to));
-    }
-
-    final List<OrderDto> ordersDto =
-        orders.stream()
+    final List<OrderDto> orders =
+        orderDao.findOrdersRegisteredBetweenDates(from, to).stream()
             .filter(Objects::nonNull)
             .map(orderConverter::convertToDto)
             .collect(Collectors.toList());
 
-    final LocalDateTime now = LocalDateTime.now(Clock.systemUTC());
-
-    final LongSummaryStatistics durationStatistics =
-        ordersDto.stream()
-            .mapToLong(
-                order ->
-                    ChronoUnit.DAYS.between(
-                        order.getFrom().atStartOfDay(), order.getTo().atStartOfDay()))
-            .summaryStatistics();
-
-    final CostStatistics costStatistics =
-        ordersDto.stream().map(OrderDto::getCost).collect(CostStatistics.statistics());
-
-    final IntSummaryStatistics guestsStatistics =
-        ordersDto.stream().mapToInt(OrderDto::getGuests).summaryStatistics();
+    if (orders.isEmpty()) {
+      LOGGER.warn(ORDERS_NOT_FOUND_LOG, from, to);
+      throw new ObjectNotFoundException(String.format(ORDERS_NOT_FOUND, from, to));
+    }
 
     final WordDocument wordDocument;
-    final Resource resource = resourceLoader.getResource(ReportSettings.LOGO_RESOURCE.getValue());
 
-    try (final InputStream imageInputStream = resource.getInputStream()) {
+    try (final InputStream imageInputStream = imageResource.getInputStream()) {
+      final LongSummaryStatistics durationStatistics =
+          orders.stream()
+              .mapToLong(
+                  order ->
+                      ChronoUnit.DAYS.between(
+                          order.getFrom().atStartOfDay(), order.getTo().atStartOfDay()))
+              .summaryStatistics();
+
+      final CostStatistics costStatistics =
+          orders.stream().map(OrderDto::getCost).collect(CostStatistics.statistics());
+
+      final IntSummaryStatistics guestsStatistics =
+          orders.stream().mapToInt(OrderDto::getGuests).summaryStatistics();
+
       wordDocument =
-          new OrdersWordDocument(new XWPFDocument(), ordersDto)
+          new OrdersWordDocument(new XWPFDocument(), orders)
               .addTableHeader(OrdersWordDocument.ORDERS_HEADERS)
               .addTableRows()
               .addAverageStatistics(durationStatistics, costStatistics, guestsStatistics)
               .addSummaryStatistics(durationStatistics, costStatistics, guestsStatistics)
               .addImage(imageInputStream)
-              .addFooter(from, to, ordersDto.size(), ReportType.ORDERS, now);
+              .addFooter(
+                  from, to, orders.size(), ReportType.ORDERS, LocalDateTime.now(Clock.systemUTC()));
     }
 
     byte[] outputByteArray;
