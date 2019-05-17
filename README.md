@@ -6,7 +6,7 @@
 
 > To restore data in [Atlas](https://www.mongodb.com/cloud/atlas) cluster run the next command from <b>'scr'</b> folder:
 ```
-mongorestore --drop --uri mongodb+srv://developer:Password@development-hmiup.mongodb.net/booking-system data
+mongorestore --drop --uri mongodb+srv://developer:Password@booking-system-0-hmiup.mongodb.net/booking-system data
 ```
 
 # How to up the application

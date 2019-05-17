@@ -27,7 +27,7 @@ public class DevelopmentMongoConfig {
    * @param uri - the URI to connect to cluster on Atlas
    * @return {@link MongoClient}
    */
-  @Bean
+  @Bean(destroyMethod = "close")
   @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
   public MongoClient mongoClient(@Value("${spring.data.mongodb.uri}") String uri) {
     return MongoClients.create(new ConnectionString(uri));
