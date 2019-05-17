@@ -51,23 +51,22 @@ public interface OrderMongoDao extends MongoRepository<Order, ObjectId>, OrderDa
   void deleteById(String id);
 
   /**
-   * Finds all the orders that intersects with new one.
-   *
-   * @param from - {@link LocalDate}
-   * @param to - {@link LocalDate}
-   * @return the list of {@link Order}
-   */
-  @Query(
-      "{ $or: [{'from' : {$range:[?0, ?1]}}, {'to':{$range:[?0, ?1]}}, {$and:[{'from': {$lte: ?0}},{'to': {$gte: ?1}}]}] }")
-  boolean existsByFromAndTo(LocalDateTime from, LocalDateTime to);
-
-  /**
    * Checks if order exists.
    *
    * @param id - the id of {@link Order}
    * @return true if order exists, false if
    */
   boolean existsById(String id);
+
+  /**
+   * Finds checks if order intersects with existing orders
+   *
+   * @param from - {@link LocalDate}
+   * @param to - {@link LocalDate}
+   * @return true if intersects
+   */
+  @Query(value = "{ 'from' : {$lt: ?0}, 'to' : {$gt: ?1} }", exists = true)
+  boolean intersectedWithExistedOrders(LocalDate to, LocalDate from);
 
   /**
    * Retrieves all orders that were registered between selected dates

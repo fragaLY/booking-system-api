@@ -47,7 +47,7 @@ public class UserConverterImpl implements UserConverter {
   @Override
   public User convertToEntity(final UserDto dto) {
     return User.builder()
-        .id(dto.getId() != null ? new ObjectId(dto.getUserId()) : null)
+        .id(dto.getUserId() != null ? new ObjectId(dto.getUserId()) : null)
         .firstName(dto.getFirstName())
         .lastName(dto.getLastName())
         .role(Role.getRole(dto.getRole()))

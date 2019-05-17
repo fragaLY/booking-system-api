@@ -1,5 +1,13 @@
 package by.vk.bookingsystem.validator.order.impl;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.validation.constraints.NotNull;
+
 import by.vk.bookingsystem.dao.HomeDao;
 import by.vk.bookingsystem.dao.OrderDao;
 import by.vk.bookingsystem.dao.UserDao;
@@ -8,7 +16,6 @@ import by.vk.bookingsystem.dto.home.HomeDto;
 import by.vk.bookingsystem.dto.order.OrderDto;
 import by.vk.bookingsystem.dto.user.UserDto;
 import by.vk.bookingsystem.validator.order.OrderValidator;
-import javax.validation.constraints.NotNull;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,12 +24,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * The validator implementation for {@link OrderDto}
@@ -122,7 +123,7 @@ public class OrderValidatorImpl implements OrderValidator {
       throw new IllegalArgumentException(environment.getProperty(INVALID_DATES));
     }
 
-    if (orderDao.existsByFromAndTo(from, to)) {
+    if (orderDao.intersectedWithExistedOrders(to, from)) {
       LOGGER.warn(INTERSECTING_DATES_LOG, order);
       throw new IllegalArgumentException(environment.getProperty(INTERSECTING_DATES));
     }

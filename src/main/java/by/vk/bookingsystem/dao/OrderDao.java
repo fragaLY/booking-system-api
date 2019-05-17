@@ -47,13 +47,13 @@ public interface OrderDao {
   void deleteById(String id);
 
   /**
-   * Finds all the orders that intersects with new one.
+   * Finds checks if order intersects with existing orders
    *
    * @param from - {@link LocalDate}
    * @param to - {@link LocalDate}
-   * @return the list of {@link Order}
+   * @return true if intersects
    */
-  boolean existsByFromAndTo(LocalDate from, LocalDate to);
+  boolean intersectedWithExistedOrders(LocalDate from, LocalDate to);
 
   /**
    * Checks if order exists.
