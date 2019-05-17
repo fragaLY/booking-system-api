@@ -2,6 +2,7 @@ package by.vk.bookingsystem.service.impl.report;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,7 +25,6 @@ import by.vk.bookingsystem.report.setting.ReportType;
 import by.vk.bookingsystem.report.statistics.CostStatistics;
 import by.vk.bookingsystem.service.ReportService;
 import lombok.SneakyThrows;
-import org.apache.commons.lang3.SystemUtils;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +34,7 @@ import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 /**
@@ -56,20 +57,25 @@ public class OrderReportServiceImpl implements ReportService {
   private final OrderDao orderDao;
   private final OrderConverter orderConverter;
   private final Environment environment;
-
+  private final ResourceLoader resourceLoader;
   /**
    * The constructor with parameters.
    *
    * @param orderDao {@link OrderDao}
    * @param orderConverter {@link OrderConverter}
    * @param environment {@link Environment}
+   * @param resourceLoader {@link ResourceLoader}
    */
   @Autowired
   public OrderReportServiceImpl(
-      final OrderDao orderDao, final OrderConverter orderConverter, final Environment environment) {
+      final OrderDao orderDao,
+      final OrderConverter orderConverter,
+      final Environment environment,
+      final ResourceLoader resourceLoader) {
     this.orderDao = orderDao;
     this.orderConverter = orderConverter;
     this.environment = environment;
+    this.resourceLoader = resourceLoader;
   }
 
   /**
@@ -117,17 +123,19 @@ public class OrderReportServiceImpl implements ReportService {
     final IntSummaryStatistics guestsStatistics =
         ordersDto.stream().mapToInt(OrderDto::getGuests).summaryStatistics();
 
-    final WordDocument wordDocument =
-        new OrdersWordDocument(new XWPFDocument(), ordersDto)
-            .addTableHeader(OrdersWordDocument.ORDERS_HEADERS)
-            .addTableRows()
-            .addAverageStatistics(durationStatistics, costStatistics, guestsStatistics)
-            .addSummaryStatistics(durationStatistics, costStatistics, guestsStatistics)
-            .addImage(
-                SystemUtils.IS_OS_WINDOWS
-                    ? ReportSettings.LOGO_PATH_WINDOWS.getValue()
-                    : ReportSettings.LOGO_PATH_LINUX.getValue())
-            .addFooter(from, to, ordersDto.size(), ReportType.ORDERS, now);
+    final WordDocument wordDocument;
+    final Resource resource = resourceLoader.getResource(ReportSettings.LOGO_RESOURCE.getValue());
+
+    try (final InputStream imageInputStream = resource.getInputStream()) {
+      wordDocument =
+          new OrdersWordDocument(new XWPFDocument(), ordersDto)
+              .addTableHeader(OrdersWordDocument.ORDERS_HEADERS)
+              .addTableRows()
+              .addAverageStatistics(durationStatistics, costStatistics, guestsStatistics)
+              .addSummaryStatistics(durationStatistics, costStatistics, guestsStatistics)
+              .addImage(imageInputStream)
+              .addFooter(from, to, ordersDto.size(), ReportType.ORDERS, now);
+    }
 
     byte[] outputByteArray;
 

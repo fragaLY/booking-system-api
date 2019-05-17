@@ -1,9 +1,7 @@
 package by.vk.bookingsystem.report;
 
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -32,6 +30,7 @@ import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 public abstract class WordDocument {
 
   private static final String DATE_TIME_FORMATTER_PATTERN = "yyyy-MM-dd HH-mm-ss";
+  private static final String LOGO_IMAGE_NAME = "logo-image";
 
   static final String SUMMARY = "Summary";
   static final String AVERAGE = "Average";
@@ -116,24 +115,21 @@ public abstract class WordDocument {
   /**
    * Add logo image to report. Use different logo path for different OS.
    *
-   * @param logoPath {@link String}
+   * @param imageInputStream {@link InputStream}
    * @return {@link WordDocument}
    */
   @SneakyThrows({IOException.class, InvalidFormatException.class})
-  public WordDocument addImage(final String logoPath) {
+  public WordDocument addImage(final InputStream imageInputStream) {
 
     final XWPFParagraph image = document.createParagraph();
     image.setAlignment(ParagraphAlignment.CENTER);
 
-    final File imageFile = new File(logoPath);
-    final DataInputStream imageDataStream = new DataInputStream(new FileInputStream(imageFile));
-
     final XWPFRun imageRun = image.createRun();
 
     imageRun.addPicture(
-        imageDataStream,
+        imageInputStream,
         XWPFDocument.PICTURE_TYPE_PNG,
-        imageFile.getName(),
+        LOGO_IMAGE_NAME,
         Units.toEMU(132),
         Units.toEMU(40));
 

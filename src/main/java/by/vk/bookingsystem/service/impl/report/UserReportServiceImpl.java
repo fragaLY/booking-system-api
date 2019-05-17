@@ -2,6 +2,7 @@ package by.vk.bookingsystem.service.impl.report;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,7 +21,6 @@ import by.vk.bookingsystem.report.setting.ReportSettings;
 import by.vk.bookingsystem.report.setting.ReportType;
 import by.vk.bookingsystem.service.ReportService;
 import lombok.SneakyThrows;
-import org.apache.commons.lang3.SystemUtils;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +30,7 @@ import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 /**
@@ -52,6 +53,7 @@ public class UserReportServiceImpl implements ReportService {
   private final UserDao userDao;
   private final UserConverter userConverter;
   private final Environment environment;
+  private final ResourceLoader resourceLoader;
 
   /**
    * The constructor with parameters.
@@ -59,13 +61,18 @@ public class UserReportServiceImpl implements ReportService {
    * @param userDao {@link UserDao}
    * @param userConverter {@link UserConverter}
    * @param environment {@link Environment}
+   * @param resourceLoader {@link ResourceLoader}
    */
   @Autowired
   public UserReportServiceImpl(
-      final UserDao userDao, final UserConverter userConverter, final Environment environment) {
+      final UserDao userDao,
+      final UserConverter userConverter,
+      final Environment environment,
+      final ResourceLoader resourceLoader) {
     this.userDao = userDao;
     this.userConverter = userConverter;
     this.environment = environment;
+    this.resourceLoader = resourceLoader;
   }
 
   /**
@@ -98,15 +105,17 @@ public class UserReportServiceImpl implements ReportService {
 
     final LocalDateTime now = LocalDateTime.now(Clock.systemUTC());
 
-    final WordDocument wordDocument =
-        new UsersWordDocument(new XWPFDocument(), userDtos)
-            .addTableHeader(UsersWordDocument.USER_HEADERS)
-            .addTableRows()
-            .addImage(
-                SystemUtils.IS_OS_WINDOWS
-                    ? ReportSettings.LOGO_PATH_WINDOWS.getValue()
-                    : ReportSettings.LOGO_PATH_LINUX.getValue())
-            .addFooter(from, to, userDtos.size(), ReportType.USERS, now);
+    final WordDocument wordDocument;
+    final Resource resource = resourceLoader.getResource(ReportSettings.LOGO_RESOURCE.getValue());
+
+    try (final InputStream imageInputStream = resource.getInputStream()) {
+      wordDocument =
+          new UsersWordDocument(new XWPFDocument(), userDtos)
+              .addTableHeader(UsersWordDocument.USER_HEADERS)
+              .addTableRows()
+              .addImage(imageInputStream)
+              .addFooter(from, to, userDtos.size(), ReportType.USERS, now);
+    }
 
     byte[] outputByteArray;
 
