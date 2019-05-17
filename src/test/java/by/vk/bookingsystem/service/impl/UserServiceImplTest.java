@@ -2,17 +2,12 @@ package by.vk.bookingsystem.service.impl;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import by.vk.bookingsystem.converter.UserConverter;
 import by.vk.bookingsystem.dao.UserDao;
 import by.vk.bookingsystem.domain.User;
 import by.vk.bookingsystem.dto.user.UserDto;
-import by.vk.bookingsystem.dto.user.UserSetDto;
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
 import by.vk.bookingsystem.service.UserService;
-import org.assertj.core.util.Lists;
 import org.bson.types.ObjectId;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,10 +23,6 @@ public class UserServiceImplTest {
   private static final String USER1_ID_VALUE = "5c8fba4cc077d3614023f871";
   private static final String USER1_EMAIL = "email1@mail.com";
   private static final String USER1_PHONE = "3752911111111";
-
-  private static final String USER2_ID_VALUE = "5c8fba4cc077d3614023f872";
-  private static final String USER2_EMAIL = "email2@mail.com";
-  private static final String USER2_PHONE = "+375292222222";
 
   @MockBean private UserDao userDao;
   @MockBean private UserConverter userConverter;
