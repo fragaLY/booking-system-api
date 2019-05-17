@@ -5,7 +5,10 @@ import java.io.IOException;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.IntSummaryStatistics;
 import java.util.List;
+import java.util.LongSummaryStatistics;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -17,6 +20,7 @@ import by.vk.bookingsystem.exception.ObjectNotFoundException;
 import by.vk.bookingsystem.report.OrdersWordDocument;
 import by.vk.bookingsystem.report.WordDocument;
 import by.vk.bookingsystem.report.setting.ReportType;
+import by.vk.bookingsystem.report.statistics.CostStatistics;
 import by.vk.bookingsystem.service.ReportService;
 import lombok.SneakyThrows;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -97,11 +101,27 @@ public class OrderReportServiceImpl implements ReportService {
 
     final LocalDateTime now = LocalDateTime.now(Clock.systemUTC());
 
+    final LongSummaryStatistics durationStatistics =
+        ordersDto.stream()
+            .mapToLong(
+                order ->
+                    ChronoUnit.DAYS.between(
+                        order.getFrom().atStartOfDay(), order.getTo().atStartOfDay()))
+            .summaryStatistics();
+
+    final CostStatistics costStatistics =
+        ordersDto.stream().map(OrderDto::getCost).collect(CostStatistics.statistics());
+
+    final IntSummaryStatistics guestsStatistics =
+        ordersDto.stream().mapToInt(OrderDto::getGuests).summaryStatistics();
+
     final WordDocument wordDocument =
         new OrdersWordDocument(new XWPFDocument(), ordersDto)
             .addTableHeader(OrdersWordDocument.ORDERS_HEADERS)
             .addTableRows()
-//            .addImage() //todo vk: fix it
+            .addAverageStatistics(durationStatistics, costStatistics, guestsStatistics)
+            .addSummaryStatistics(durationStatistics, costStatistics, guestsStatistics)
+            //            .addImage() //todo vk: fix it
             .addFooter(from, to, ordersDto.size(), ReportType.ORDERS, now);
 
     byte[] outputByteArray;

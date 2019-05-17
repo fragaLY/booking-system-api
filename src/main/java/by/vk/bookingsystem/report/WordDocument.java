@@ -6,10 +6,14 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.IntSummaryStatistics;
+import java.util.LongSummaryStatistics;
 import java.util.Map;
 
 import by.vk.bookingsystem.report.setting.ReportSettings;
 import by.vk.bookingsystem.report.setting.ReportType;
+import by.vk.bookingsystem.report.statistics.CostStatistics;
 import lombok.SneakyThrows;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.util.Units;
@@ -26,6 +30,11 @@ import org.apache.poi.xwpf.usermodel.XWPFTableRow;
  * @author Vadzim_Kavalkou
  */
 public abstract class WordDocument {
+
+  private static final String DATE_TIME_FORMATTER_PATTERN = "yyyy-MM-dd HH-mm-ss";
+
+  static final String SUMMARY = "Summary";
+  static final String AVERAGE = "Average";
 
   int rowIndex;
 
@@ -95,7 +104,11 @@ public abstract class WordDocument {
     footer.setAlignment(ParagraphAlignment.RIGHT);
 
     final XWPFRun footerRun = footer.createRun();
-    footerRun.setText(String.format(ReportSettings.FOOTER_MESSAGE.getValue(), generationTime));
+    final DateTimeFormatter dateTimeFormatter =
+        DateTimeFormatter.ofPattern(DATE_TIME_FORMATTER_PATTERN);
+    footerRun.setText(
+        String.format(
+            ReportSettings.FOOTER_MESSAGE.getValue(), dateTimeFormatter.format(generationTime)));
 
     return this;
   }
@@ -111,7 +124,7 @@ public abstract class WordDocument {
     final XWPFParagraph image = document.createParagraph();
     image.setAlignment(ParagraphAlignment.CENTER);
 
-    final File imageFile = new File(ReportSettings.LOGO_PATH.getValue());
+    final File imageFile = new File(ReportSettings.LOGO_PATH_WINDOWS.getValue());
     final DataInputStream imageDataStream = new DataInputStream(new FileInputStream(imageFile));
 
     final XWPFRun imageRun = image.createRun();
@@ -132,4 +145,30 @@ public abstract class WordDocument {
    * @return {@link WordDocument}
    */
   public abstract WordDocument addTableRows();
+
+  /**
+   * Add average statistics for report
+   *
+   * @param durationStatistics {@link LongSummaryStatistics}
+   * @param costStatistics {@link CostStatistics}
+   * @param guestsStatistics {@link IntSummaryStatistics}
+   * @return {@link WordDocument}
+   */
+  public abstract WordDocument addAverageStatistics(
+      LongSummaryStatistics durationStatistics,
+      CostStatistics costStatistics,
+      IntSummaryStatistics guestsStatistics);
+
+  /**
+   * Add summary statistics for report
+   *
+   * @param durationStatistics {@link LongSummaryStatistics}
+   * @param costStatistics {@link CostStatistics}
+   * @param guestsStatistics {@link IntSummaryStatistics}
+   * @return {@link WordDocument}
+   */
+  public abstract WordDocument addSummaryStatistics(
+      LongSummaryStatistics durationStatistics,
+      CostStatistics costStatistics,
+      IntSummaryStatistics guestsStatistics);
 }

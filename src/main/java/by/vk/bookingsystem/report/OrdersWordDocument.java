@@ -8,7 +8,7 @@ import java.util.LongSummaryStatistics;
 import java.util.Map;
 
 import by.vk.bookingsystem.dto.order.OrderDto;
-import by.vk.bookingsystem.helper.CostSummaryStatistics;
+import by.vk.bookingsystem.report.statistics.CostStatistics;
 import com.google.common.collect.ImmutableMap;
 import lombok.Getter;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -22,6 +22,7 @@ import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 @Getter
 public final class OrdersWordDocument extends WordDocument {
 
+  /** Default headers for order table */
   public static final Map<Integer, String> ORDERS_HEADERS =
       ImmutableMap.<Integer, String>builder()
           .put(0, "#")
@@ -78,33 +79,51 @@ public final class OrdersWordDocument extends WordDocument {
           row.getCell(7).setText(String.valueOf(order.getGuests()));
         });
 
-    final LongSummaryStatistics durationStatistics =
-        orders.stream()
-            .mapToLong(
-                order ->
-                    ChronoUnit.DAYS.between(
-                        order.getFrom().atStartOfDay(), order.getTo().atStartOfDay()))
-            .summaryStatistics();
+    return this;
+  }
 
-    final CostSummaryStatistics costStatistics =
-        orders.stream().map(OrderDto::getCost).collect(CostSummaryStatistics.statistics());
-
-    final IntSummaryStatistics guestsSummaryStatistics =
-        orders.stream().mapToInt(OrderDto::getGuests).summaryStatistics();
+  /**
+   * Add average statistics for report
+   *
+   * @param durationStatistics {@link LongSummaryStatistics}
+   * @param costStatistics {@link CostStatistics}
+   * @param guestsStatistics {@link IntSummaryStatistics}
+   * @return {@link WordDocument}
+   */
+  public OrdersWordDocument addAverageStatistics(
+      final LongSummaryStatistics durationStatistics,
+      final CostStatistics costStatistics,
+      final IntSummaryStatistics guestsStatistics) {
 
     final XWPFTableRow averageRow = table.getRow(rowIndex++);
 
-    averageRow.getCell(0).setText("Average");
+    averageRow.getCell(4).setText(AVERAGE);
     averageRow.getCell(5).setText(String.valueOf(durationStatistics.getAverage()));
     averageRow.getCell(6).setText(costStatistics.getAverage(MathContext.DECIMAL32).toString());
-    averageRow.getCell(7).setText(String.valueOf(guestsSummaryStatistics.getAverage()));
+    averageRow.getCell(7).setText(String.valueOf(guestsStatistics.getAverage()));
+
+    return this;
+  }
+
+  /**
+   * Add summary statistics for report
+   *
+   * @param durationStatistics {@link LongSummaryStatistics}
+   * @param costStatistics {@link CostStatistics}
+   * @param guestsStatistics {@link IntSummaryStatistics}
+   * @return {@link WordDocument}
+   */
+  public OrdersWordDocument addSummaryStatistics(
+      final LongSummaryStatistics durationStatistics,
+      final CostStatistics costStatistics,
+      final IntSummaryStatistics guestsStatistics) {
 
     final XWPFTableRow summaryRow = table.getRow(rowIndex);
 
-    summaryRow.getCell(0).setText("Summary");
-    averageRow.getCell(5).setText(String.valueOf(durationStatistics.getSum()));
+    summaryRow.getCell(4).setText(SUMMARY);
+    summaryRow.getCell(5).setText(String.valueOf(durationStatistics.getSum()));
     summaryRow.getCell(6).setText(costStatistics.getSum().toString());
-    summaryRow.getCell(7).setText(String.valueOf(guestsSummaryStatistics.getSum()));
+    summaryRow.getCell(7).setText(String.valueOf(guestsStatistics.getSum()));
 
     return this;
   }

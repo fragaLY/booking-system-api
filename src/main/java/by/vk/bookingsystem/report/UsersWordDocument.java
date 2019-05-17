@@ -1,9 +1,12 @@
 package by.vk.bookingsystem.report;
 
+import java.util.IntSummaryStatistics;
 import java.util.List;
+import java.util.LongSummaryStatistics;
 import java.util.Map;
 
 import by.vk.bookingsystem.dto.user.UserDto;
+import by.vk.bookingsystem.report.statistics.CostStatistics;
 import com.google.common.collect.ImmutableMap;
 import lombok.Getter;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -17,6 +20,7 @@ import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 @Getter
 public final class UsersWordDocument extends WordDocument {
 
+  /** Default headers for user table */
   public static final Map<Integer, String> USER_HEADERS =
       ImmutableMap.<Integer, String>builder()
           .put(0, "#")
@@ -61,6 +65,40 @@ public final class UsersWordDocument extends WordDocument {
           row.getCell(6).setText(user.getRegistered().toString());
         });
 
+    return this;
+  }
+
+  /**
+   * Add average statistics for report
+   *
+   * @param durationStatistics {@link LongSummaryStatistics}
+   * @param costStatistics {@link CostStatistics}
+   * @param guestsStatistics {@link IntSummaryStatistics}
+   * @return {@link WordDocument}
+   */
+  @Override
+  public WordDocument addAverageStatistics(
+      final LongSummaryStatistics durationStatistics,
+      final CostStatistics costStatistics,
+      final IntSummaryStatistics guestsStatistics) {
+    // do nothing
+    return this;
+  }
+
+  /**
+   * Add summary statistics for report
+   *
+   * @param durationStatistics {@link LongSummaryStatistics}
+   * @param costStatistics {@link CostStatistics}
+   * @param guestsStatistics {@link IntSummaryStatistics}
+   * @return {@link WordDocument}
+   */
+  @Override
+  public WordDocument addSummaryStatistics(
+      final LongSummaryStatistics durationStatistics,
+      final CostStatistics costStatistics,
+      final IntSummaryStatistics guestsStatistics) {
+    // do nothing
     return this;
   }
 }

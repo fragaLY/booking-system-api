@@ -1,4 +1,4 @@
-package by.vk.bookingsystem.helper;
+package by.vk.bookingsystem.report.statistics;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -15,11 +15,10 @@ import lombok.ToString;
  */
 @Getter
 @ToString
-public class CostSummaryStatistics {
+public class CostStatistics {
 
-  public static Collector<BigDecimal, ?, CostSummaryStatistics> statistics() {
-    return Collector.of(
-        CostSummaryStatistics::new, CostSummaryStatistics::accept, CostSummaryStatistics::merge);
+  public static Collector<BigDecimal, ?, CostStatistics> statistics() {
+    return Collector.of(CostStatistics::new, CostStatistics::accept, CostStatistics::merge);
   }
 
   private BigDecimal sum = BigDecimal.ZERO;
@@ -43,7 +42,7 @@ public class CostSummaryStatistics {
     }
   }
 
-  public CostSummaryStatistics merge(CostSummaryStatistics statistics) {
+  public CostStatistics merge(CostStatistics statistics) {
     if (statistics.count > 0) {
       if (count == 0) {
         count = statistics.count;

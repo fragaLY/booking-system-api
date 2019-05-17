@@ -11,7 +11,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ReportSettings {
-  LOGO_PATH("src/main/resources/poi/booking-system-logo.png"),
+  LOGO_PATH_WINDOWS("/poi/booking-system-logo.png"),
+  LOGO_PATH_LINUX("/poi/booking-system-logo.png"),
   FONT_FAMILY_COURIER("Courier"),
   BLUE_COLOR("3fb8ff"),
   BLACK_COLOR("000000"),
