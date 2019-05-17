@@ -19,10 +19,12 @@ import by.vk.bookingsystem.dto.order.OrderDto;
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
 import by.vk.bookingsystem.report.OrdersWordDocument;
 import by.vk.bookingsystem.report.WordDocument;
+import by.vk.bookingsystem.report.setting.ReportSettings;
 import by.vk.bookingsystem.report.setting.ReportType;
 import by.vk.bookingsystem.report.statistics.CostStatistics;
 import by.vk.bookingsystem.service.ReportService;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.SystemUtils;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -121,7 +123,10 @@ public class OrderReportServiceImpl implements ReportService {
             .addTableRows()
             .addAverageStatistics(durationStatistics, costStatistics, guestsStatistics)
             .addSummaryStatistics(durationStatistics, costStatistics, guestsStatistics)
-            //            .addImage() //todo vk: fix it
+            .addImage(
+                SystemUtils.IS_OS_WINDOWS
+                    ? ReportSettings.LOGO_PATH_WINDOWS.getValue()
+                    : ReportSettings.LOGO_PATH_LINUX.getValue())
             .addFooter(from, to, ordersDto.size(), ReportType.ORDERS, now);
 
     byte[] outputByteArray;

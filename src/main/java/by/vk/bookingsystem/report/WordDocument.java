@@ -114,17 +114,18 @@ public abstract class WordDocument {
   }
 
   /**
-   * Add logo image to report
+   * Add logo image to report. Use different logo path for different OS.
    *
+   * @param logoPath {@link String}
    * @return {@link WordDocument}
    */
   @SneakyThrows({IOException.class, InvalidFormatException.class})
-  public WordDocument addImage() {
+  public WordDocument addImage(final String logoPath) {
 
     final XWPFParagraph image = document.createParagraph();
     image.setAlignment(ParagraphAlignment.CENTER);
 
-    final File imageFile = new File(ReportSettings.LOGO_PATH_WINDOWS.getValue());
+    final File imageFile = new File(logoPath);
     final DataInputStream imageDataStream = new DataInputStream(new FileInputStream(imageFile));
 
     final XWPFRun imageRun = image.createRun();

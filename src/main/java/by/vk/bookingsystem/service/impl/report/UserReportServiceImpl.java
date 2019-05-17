@@ -16,9 +16,11 @@ import by.vk.bookingsystem.dto.user.UserDto;
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
 import by.vk.bookingsystem.report.UsersWordDocument;
 import by.vk.bookingsystem.report.WordDocument;
+import by.vk.bookingsystem.report.setting.ReportSettings;
 import by.vk.bookingsystem.report.setting.ReportType;
 import by.vk.bookingsystem.service.ReportService;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.SystemUtils;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,7 +76,6 @@ public class UserReportServiceImpl implements ReportService {
    */
   @SneakyThrows(IOException.class)
   @Override
-  // todo vk: investigate possibility of caching
   public Resource generateReportResource(final LocalDate from, final LocalDate to) {
 
     if (from.isAfter(to)) {
@@ -101,7 +102,10 @@ public class UserReportServiceImpl implements ReportService {
         new UsersWordDocument(new XWPFDocument(), userDtos)
             .addTableHeader(UsersWordDocument.USER_HEADERS)
             .addTableRows()
-//            .addImage() //todo vk: fix it
+            .addImage(
+                SystemUtils.IS_OS_WINDOWS
+                    ? ReportSettings.LOGO_PATH_WINDOWS.getValue()
+                    : ReportSettings.LOGO_PATH_LINUX.getValue())
             .addFooter(from, to, userDtos.size(), ReportType.USERS, now);
 
     byte[] outputByteArray;
