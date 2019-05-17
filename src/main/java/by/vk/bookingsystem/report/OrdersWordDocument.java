@@ -53,7 +53,6 @@ public final class OrdersWordDocument extends WordDocument {
    *
    * @return {@link OrdersWordDocument}
    */
-  //todo vk: refactor this peace of shit
   public OrdersWordDocument addTableRows() {
 
     orders.forEach(

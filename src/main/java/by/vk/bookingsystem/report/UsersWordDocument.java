@@ -50,7 +50,6 @@ public final class UsersWordDocument extends WordDocument {
    *
    * @return {@link UsersWordDocument}
    */
-  // todo vk: refactor this peace of shit
   public UsersWordDocument addTableRows() {
 
     users.forEach(
