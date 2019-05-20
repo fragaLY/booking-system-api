@@ -35,12 +35,13 @@ public interface OrderMongoDao extends MongoRepository<Order, ObjectId>, OrderDa
   Order findOrderById(String id);
 
   /**
-   * Saves the order.
+   * Save or update order
    *
-   * @param order - {@link Order}
+   * @param order {@link Order}
    * @return {@link Order}
    */
-  <S extends Order> S insert(S order);
+  @Override
+  <S extends Order> S save(S order);
 
   /**
    * Deletes the order by id

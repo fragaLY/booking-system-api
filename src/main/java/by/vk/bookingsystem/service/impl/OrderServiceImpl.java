@@ -149,7 +149,7 @@ public class OrderServiceImpl implements OrderService {
     orderValidator.validateHomes(order.getHomes());
     orderValidator.validateOrderDates(order);
     order.setCost(costCalculator.calculateCost(order));
-    return orderDao.insert(orderConverter.convertToEntity(order)).getId().toHexString();
+    return orderDao.save(orderConverter.convertToEntity(order)).getId().toHexString();
   }
 
   /**
@@ -176,7 +176,7 @@ public class OrderServiceImpl implements OrderService {
     final Order order = orderDao.findOrderById(id);
 
     dto.setCost(costCalculator.calculateCost(dto));
-    orderDao.insert(orderConverter.enrichModel(order, dto));
+    orderDao.save(orderConverter.enrichModel(order, dto));
   }
 
   /**

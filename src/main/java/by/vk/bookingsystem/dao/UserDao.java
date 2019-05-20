@@ -48,13 +48,12 @@ public interface UserDao {
   boolean existsByPhone(String phone);
 
   /**
-   * Saves user
+   * Save or update user
    *
    * @param user {@link User}
-   * @param <S> - the instance of User
    * @return {@link User}
    */
-  <S extends User> S insert(S user);
+  <S extends User> S save(S user);
 
   /**
    * Deletes the user by id

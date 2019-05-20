@@ -156,7 +156,7 @@ public class UserServiceImpl implements UserService {
       throw new IllegalArgumentException(environment.getProperty(PHONE_ALREADY_REGISTERED));
     }
 
-    return userDao.insert(userConverter.convertToEntity(user)).getId().toHexString();
+    return userDao.save(userConverter.convertToEntity(user)).getId().toHexString();
   }
 
   /**
@@ -196,7 +196,7 @@ public class UserServiceImpl implements UserService {
       throw new IllegalArgumentException(environment.getProperty(PHONE_ALREADY_REGISTERED));
     }
 
-    userDao.insert(userConverter.enrichModel(userToUpdate, user));
+    userDao.save(userConverter.enrichModel(userToUpdate, user));
   }
 
   /**

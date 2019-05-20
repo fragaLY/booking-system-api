@@ -83,13 +83,13 @@ public class OrderServiceImplTest {
 
     Mockito.when(costCalculator.calculateCost(dto1)).thenReturn(BigDecimal.TEN);
     Mockito.when(orderConverter.convertToEntity(dto1)).thenReturn(order1);
-    Mockito.when(orderDao.insert(order1)).thenReturn(order1);
+    Mockito.when(orderDao.save(order1)).thenReturn(order1);
 
     // when
     final String actualResult = orderService.createOrder(dto1);
 
     // then
-    Mockito.verify(orderDao, Mockito.atLeastOnce()).insert(order1);
+    Mockito.verify(orderDao, Mockito.atLeastOnce()).save(order1);
 
     assertEquals(ORDER1_ID_VALUE, actualResult);
   }
@@ -121,7 +121,7 @@ public class OrderServiceImplTest {
 
     // when
     orderService.updateOrder(dto1, ORDER1_ID_VALUE);
-    Mockito.verify(orderDao, Mockito.atLeastOnce()).insert(order1);
+    Mockito.verify(orderDao, Mockito.atLeastOnce()).save(order1);
   }
 
   @Test(expected = ObjectNotFoundException.class)

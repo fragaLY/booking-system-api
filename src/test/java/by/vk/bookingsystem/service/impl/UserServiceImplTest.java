@@ -112,7 +112,7 @@ public class UserServiceImplTest {
     Mockito.when(userDao.existsByEmail(USER1_EMAIL)).thenReturn(false);
     Mockito.when(userDao.existsByPhone(USER1_PHONE)).thenReturn(false);
     Mockito.when(userConverter.convertToEntity(userDto1)).thenReturn(user1);
-    Mockito.when(userDao.insert(user1)).thenReturn(user1);
+    Mockito.when(userDao.save(user1)).thenReturn(user1);
 
     final String expectedResult = "5c8fba4cc077d3614023f871";
 
@@ -177,7 +177,7 @@ public class UserServiceImplTest {
     userService.updateUser(dto, USER1_ID_VALUE);
 
     // then
-    Mockito.verify(userDao, Mockito.atLeastOnce()).insert(updatedUser);
+    Mockito.verify(userDao, Mockito.atLeastOnce()).save(updatedUser);
   }
 
   @Test(expected = ObjectNotFoundException.class)

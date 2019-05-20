@@ -51,12 +51,13 @@ public interface UserMongoDao extends MongoRepository<User, ObjectId>, UserDao {
   boolean existsByPhone(String phone);
 
   /**
-   * Saves user
+   * Save or update user
    *
-   * @param user - {@link User}
+   * @param user {@link User}
    * @return {@link User}
    */
-  <S extends User> S insert(S user);
+  @Override
+  <S extends User> S save(S user);
 
   /**
    * Deletes the user by id

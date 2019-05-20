@@ -32,8 +32,8 @@ public class User {
 
   @TextIndexed private String firstName;
   @TextIndexed private String lastName;
-  @Indexed private String email;
-  @Indexed private String phone;
+  @Indexed(unique = true, sparse = true) private String email;
+  @Indexed(unique = true, sparse = true) private String phone;
   private Role role;
 
   @Field("currency")

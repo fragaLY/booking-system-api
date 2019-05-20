@@ -31,13 +31,12 @@ public interface OrderDao {
   Order findOrderById(String id);
 
   /**
-   * Saves the order.
+   * Save or update order
    *
-   * @param order the {@link Order}
-   * @param <S> the instance of {@link Order}
+   * @param order {@link Order}
    * @return {@link Order}
    */
-  <S extends Order> S insert(S order);
+  <S extends Order> S save(S order);
 
   /**
    * Deletes the order by id
