@@ -19,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.PropertySource;
@@ -142,7 +141,7 @@ public class UserServiceImpl implements UserService {
    * @param user - {@link UserDto}
    * @return {@link String}
    */
-  @CachePut(value = "users")
+  @CacheEvict(value = "users", allEntries = true)
   @Override
   public String createUser(final UserDto user) {
 
@@ -169,7 +168,11 @@ public class UserServiceImpl implements UserService {
    * @param user - {@link UserDto}
    * @param id - the id of user.
    */
-  @Caching(put = {@CachePut(value = "users"), @CachePut(value = "user", key = "#id")})
+  @Caching(
+      evict = {
+        @CacheEvict(value = "users", allEntries = true),
+        @CacheEvict(value = "user", key = "#id")
+      })
   @Override
   public void updateUser(final UserDto user, final String id) {
 
@@ -206,7 +209,11 @@ public class UserServiceImpl implements UserService {
    *
    * @param id - the id of user
    */
-  @Caching(evict = {@CacheEvict(value = "users"), @CacheEvict(value = "user", key = "#id")})
+  @Caching(
+      evict = {
+        @CacheEvict(value = "users", allEntries = true),
+        @CacheEvict(value = "user", key = "#id")
+      })
   @Override
   public void deleteUserById(final String id) {
 

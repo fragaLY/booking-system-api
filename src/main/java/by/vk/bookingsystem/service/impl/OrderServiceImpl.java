@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.PropertySource;
@@ -142,7 +141,7 @@ public class OrderServiceImpl implements OrderService {
    * @param order - {@link OrderDto}
    * @return {@link String}
    */
-  @CachePut(value = "orders")
+  @CacheEvict(value = "orders", allEntries = true)
   @Override
   public String createOrder(final OrderDto order) {
     orderValidator.validateOwner(order.getOwner());
@@ -160,7 +159,11 @@ public class OrderServiceImpl implements OrderService {
    * @param dto - {@link OrderDto}
    * @param id - the id of order.
    */
-  @Caching(put = {@CachePut(value = "orders"), @CachePut(value = "order", key = "#id")})
+  @Caching(
+      evict = {
+        @CacheEvict(value = "orders", allEntries = true),
+        @CacheEvict(value = "order", key = "#id")
+      })
   @Override
   public void updateOrder(final OrderDto dto, final String id) {
 
@@ -186,7 +189,11 @@ public class OrderServiceImpl implements OrderService {
    *
    * @param id - the id of order
    */
-  @Caching(evict = {@CacheEvict(value = "orders"), @CacheEvict(value = "order", key = "#id")})
+  @Caching(
+      evict = {
+        @CacheEvict(value = "orders", allEntries = true),
+        @CacheEvict(value = "order", key = "#id")
+      })
   @Override
   public void deleteOrderById(final String id) {
 
