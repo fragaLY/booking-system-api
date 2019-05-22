@@ -24,7 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.hateoas.Link;
-import org.springframework.http.MediaType;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -84,7 +84,7 @@ public class OrderController {
             response = ObjectNotFoundException.class),
         @ApiResponse(code = 500, message = "Internal Error")
       })
-  @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+  @GetMapping(produces = MediaTypes.HAL_JSON_UTF8_VALUE)
   @ResponseBody
   public ResponseEntity<OrderSetDto> getAllOrders(
       @ApiParam("RequestParam: ?page=XXX&size=YYY&sort=ZZZ") @PageableDefault(sort = "from")
@@ -117,7 +117,7 @@ public class OrderController {
             response = ObjectNotFoundException.class),
         @ApiResponse(code = 500, message = "Internal Error")
       })
-  @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+  @GetMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
   @ResponseBody
   public ResponseEntity<OrderDto> getOrder(
       @NotBlank(message = "The id cannot be blank") @PathVariable(value = "id") final String id) {
@@ -151,7 +151,7 @@ public class OrderController {
         @ApiResponse(code = 403, message = "Access denied"),
         @ApiResponse(code = 500, message = "Error getting orders")
       })
-  @PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+  @PostMapping(consumes = MediaTypes.HAL_JSON_UTF8_VALUE)
   @ResponseBody
   public ResponseEntity<Void> createOrder(
       @NotNull(message = "The order cannot be null") @Valid @RequestBody final OrderDto dto) {
@@ -185,7 +185,7 @@ public class OrderController {
         @ApiResponse(code = 403, message = "Access denied"),
         @ApiResponse(code = 500, message = "Internal Error")
       })
-  @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+  @PutMapping(value = "/{id}", consumes = MediaTypes.HAL_JSON_UTF8_VALUE)
   @ResponseBody
   public ResponseEntity<Void> updateOrder(
       final HttpServletRequest request,
@@ -212,7 +212,8 @@ public class OrderController {
       })
   @DeleteMapping(value = "/{id}")
   @ResponseBody
-  public ResponseEntity<Void> deleteOrder(@NotBlank(message = "The id cannot be blank") @PathVariable final String id) {
+  public ResponseEntity<Void> deleteOrder(
+      @NotBlank(message = "The id cannot be blank") @PathVariable final String id) {
     orderService.deleteOrderById(id);
     return ResponseEntity.noContent().build();
   }
