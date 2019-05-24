@@ -1,5 +1,6 @@
 package by.vk.bookingsystem.validator.order.impl;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -11,16 +12,17 @@ import by.vk.bookingsystem.dao.UserDao;
 import by.vk.bookingsystem.domain.Home;
 import by.vk.bookingsystem.domain.User;
 import by.vk.bookingsystem.dto.home.HomeDto;
+import by.vk.bookingsystem.dto.order.OrderDto;
 import by.vk.bookingsystem.dto.user.UserDto;
 import org.bson.types.ObjectId;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.env.Environment;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 public class OrderValidatorImplTest {
@@ -46,7 +48,7 @@ public class OrderValidatorImplTest {
 
     // given
     final UserDto dto = UserDto.newBuilder().setId(USER_ID).build();
-    Mockito.when(userDao.findUserById(USER_ID)).thenReturn(null);
+    when(userDao.findUserById(USER_ID)).thenReturn(null);
 
     // when
     orderValidator.validateOwner(dto);
@@ -58,7 +60,7 @@ public class OrderValidatorImplTest {
     // given
     final UserDto dto = UserDto.newBuilder().setId(USER_ID).build();
     final User user = User.builder().id(new ObjectId(USER_ID)).build();
-    Mockito.when(userDao.findUserById(USER_ID)).thenReturn(user);
+    when(userDao.findUserById(USER_ID)).thenReturn(user);
 
     // when
     orderValidator.validateOwner(dto);
@@ -86,7 +88,7 @@ public class OrderValidatorImplTest {
     homeIds.add(new ObjectId(HOME1_ID));
     homeIds.add(new ObjectId(HOME2_ID));
 
-    Mockito.when(homeDao.findAllById(homeIds)).thenReturn(new ArrayList<>());
+    when(homeDao.findAllById(homeIds)).thenReturn(new ArrayList<>());
 
     // when
     orderValidator.validateHomes(homeDtoSet);
@@ -108,13 +110,74 @@ public class OrderValidatorImplTest {
     homes.add(new Home(new ObjectId(HOME1_ID), "HOME1"));
     homes.add(new Home(new ObjectId(HOME2_ID), "HOME2"));
 
-    Mockito.when(homeDao.findAllById(homeIds)).thenReturn(homes);
+    when(homeDao.findAllById(homeIds)).thenReturn(homes);
 
     // when
     orderValidator.validateHomes(homeDtoSet);
   }
 
-  @Ignore
+  @Test(expected = NullPointerException.class)
+  public void validateOrderDatesWhenFromIsNull() {
+    orderValidator.validateOrderDates(new OrderDto());
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void validateOrderDatesWhenToIsNull() {
+
+    // given
+    final OrderDto order = new OrderDto();
+    order.setFrom(LocalDate.now());
+
+    // when
+    orderValidator.validateOrderDates(order);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void validateOrderDatesWhenFromIsAfterTo() {
+
+    // given
+    final LocalDate from = LocalDate.now();
+    final LocalDate to = from.minusDays(3);
+
+    final OrderDto order = new OrderDto();
+    order.setFrom(from);
+    order.setTo(to);
+
+    // when
+    orderValidator.validateOrderDates(order);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void validateOrderDatesWhenFromIsBeforeToHasIntersection() {
+
+    // given
+    final LocalDate from = LocalDate.now();
+    final LocalDate to = from.plusDays(3);
+
+    final OrderDto order = new OrderDto();
+    order.setFrom(from);
+    order.setTo(to);
+
+    when(orderDao.intersectedWithExistedOrders(to, from)).thenReturn(true);
+
+    // when
+    orderValidator.validateOrderDates(order);
+  }
+
   @Test
-  public void validateOrderDates() {}
+  public void validateOrderDatesWhenFromIsBeforeToHasNoIntersection() {
+
+    // given
+    final LocalDate from = LocalDate.now();
+    final LocalDate to = from.plusDays(3);
+
+    final OrderDto order = new OrderDto();
+    order.setFrom(from);
+    order.setTo(to);
+
+    when(orderDao.intersectedWithExistedOrders(to, from)).thenReturn(false);
+
+    // when
+    orderValidator.validateOrderDates(order);
+  }
 }
