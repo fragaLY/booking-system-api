@@ -35,7 +35,6 @@ dependencies {
     //reactor
     compile 'io.projectreactor:reactor-core:3.2.9.RELEASE'
 
-
     //swagger
     compile 'io.springfox:springfox-swagger2:2.9.2'
     compile 'io.springfox:springfox-swagger-ui:2.9.2'
@@ -45,7 +44,6 @@ dependencies {
 //    annotationProcessor 'org.projectlombok:lombok'
 
     //3rd party
-    compile 'org.apache.commons:commons-lang3:3.8.1'
     compile 'com.google.guava:guava:27.0.1-jre'
     compile 'org.apache.poi:poi-ooxml:4.1.0'
 
