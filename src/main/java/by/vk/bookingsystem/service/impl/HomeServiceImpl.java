@@ -12,6 +12,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 /**
  * The service implementation for homes.
@@ -43,6 +44,7 @@ public class HomeServiceImpl implements HomeService {
     return homeDao
         .findById(new ObjectId(id))
         .switchIfEmpty(
-            Mono.error(new ObjectNotFoundException(environment.getProperty(HOME_NOT_FOUND))));
+            Mono.error(new ObjectNotFoundException(environment.getProperty(HOME_NOT_FOUND))))
+        .subscribeOn(Schedulers.elastic());
   }
 }

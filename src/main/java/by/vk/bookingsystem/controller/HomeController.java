@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 /**
  * The controller to work with homes
@@ -36,7 +37,7 @@ public class HomeController {
   @ResponseBody
   @ResponseStatus(HttpStatus.FOUND)
   public Flux<Home> getHomes() {
-    return homeService.findAllHomes();
+    return homeService.findAllHomes().subscribeOn(Schedulers.elastic());
   }
 
   @GetMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
@@ -44,6 +45,6 @@ public class HomeController {
   @ResponseStatus(HttpStatus.FOUND)
   public Mono<Home> getHomeById(
       @NotBlank(message = "The id cannot be blank") @PathVariable final String id) {
-    return homeService.findHomeById(id);
+    return homeService.findHomeById(id).subscribeOn(Schedulers.elastic());
   }
 }
