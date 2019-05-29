@@ -1,52 +1,23 @@
 package by.vk.bookingsystem.service;
 
-import by.vk.bookingsystem.dto.user.UserDto;
-import by.vk.bookingsystem.dto.user.UserSetDto;
-import org.springframework.data.domain.Pageable;
+import by.vk.bookingsystem.domain.User;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 /**
- * The service for {@link UserDto}
+ * The service for users
  *
  * @author Vadzim_Kavalkou
  */
 public interface UserService {
 
-  /**
-   * Finds all users in the system and returns them
-   *
-   * @param pageable {@link Pageable}
-   * @return {@link UserSetDto}
-   */
-  UserSetDto findAllUsers(Pageable pageable);
+  Flux<User> findAllUsers();
 
-  /**
-   * Finds the user by its id.
-   *
-   * @param id - the id of price
-   * @return {@link UserDto}
-   */
-  UserDto findUserById(String id);
+  Mono<User> findUserById(String id);
 
-  /**
-   * Creates the user and returns its id
-   *
-   * @param dto - {@link UserDto}
-   * @return {@link String}
-   */
-  String createUser(UserDto dto);
+  Mono<User> createUser(User user);
 
-  /**
-   * Enriches the user with new information from data transfer object and updates it.
-   *
-   * @param dto - {@link UserDto}
-   * @param id - the id of user.
-   */
-  void updateUser(UserDto dto, String id);
+  Flux<User> updateUser(User user, String id);
 
-  /**
-   * Deletes user by its id.
-   *
-   * @param id - the id of user
-   */
-  void deleteUserById(String id);
+  Mono<Void> deleteUserById(String id);
 }

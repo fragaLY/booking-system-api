@@ -12,7 +12,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 /**
  * The service implementation for prices
@@ -44,7 +43,6 @@ public class PriceServiceImpl implements PriceService {
     return priceDao
         .findById(new ObjectId(id))
         .switchIfEmpty(
-            Mono.error(new ObjectNotFoundException(environment.getProperty(PRICE_NOT_FOUND))))
-        .subscribeOn(Schedulers.elastic());
+            Mono.error(new ObjectNotFoundException(environment.getProperty(PRICE_NOT_FOUND))));
   }
 }

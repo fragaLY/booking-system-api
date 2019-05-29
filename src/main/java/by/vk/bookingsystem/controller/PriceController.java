@@ -10,12 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 /**
  * The controller to work with prices
@@ -34,17 +32,15 @@ public class PriceController {
   }
 
   @GetMapping(produces = MediaTypes.HAL_JSON_UTF8_VALUE)
-  @ResponseBody
   @ResponseStatus(HttpStatus.FOUND)
   public Flux<Price> getPrices() {
-    return priceService.findAllPrices().subscribeOn(Schedulers.elastic());
+    return priceService.findAllPrices();
   }
 
   @GetMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
-  @ResponseBody
   @ResponseStatus(HttpStatus.FOUND)
   public Mono<Price> getPrice(
       @NotBlank(message = "The id cannot be blank") @PathVariable final String id) {
-    return priceService.findPriceById(id).subscribeOn(Schedulers.elastic());
+    return priceService.findPriceById(id);
   }
 }

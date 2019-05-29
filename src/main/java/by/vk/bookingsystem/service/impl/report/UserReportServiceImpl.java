@@ -11,7 +11,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import by.vk.bookingsystem.converter.UserConverter;
-import by.vk.bookingsystem.dao.UserDao;
 import by.vk.bookingsystem.dto.user.UserDto;
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
 import by.vk.bookingsystem.report.UsersWordDocument;
