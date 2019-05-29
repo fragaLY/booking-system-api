@@ -1,52 +1,23 @@
 package by.vk.bookingsystem.service;
 
-import by.vk.bookingsystem.dto.order.OrderDto;
-import by.vk.bookingsystem.dto.order.OrderSetDto;
-import org.springframework.data.domain.Pageable;
+import by.vk.bookingsystem.domain.Order;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 /**
- * The service for {@link OrderDto}
+ * The service for orders
  *
  * @author Vadzim_Kavalkou
  */
 public interface OrderService {
 
-  /**
-   * Finds all orders in the system and returns them
-   *
-   * @param pageable {@link Pageable}
-   * @return {@link OrderSetDto}
-   */
-  OrderSetDto findAllOrders(Pageable pageable);
+  Flux<Order> findAllOrders();
 
-  /**
-   * Finds the order by its id.
-   *
-   * @param id - the id of order
-   * @return {@link OrderDto}
-   */
-  OrderDto findOrderById(String id);
+  Mono<Order> findOrderById(String id);
 
-  /**
-   * Creates the order and returns its id
-   *
-   * @param dto - {@link OrderDto}
-   * @return {@link String}
-   */
-  String createOrder(OrderDto dto);
+  Mono<Void> createOrder(Order order);
 
-  /**
-   * Enriches the order with new information from data transfer object and updates it.
-   *
-   * @param dto - {@link OrderDto}
-   * @param id - the id of order.
-   */
-  void updateOrder(OrderDto dto, String id);
+  Mono<Void> updateOrder(Order order, String id);
 
-  /**
-   * Deletes order by its id.
-   *
-   * @param id - the id of order
-   */
-  void deleteOrderById(String id);
+  Mono<Void> deleteOrderById(String id);
 }
