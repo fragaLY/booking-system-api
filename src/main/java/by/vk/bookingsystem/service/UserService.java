@@ -15,9 +15,9 @@ public interface UserService {
 
   Mono<User> findUserById(String id);
 
-  Mono<User> createUser(User user);
+  Mono<Void> createUser(User user);
 
-  Flux<User> updateUser(User user, String id);
+  Mono<Void> updateUser(User user, String id);
 
   Mono<Void> deleteUserById(String id);
 }

@@ -48,27 +48,35 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public Mono<User> createUser(final User user) {
-    return userDao.insert(user);
+  public Mono<Void> createUser(final User user) {
+    return userDao.insert(user).then();
   }
 
   @Override
-  public Flux<User> updateUser(final User user, final String id) {
-    return userDao.insert(
-        userDao
-            .findById(new ObjectId(id))
-            .switchIfEmpty(
-                Mono.error(new ObjectNotFoundException(environment.getProperty(USER_NOT_FOUND))))
-            .flatMap(
-                data ->
-                    Mono.just(data)
-                        .map(
-                            updatedUser -> {
-                              updatedUser.setEmail(user.getEmail());
-                              updatedUser.setPhone(user.getPhone());
-                              return updatedUser;
-                            })
-                        .subscribeOn(Schedulers.parallel())));
+  public Mono<Void> updateUser(final User user, final String id) {
+    return userDao
+        .insert(
+            userDao
+                .findById(new ObjectId(id))
+                .switchIfEmpty(
+                    Mono.error(
+                        new ObjectNotFoundException(environment.getProperty(USER_NOT_FOUND))))
+                .flatMap(
+                    data ->
+                        Mono.just(data)
+                            .map(
+                                updatedUser -> {
+                                  updatedUser.setEmail(user.getEmail());
+                                  updatedUser.setPhone(user.getPhone());
+                                  updatedUser.setCity(user.getCity());
+                                  updatedUser.setCountry(user.getCountry());
+                                  updatedUser.setCurrencyCode(user.getCurrencyCode());
+                                  updatedUser.setFirstName(user.getFirstName());
+                                  updatedUser.setLastName(user.getLastName());
+                                  return updatedUser;
+                                })
+                            .subscribeOn(Schedulers.parallel())))
+        .then();
   }
 
   @Override

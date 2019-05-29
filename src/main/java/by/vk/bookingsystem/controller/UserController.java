@@ -52,14 +52,14 @@ public class UserController {
 
   @PostMapping(consumes = MediaTypes.HAL_JSON_UTF8_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
-  public Mono<User> createUser(
+  public Mono<Void> createUser(
       @NotNull(message = "The user cannot be null") @Valid @RequestBody final User user) {
     return userService.createUser(user);
   }
 
   @PutMapping(value = "/{id}", consumes = MediaTypes.HAL_JSON_UTF8_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public Flux<User> updateUser(
+  public Mono<Void> updateUser(
       @NotNull(message = "The user cannot be null") @Valid @RequestBody final User user,
       @NotBlank(message = "The id cannot be blank") @PathVariable final String id) {
     return userService.updateUser(user, id);
