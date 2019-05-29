@@ -44,9 +44,6 @@ logging:
 
 server:
   port: 8080
-  jetty:
-    acceptors: -1
-    selectors: -1
   servlet:
     context-path: /api
     session:

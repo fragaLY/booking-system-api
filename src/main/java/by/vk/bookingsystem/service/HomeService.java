@@ -1,27 +1,17 @@
 package by.vk.bookingsystem.service;
 
-import by.vk.bookingsystem.dto.home.HomeDto;
-import by.vk.bookingsystem.dto.home.HomeSetDto;
+import by.vk.bookingsystem.domain.Home;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 /**
- * The service for {@link HomeDto}
+ * The service for homes
  *
  * @author Vadzim_Kavalkou
  */
 public interface HomeService {
 
-  /**
-   * Finds all homes in the system and returns them.
-   *
-   * @return {@link HomeSetDto}
-   */
-  HomeSetDto findAllHomes();
+  Flux<Home> findAllHomes();
 
-  /**
-   * Finds the home by id.
-   *
-   * @param id - the id of home.
-   * @return {@link HomeDto}
-   */
-  HomeDto findHomeById(String id);
+  Mono<Home> findHomeById(String id);
 }
