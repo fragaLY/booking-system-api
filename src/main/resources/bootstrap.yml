@@ -1,3 +1,12 @@
 spring:
   application:
-    name: booking-system
+    name: booking-system-api
+  cloud:
+    config:
+      uri: http://localhost:8081
+      fail-fast: true
+      retry:
+        initialInterval: 5000
+        multiplier: 1.1
+        maxInterval: 5000
+        maxAttempts: 20

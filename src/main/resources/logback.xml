@@ -3,7 +3,7 @@
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
     <logger name="org.springframework" level="INFO"/>
 
-    <property name="FILE_PATH" value="/tmp/booking-system.log"/>
+    <property name="FILE_PATH" value="/tmp/booking-system-api.log"/>
 
     <appender name="FILE_STASH" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <File>${FILE_PATH}</File>

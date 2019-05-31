@@ -1,4 +1,5 @@
 FROM java:8-alpine
+MAINTAINER vadzim.kavalkou@gmail.com
 VOLUME /tmp
 
 ENV JAVA_XMX=512m
