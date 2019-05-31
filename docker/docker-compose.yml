@@ -1,0 +1,86 @@
+version: "3.7"
+services:
+
+  config-server:
+    container_name: config-server
+    image: "fragaly/booking-system:config-cloud-server"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081 || exit 1"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 1m
+    restart: always
+    expose:
+      - 8081
+    ports:
+      - 8081:8080
+      - 5081:5080
+      - 38081:38080
+    deploy:
+      resources:
+        limits:
+          cpus: '0.05'
+          memory: 256M
+        reservations:
+          cpus: '0.01'
+          memory: 128M
+
+  api:
+    container_name: api
+    image: "fragaly/booking-system:config-cloud-client"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/ || exit 1"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 1m
+    restart: always
+    depends_on:
+      - config-server
+    expose:
+      - 8080
+    ports:
+      - 8080:8080
+      - 5080:5080
+      - 38080:38080
+    deploy:
+      resources:
+        limits:
+          cpus: '0.90'
+          memory: 1024M
+        reservations:
+          cpus: '0.29'
+          memory: 512M
+
+  monitoring:
+    container_name: monitoring
+    image: google/cadvisor
+    volumes:
+#      - /:/rootfs:ro
+      - c:\:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    restart: always
+    depends_on:
+      - config-server
+      - api
+    expose:
+      - 8082
+    ports:
+      - 8082:8080
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/containers/ || exit 1"]
+      interval: 10m
+      timeout: 10s
+      retries: 3
+      start_period: 1m
+    deploy:
+      resources:
+        limits:
+          cpus: '0.05'
+          memory: 256M
+        reservations:
+          cpus: '0.01'
+          memory: 128M
