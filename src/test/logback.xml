@@ -1,0 +1,32 @@
+<configuration>
+
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <logger name="org.springframework" level="INFO"/>
+
+    <property name="FILE_PATH" value="/tmp/booking-system-api.log"/>
+
+    <appender name="FILE_STASH" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${FILE_PATH}</File>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <maxIndex>5</maxIndex>
+            <fileNamePattern>${FILE_PATH}.%i</fileNamePattern>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>10MB</MaxFileSize>
+        </triggeringPolicy>
+    </appender>
+
+    <appender name="CONSOLE_STASH" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE_STASH"/>
+    </root>
+
+    <root level="INFO">
+        <appender-ref ref="FILE_STASH"/>
+    </root>
+
+</configuration>

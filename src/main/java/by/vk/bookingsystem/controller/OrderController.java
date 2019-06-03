@@ -26,6 +26,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,6 +43,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
  *
  * @author Vadzim_Kavalkou
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
