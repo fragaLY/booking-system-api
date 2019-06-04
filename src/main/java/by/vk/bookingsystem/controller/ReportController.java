@@ -126,12 +126,16 @@ public class ReportController {
   @GetMapping(value = "/users")
   @ResponseBody
   public ResponseEntity<Resource> generateUserReport(
-      @ApiParam("The start date of searching for users. Date format yyyy-MM-dd")
-          @RequestParam("from")
+      @ApiParam(
+              value = "The start date of searching for users. Date format yyyy-MM-dd",
+              defaultValue = "0001-01-01")
+          @RequestParam(value = "from", defaultValue = "0001-01-01")
           @DateTimeFormat(pattern = "yyyy-MM-dd")
           final LocalDate from,
-      @ApiParam("The end date of searching for users. Date format yyyy-MM-dd")
-          @RequestParam("to")
+      @ApiParam(
+              value = "The end date of searching for users. Date format yyyy-MM-dd",
+              defaultValue = "9999-12-31")
+          @RequestParam(value = "to", defaultValue = "9999-12-31")
           @DateTimeFormat(pattern = "yyyy-MM-dd")
           final LocalDate to)
       throws IOException {
@@ -178,12 +182,16 @@ public class ReportController {
   @GetMapping(value = "/orders")
   @ResponseBody
   public ResponseEntity<Resource> generateOrderReport(
-      @ApiParam("The start date of searching for orders. Date format yyyy-MM-dd")
-          @RequestParam("from")
+      @ApiParam(
+              value = "The start date of searching for orders. Date format yyyy-MM-dd",
+              defaultValue = "0001-01-01")
+          @RequestParam(value = "from", defaultValue = "0001-01-01")
           @DateTimeFormat(pattern = "yyyy-MM-dd")
           final LocalDate from,
-      @ApiParam("The end date of searching for orders. Date format yyyy-MM-dd")
-          @RequestParam("to")
+      @ApiParam(
+              value = "The end date of searching for orders. Date format yyyy-MM-dd",
+              defaultValue = "9999-12-31")
+          @RequestParam(value = "to", defaultValue = "9999-12-31")
           @DateTimeFormat(pattern = "yyyy-MM-dd")
           final LocalDate to)
       throws IOException {
