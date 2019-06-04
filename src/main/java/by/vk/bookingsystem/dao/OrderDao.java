@@ -15,12 +15,14 @@ import org.springframework.data.domain.Pageable;
 public interface OrderDao {
 
   /**
-   * Finds all orders that are in the system and returns it
+   * Finds all orders between dates and returns it
    *
    * @param pageable {@link Pageable}
+   * @param from {@link LocalDate}
+   * @param to {@link LocalDate}
    * @return {@link Page} of {@link Order}
    */
-  Page<Order> findAll(Pageable pageable);
+  Page<Order> findAllOrdersBetweenDates(Pageable pageable, LocalDate from, LocalDate to);
 
   /**
    * Finds the order by its id and returns it

@@ -1,7 +1,6 @@
 package by.vk.bookingsystem.service.impl;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -16,6 +15,7 @@ import by.vk.bookingsystem.exception.ObjectNotFoundException;
 import by.vk.bookingsystem.service.CostCalculatorService;
 import by.vk.bookingsystem.service.OrderService;
 import by.vk.bookingsystem.validator.order.OrderValidator;
+import by.vk.bookingsystem.validator.order.impl.OrderValidatorImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +29,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Service;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 /**
  * The service implementation for {@link OrderDto}
@@ -78,15 +80,32 @@ public class OrderServiceImpl implements OrderService {
   }
 
   /**
-   * Finds page orders in the system and returns it
+   * Finds page orders in between selected dates
+   *
+   * <p>By default the date frame is the last month
    *
    * @param pageable {@link Pageable}
+   * @param from {@link LocalDate}
+   * @param to {@link LocalDate}
    * @return {@link OrderSetDto}
    */
   @Override
   @Cacheable(value = "orders")
-  public OrderSetDto findAllOrders(final Pageable pageable) {
-    final Page<Order> orders = orderDao.findAll(pageable);
+  public OrderSetDto findAllOrdersBetweenDates(
+      final Pageable pageable, LocalDate from, LocalDate to) {
+
+    if (from == null || to == null) {
+      final LocalDate now = LocalDate.now();
+      from = LocalDate.of(now.getYear(), now.getMonth(), 1);
+      to = from.plusMonths(1).minusDays(1);
+    }
+
+    if (from.isAfter(to)) {
+      LOGGER.warn(OrderValidatorImpl.INVALID_DATES_LOG, from, to);
+      throw new IllegalArgumentException(environment.getProperty(OrderValidatorImpl.INVALID_DATES));
+    }
+
+    final Page<Order> orders = orderDao.findAllOrdersBetweenDates(pageable, from, to);
 
     final Set<OrderDto> orderSet =
         orders.getContent().stream()

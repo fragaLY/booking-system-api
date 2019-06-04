@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import javax.validation.constraints.NotNull;
 
 import by.vk.bookingsystem.dao.HomeDao;
@@ -38,13 +37,12 @@ public class OrderValidatorImpl implements OrderValidator {
 
   private static final String OWNER_NOT_FOUND = "owner.not.found";
   private static final String HOMES_NOT_FOUND = "homes.not.found";
-  private static final String INVALID_DATES = "dates.invalid";
+  public static final String INVALID_DATES = "dates.invalid";
   private static final String INTERSECTING_DATES = "order.dates.intersection";
 
   private static final String OWNER_NOT_FOUND_LOG = "The user {} was not found";
   private static final String HOMES_NOT_FOUND_LOG = "The homes {} were not found";
-  private static final String INVALID_ORDER_DATES_LOG =
-      "The from date should be before to date for order {}.";
+  public static final String INVALID_DATES_LOG = "The from date should be before to date {} {}";
   private static final String INTERSECTING_DATES_LOG =
       "The dates for order {} intersect with already existing";
 
@@ -119,7 +117,7 @@ public class OrderValidatorImpl implements OrderValidator {
     final LocalDate to = order.getTo();
 
     if (from.isAfter(to)) {
-      LOGGER.warn(INVALID_ORDER_DATES_LOG, order);
+      LOGGER.warn(INVALID_DATES_LOG, from, to);
       throw new IllegalArgumentException(environment.getProperty(INVALID_DATES));
     }
 

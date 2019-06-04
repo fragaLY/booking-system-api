@@ -59,6 +59,17 @@ public interface OrderMongoDao extends MongoRepository<Order, ObjectId>, OrderDa
   boolean existsById(String id);
 
   /**
+   * Finds orders between dates and returns them
+   *
+   * @param pageable {@link Pageable}
+   * @param from {@link LocalDate}
+   * @param to {@link LocalDate}
+   * @return {@link List} of {@link Order}
+   */
+  @Query(value = "{ 'from' : { $gte: ?0 }, 'to' : { $lte: ?1 }}")
+  Page<Order> findAllOrdersBetweenDates(Pageable pageable, LocalDate from, LocalDate to);
+
+  /**
    * Finds checks if order intersects with existing orders
    *
    * @param from - {@link LocalDate}

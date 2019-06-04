@@ -2,6 +2,7 @@ package by.vk.bookingsystem.controller;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -21,6 +22,7 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.CacheControl;
@@ -36,6 +38,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -113,7 +116,9 @@ public class OrderController {
   }
 
   /**
-   * Returns the page with orders.
+   * Returns the page with orders between selected dates
+   *
+   * <p>By default the date frame is the last month
    *
    * @param pageable {@link Pageable}
    * @return {@link ResponseEntity}
@@ -142,8 +147,16 @@ public class OrderController {
   @ResponseBody
   public ResponseEntity<OrderSetDto> getAllOrders(
       @ApiParam("RequestParam: ?page=XXX&size=YYY&sort=ZZZ") @PageableDefault(sort = "from")
-          final Pageable pageable) {
-    return ResponseEntity.ok(orderService.findAllOrders(pageable));
+          final Pageable pageable,
+      @ApiParam("The start date of searching for orders. Date format yyyy-MM-dd")
+          @RequestParam("from")
+          @DateTimeFormat(pattern = "yyyy-MM-dd")
+          final LocalDate from,
+      @ApiParam("The end date of searching for orders. Date format yyyy-MM-dd")
+          @RequestParam("to")
+          @DateTimeFormat(pattern = "yyyy-MM-dd")
+          final LocalDate to) {
+    return ResponseEntity.ok(orderService.findAllOrdersBetweenDates(pageable, from, to));
   }
 
   /**

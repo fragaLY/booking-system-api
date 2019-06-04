@@ -1,5 +1,7 @@
 package by.vk.bookingsystem.service;
 
+import java.time.LocalDate;
+
 import by.vk.bookingsystem.dto.order.OrderDto;
 import by.vk.bookingsystem.dto.order.OrderSetDto;
 import org.springframework.data.domain.Pageable;
@@ -12,12 +14,16 @@ import org.springframework.data.domain.Pageable;
 public interface OrderService {
 
   /**
-   * Finds all orders in the system and returns them
+   * Finds all orders between selected dates in the system and returns them
    *
+   * <p>By default date frame the last month
+   *
+   * @param from {@link LocalDate}
+   * @param to {@link LocalDate}
    * @param pageable {@link Pageable}
    * @return {@link OrderSetDto}
    */
-  OrderSetDto findAllOrders(Pageable pageable);
+  OrderSetDto findAllOrdersBetweenDates(Pageable pageable, LocalDate from, LocalDate to);
 
   /**
    * Finds the order by its id.
