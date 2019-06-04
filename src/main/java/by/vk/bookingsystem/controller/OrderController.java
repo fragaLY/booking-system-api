@@ -121,6 +121,8 @@ public class OrderController {
    * <p>By default the date frame is the last month
    *
    * @param pageable {@link Pageable}
+   * @param from {@link LocalDate}
+   * @param to {@link LocalDate}
    * @return {@link ResponseEntity}
    */
   @ApiOperation(

@@ -1,7 +1,6 @@
 package by.vk.bookingsystem.service.impl;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -14,6 +13,7 @@ import by.vk.bookingsystem.dto.user.UserDto;
 import by.vk.bookingsystem.dto.user.UserSetDto;
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
 import by.vk.bookingsystem.service.UserService;
+import by.vk.bookingsystem.validator.order.impl.OrderValidatorImpl;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +28,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Service;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 /**
  * The service implementation for {@link UserDto}
@@ -76,14 +78,30 @@ public class UserServiceImpl implements UserService {
   /**
    * Finds page of users in the system and returns it
    *
+   * <p>By default the date frame is the last month
+   *
    * @param pageable {@link Pageable}
+   * @param from {@link LocalDate}
+   * @param to {@link LocalDate}
    * @return {@link UserSetDto}
    */
   @Cacheable(value = "users")
   @Override
-  public UserSetDto findAllUsers(final Pageable pageable) {
+  public UserSetDto findAllUsersBetweenDates(
+      final Pageable pageable, LocalDate from, LocalDate to) {
 
-    final Page<User> users = userDao.findAll(pageable);
+    if (from == null || to == null) {
+      final LocalDate now = LocalDate.now();
+      from = LocalDate.of(now.getYear(), now.getMonth(), 1);
+      to = from.plusMonths(1).minusDays(1);
+    }
+
+    if (from.isAfter(to)) {
+      LOGGER.warn(OrderValidatorImpl.INVALID_DATES_LOG, from, to);
+      throw new IllegalArgumentException(environment.getProperty(OrderValidatorImpl.INVALID_DATES));
+    }
+
+    final Page<User> users = userDao.findAllOrdersBetweenDates(pageable, from, to);
 
     final Set<UserDto> userSet =
         users.stream()

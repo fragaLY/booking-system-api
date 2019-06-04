@@ -2,6 +2,7 @@ package by.vk.bookingsystem.controller;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -19,6 +20,7 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.CacheControl;
@@ -34,6 +36,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -149,6 +152,11 @@ public class UserController {
   /**
    * Returns the page with users
    *
+   * <p>By default the date frame is the last month
+   *
+   * @param pageable {@link Pageable}
+   * @param from {@link LocalDate}
+   * @param to {@link LocalDate}
    * @return {@link ResponseEntity}
    */
   @ApiOperation(
@@ -173,10 +181,19 @@ public class UserController {
       })
   @GetMapping(produces = MediaTypes.HAL_JSON_UTF8_VALUE)
   @ResponseBody
-  public ResponseEntity<UserSetDto> getUsers(
+  public ResponseEntity<UserSetDto> getAllUsers(
       @ApiParam("RequestParam: ?page=XXX&size=YYY&sort=ZZZ") @PageableDefault(sort = "registered")
-          final Pageable pageable) {
-    return ResponseEntity.ok(userService.findAllUsers(pageable));
+          final Pageable pageable,
+      @ApiParam("The start date of searching for orders. Date format yyyy-MM-dd")
+          @RequestParam("from")
+          @DateTimeFormat(pattern = "yyyy-MM-dd")
+          final LocalDate from,
+      @ApiParam("The end date of searching for orders. Date format yyyy-MM-dd")
+          @RequestParam("to")
+          @DateTimeFormat(pattern = "yyyy-MM-dd")
+          final LocalDate to) {
+
+    return ResponseEntity.ok(userService.findAllUsersBetweenDates(pageable, from, to));
   }
 
   /**

@@ -3,6 +3,7 @@ package by.vk.bookingsystem.dao;
 import java.time.LocalDate;
 import java.util.List;
 
+import by.vk.bookingsystem.domain.Order;
 import by.vk.bookingsystem.domain.User;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
@@ -16,12 +17,14 @@ import org.springframework.data.domain.Pageable;
 public interface UserDao {
 
   /**
-   * Finds all users that are in the system
+   * Finds all users between dates and returns it
    *
    * @param pageable {@link Pageable}
-   * @return {@link Page} of {@link User}
+   * @param from {@link LocalDate}
+   * @param to {@link LocalDate}
+   * @return {@link Page} of {@link Order}
    */
-  Page<User> findAll(Pageable pageable);
+  Page<User> findAllOrdersBetweenDates(Pageable pageable, LocalDate from, LocalDate to);
 
   /**
    * Finds the user by id
