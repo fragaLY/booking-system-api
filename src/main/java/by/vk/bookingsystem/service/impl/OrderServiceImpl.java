@@ -82,23 +82,15 @@ public class OrderServiceImpl implements OrderService {
   /**
    * Finds page orders in between selected dates
    *
-   * <p>By default the date frame is the last month
-   *
    * @param pageable {@link Pageable}
    * @param from {@link LocalDate}
    * @param to {@link LocalDate}
    * @return {@link OrderSetDto}
    */
   @Override
-  @Cacheable(value = "orders")
+  @Cacheable(value = "orders", key = "{#from, #to}")
   public OrderSetDto findAllOrdersBetweenDates(
       final Pageable pageable, LocalDate from, LocalDate to) {
-
-    if (from == null || to == null) {
-      final LocalDate now = LocalDate.now();
-      from = LocalDate.of(now.getYear(), now.getMonth(), 1);
-      to = from.plusMonths(1).minusDays(1);
-    }
 
     if (from.isAfter(to)) {
       LOGGER.warn(OrderValidatorImpl.INVALID_DATES_LOG, from, to);

@@ -78,23 +78,15 @@ public class UserServiceImpl implements UserService {
   /**
    * Finds page of users in the system and returns it
    *
-   * <p>By default the date frame is the last month
-   *
    * @param pageable {@link Pageable}
    * @param from {@link LocalDate}
    * @param to {@link LocalDate}
    * @return {@link UserSetDto}
    */
-  @Cacheable(value = "users")
+  @Cacheable(value = "users", key = "{#from, #to}")
   @Override
   public UserSetDto findAllUsersBetweenDates(
       final Pageable pageable, LocalDate from, LocalDate to) {
-
-    if (from == null || to == null) {
-      final LocalDate now = LocalDate.now();
-      from = LocalDate.of(now.getYear(), now.getMonth(), 1);
-      to = from.plusMonths(1).minusDays(1);
-    }
 
     if (from.isAfter(to)) {
       LOGGER.warn(OrderValidatorImpl.INVALID_DATES_LOG, from, to);

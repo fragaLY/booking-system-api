@@ -152,8 +152,6 @@ public class UserController {
   /**
    * Returns the page with users
    *
-   * <p>By default the date frame is the last month
-   *
    * @param pageable {@link Pageable}
    * @param from {@link LocalDate}
    * @param to {@link LocalDate}
@@ -184,12 +182,16 @@ public class UserController {
   public ResponseEntity<UserSetDto> getAllUsers(
       @ApiParam("RequestParam: ?page=XXX&size=YYY&sort=ZZZ") @PageableDefault(sort = "registered")
           final Pageable pageable,
-      @ApiParam("The start date of searching for orders. Date format yyyy-MM-dd")
-          @RequestParam("from")
+      @ApiParam(
+              value = "The start date of searching for orders. Date format yyyy-MM-dd",
+              defaultValue = "0001-01-01")
+          @RequestParam(value = "from", defaultValue = "0001-01-01")
           @DateTimeFormat(pattern = "yyyy-MM-dd")
           final LocalDate from,
-      @ApiParam("The end date of searching for orders. Date format yyyy-MM-dd")
-          @RequestParam("to")
+      @ApiParam(
+              value = "The end date of searching for orders. Date format yyyy-MM-dd",
+              defaultValue = "9999-12-31")
+          @RequestParam(value = "to", defaultValue = "9999-12-31")
           @DateTimeFormat(pattern = "yyyy-MM-dd")
           final LocalDate to) {
 

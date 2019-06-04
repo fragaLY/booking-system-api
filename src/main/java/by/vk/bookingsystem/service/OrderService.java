@@ -16,8 +16,6 @@ public interface OrderService {
   /**
    * Finds all orders between selected dates in the system and returns them
    *
-   * <p>By default date frame the last month
-   *
    * @param from {@link LocalDate}
    * @param to {@link LocalDate}
    * @param pageable {@link Pageable}

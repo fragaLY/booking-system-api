@@ -16,8 +16,6 @@ public interface UserService {
   /**
    * Finds all users in the system and returns them *
    *
-   * <p>By default the date frame is the last month
-   *
    * @param pageable {@link Pageable}
    * @param from {@link LocalDate}
    * @param to {@link LocalDate}
