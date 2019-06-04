@@ -1,12 +1,10 @@
 package by.vk.bookingsystem.controller;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -25,6 +23,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.http.CacheControl;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,16 +35,30 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 /**
  * The controller to work with orders
  *
  * @author Vadzim_Kavalkou
  */
-@CrossOrigin
+@CrossOrigin(
+    maxAge = 3600,
+    origins = "*",
+    methods = {
+      RequestMethod.GET,
+      RequestMethod.POST,
+      RequestMethod.PUT,
+      RequestMethod.DELETE,
+      RequestMethod.OPTIONS,
+      RequestMethod.HEAD
+    }
+  )
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
@@ -58,6 +73,44 @@ public class OrderController {
   @Autowired
   public OrderController(final OrderService orderService) {
     this.orderService = orderService;
+  }
+
+  /**
+   * Returns the options
+   *
+   * @return {@link ResponseEntity}
+   */
+  @ApiOperation(value = "Get options", notes = "The options will be returned")
+  @ApiResponses(
+      value = {
+        @ApiResponse(code = 200, message = "Options were retrieved"),
+        @ApiResponse(
+            code = 400,
+            message = "Bad request",
+            response = IllegalArgumentException.class),
+        @ApiResponse(code = 401, message = "Unauthorized client"),
+        @ApiResponse(code = 403, message = "Access denied"),
+        @ApiResponse(
+            code = 404,
+            message = "Options were not found",
+            response = ObjectNotFoundException.class),
+        @ApiResponse(code = 500, message = "Internal Error")
+      })
+  @RequestMapping(value = "**", method = RequestMethod.OPTIONS)
+  @ResponseBody
+  public ResponseEntity<Void> getOptions() {
+    return ResponseEntity.ok()
+        .allow(
+            HttpMethod.GET,
+            HttpMethod.POST,
+            HttpMethod.PUT,
+            HttpMethod.DELETE,
+            HttpMethod.OPTIONS,
+            HttpMethod.HEAD)
+        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .header("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE)
+        .cacheControl(CacheControl.maxAge(3600, TimeUnit.SECONDS))
+        .build();
   }
 
   /**

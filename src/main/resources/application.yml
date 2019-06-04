@@ -22,7 +22,7 @@ spring:
   resources:
     cache:
       cachecontrol:
-        max-age: 120
+        max-age: 3600
         must-revalidate: true
         cache-private: true
         cache-public: false

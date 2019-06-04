@@ -5,6 +5,7 @@ import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.TimeUnit;
 
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
 import by.vk.bookingsystem.service.ReportService;
@@ -17,12 +18,15 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,7 +36,10 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author Vadzim_Kavalkou
  */
-@CrossOrigin
+@CrossOrigin(
+    maxAge = 3600,
+    origins = "*",
+    methods = {RequestMethod.GET, RequestMethod.OPTIONS, RequestMethod.HEAD})
 @RestController
 @RequestMapping("/reports")
 public class ReportController {
@@ -57,6 +64,37 @@ public class ReportController {
       final OrderReportServiceImpl orderReportService) {
     this.userReportService = userReportService;
     this.orderReportService = orderReportService;
+  }
+
+  /**
+   * Returns the options
+   *
+   * @return {@link ResponseEntity}
+   */
+  @ApiOperation(value = "Get options", notes = "The options will be returned")
+  @ApiResponses(
+      value = {
+        @ApiResponse(code = 200, message = "Options were retrieved"),
+        @ApiResponse(
+            code = 400,
+            message = "Bad request",
+            response = IllegalArgumentException.class),
+        @ApiResponse(code = 401, message = "Unauthorized client"),
+        @ApiResponse(code = 403, message = "Access denied"),
+        @ApiResponse(
+            code = 404,
+            message = "Options were not found",
+            response = ObjectNotFoundException.class),
+        @ApiResponse(code = 500, message = "Internal Error")
+      })
+  @RequestMapping(value = "**", method = RequestMethod.OPTIONS)
+  @ResponseBody
+  public ResponseEntity<Void> getOptions() {
+    return ResponseEntity.ok()
+        .allow(HttpMethod.GET, HttpMethod.OPTIONS, HttpMethod.HEAD)
+        .contentType(MediaType.parseMediaType(MEDIA_TYPE))
+        .cacheControl(CacheControl.maxAge(3600, TimeUnit.SECONDS))
+        .build();
   }
 
   /**
