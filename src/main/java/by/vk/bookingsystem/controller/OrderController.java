@@ -57,8 +57,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
       RequestMethod.DELETE,
       RequestMethod.OPTIONS,
       RequestMethod.HEAD
-    }
-  )
+    })
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
