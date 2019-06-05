@@ -48,8 +48,8 @@ public class OrderReportServiceImpl implements ReportService {
   private static final Logger LOGGER = LoggerFactory.getLogger(OrderReportServiceImpl.class);
 
   private static final String INVALID_DATES = "dates.invalid";
-  private static final String ORDERS_NOT_FOUND_LOG = "The orders were not found from {} and {}";
-  private static final String ORDERS_NOT_FOUND = "The orders were not found from %s and %s";
+  private static final String ORDERS_NOT_FOUND_LOG = "The orders were not found between {} and {} dates";
+  private static final String ORDERS_NOT_FOUND = "The orders were not found between %s and %s dates";
   private static final String INVALID_REPORT_DATES_LOG =
       "The from date should be before to date for report";
 

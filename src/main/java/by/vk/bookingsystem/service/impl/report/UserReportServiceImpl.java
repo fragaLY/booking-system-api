@@ -44,8 +44,8 @@ public class UserReportServiceImpl implements ReportService {
   private static final Logger LOGGER = LoggerFactory.getLogger(UserReportServiceImpl.class);
 
   private static final String INVALID_DATES = "dates.invalid";
-  private static final String USERS_NOT_FOUND_LOG = "The users were not found from {} and {}";
-  private static final String USERS_NOT_FOUND = "The users were not found from %s and %s";
+  private static final String USERS_NOT_FOUND_LOG = "The users were not found between {} and {} dates";
+  private static final String USERS_NOT_FOUND = "The users were not found between %s and %s dates";
   private static final String INVALID_REPORT_DATES_LOG =
       "The from date should be before to date for report";
 
