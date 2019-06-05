@@ -20,8 +20,6 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
@@ -116,9 +114,8 @@ public class OrderController {
   }
 
   /**
-   * Returns the page with orders between selected dates
+   * Returns orders between selected dates
    *
-   * @param pageable {@link Pageable}
    * @param from {@link LocalDate}
    * @param to {@link LocalDate}
    * @return {@link ResponseEntity}
@@ -126,7 +123,7 @@ public class OrderController {
   @ApiOperation(
       value = "Get all orders",
       notes =
-          "Orders will be sent in the location response page with default size = 10, page = 0, sorting by order date from. Also, you are able to find links for next or previous page if they needed",
+          "Orders will be sent in the location response",
       response = OrderSetDto.class)
   @ApiResponses(
       value = {
@@ -146,8 +143,6 @@ public class OrderController {
   @GetMapping(produces = MediaTypes.HAL_JSON_UTF8_VALUE)
   @ResponseBody
   public ResponseEntity<OrderSetDto> getAllOrders(
-      @ApiParam("RequestParam: ?page=XXX&size=YYY&sort=ZZZ") @PageableDefault(sort = "from")
-          final Pageable pageable,
       @ApiParam(
               value = "The start date of searching for orders. Date format yyyy-MM-dd",
               defaultValue = "0001-01-01")
@@ -160,7 +155,7 @@ public class OrderController {
           @RequestParam(value = "to", defaultValue = "9999-12-31")
           @DateTimeFormat(pattern = "yyyy-MM-dd")
           final LocalDate to) {
-    return ResponseEntity.ok(orderService.findAllOrdersBetweenDates(pageable, from, to));
+    return ResponseEntity.ok(orderService.findAllOrdersBetweenDates(from, to));
   }
 
   /**

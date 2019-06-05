@@ -25,8 +25,6 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Service;
 
@@ -45,10 +43,6 @@ public class OrderServiceImpl implements OrderService {
 
   private static final String ORDER_NOT_FOUND = "order.not.found";
   private static final String ORDER_NOT_FOUND_LOG = "The order with id {} was not found.";
-
-  private static final String PARAMETER_FORMAT = "?page=%d";
-  private static final String PREVIOUS = "previous";
-  private static final String NEXT = "next";
 
   private final OrderDao orderDao;
   private final OrderConverter orderConverter;
@@ -80,48 +74,29 @@ public class OrderServiceImpl implements OrderService {
   }
 
   /**
-   * Finds page orders in between selected dates
+   * Finds orders in between selected dates
    *
-   * @param pageable {@link Pageable}
    * @param from {@link LocalDate}
    * @param to {@link LocalDate}
    * @return {@link OrderSetDto}
    */
   @Override
   @Cacheable(value = "orders", key = "{#from, #to}")
-  public OrderSetDto findAllOrdersBetweenDates(
-      final Pageable pageable, LocalDate from, LocalDate to) {
+  public OrderSetDto findAllOrdersBetweenDates(LocalDate from, LocalDate to) {
 
     if (from.isAfter(to)) {
       LOGGER.warn(OrderValidatorImpl.INVALID_DATES_LOG, from, to);
       throw new IllegalArgumentException(environment.getProperty(OrderValidatorImpl.INVALID_DATES));
     }
 
-    final Page<Order> orders = orderDao.findAllOrdersBetweenDates(pageable, from, to);
-
     final Set<OrderDto> orderSet =
-        orders.getContent().stream()
+        orderDao.findAllOrdersBetweenDates(from, to).stream()
             .filter(Objects::nonNull)
             .map(orderConverter::convertToDto)
             .collect(Collectors.toSet());
 
-    int page = orders.getNumber();
-    final int pages = orders.getTotalPages();
-
-    final OrderSetDto orderSetDto = new OrderSetDto(orderSet, page, pages);
-    final String linkToOrders = linkTo(OrderController.class).toString();
-
-    orderSetDto.add(
-        new Link(linkToOrders.concat(String.format(PARAMETER_FORMAT, page))).withSelfRel());
-
-    if (page > 0 && pages > page) {
-      orderSetDto.add(
-          new Link(linkToOrders.concat(String.format(PARAMETER_FORMAT, --page))).withRel(PREVIOUS));
-    }
-    if (pages > ++page) {
-      orderSetDto.add(
-          new Link(linkToOrders.concat(String.format(PARAMETER_FORMAT, ++page))).withRel(NEXT));
-    }
+    final OrderSetDto orderSetDto = new OrderSetDto(orderSet);
+    orderSetDto.add(new Link(linkTo(OrderController.class).toString()).withSelfRel());
 
     return orderSetDto;
   }

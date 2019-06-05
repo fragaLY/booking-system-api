@@ -18,10 +18,9 @@ public interface OrderService {
    *
    * @param from {@link LocalDate}
    * @param to {@link LocalDate}
-   * @param pageable {@link Pageable}
    * @return {@link OrderSetDto}
    */
-  OrderSetDto findAllOrdersBetweenDates(Pageable pageable, LocalDate from, LocalDate to);
+  OrderSetDto findAllOrdersBetweenDates(LocalDate from, LocalDate to);
 
   /**
    * Finds the order by its id.

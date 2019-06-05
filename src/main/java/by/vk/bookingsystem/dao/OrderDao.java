@@ -4,8 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import by.vk.bookingsystem.domain.Order;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 /**
  * The data access object layer for {@link Order}
@@ -17,12 +15,11 @@ public interface OrderDao {
   /**
    * Finds all orders between dates and returns it
    *
-   * @param pageable {@link Pageable}
    * @param from {@link LocalDate}
    * @param to {@link LocalDate}
-   * @return {@link Page} of {@link Order}
+   * @return {@link List} of {@link Order}
    */
-  Page<Order> findAllOrdersBetweenDates(Pageable pageable, LocalDate from, LocalDate to);
+  List<Order> findAllOrdersBetweenDates(LocalDate from, LocalDate to);
 
   /**
    * Finds the order by its id and returns it

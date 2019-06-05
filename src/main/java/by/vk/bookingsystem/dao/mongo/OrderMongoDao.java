@@ -6,8 +6,6 @@ import java.util.List;
 import by.vk.bookingsystem.dao.OrderDao;
 import by.vk.bookingsystem.domain.Order;
 import org.bson.types.ObjectId;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
@@ -17,14 +15,6 @@ import org.springframework.data.mongodb.repository.Query;
  * @author Vadzim_Kavalkou
  */
 public interface OrderMongoDao extends MongoRepository<Order, ObjectId>, OrderDao {
-
-  /**
-   * Finds all orders that are in the system and returns it
-   *
-   * @param pageable {@link Pageable}
-   * @return {@link Page} of {@link Order}
-   */
-  Page<Order> findAll(Pageable pageable);
 
   /**
    * Finds the order by its id and returns it
@@ -61,13 +51,12 @@ public interface OrderMongoDao extends MongoRepository<Order, ObjectId>, OrderDa
   /**
    * Finds orders between dates and returns them
    *
-   * @param pageable {@link Pageable}
    * @param from {@link LocalDate}
    * @param to {@link LocalDate}
    * @return {@link List} of {@link Order}
    */
   @Query(value = "{ 'from' : { $gte: ?0 }, 'to' : { $lte: ?1 }}")
-  Page<Order> findAllOrdersBetweenDates(Pageable pageable, LocalDate from, LocalDate to);
+  List<Order> findAllOrdersBetweenDates(LocalDate from, LocalDate to);
 
   /**
    * Finds checks if order intersects with existing orders
