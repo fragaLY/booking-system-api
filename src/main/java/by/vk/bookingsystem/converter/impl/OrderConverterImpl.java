@@ -1,5 +1,8 @@
 package by.vk.bookingsystem.converter.impl;
 
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 import by.vk.bookingsystem.controller.OrderController;
 import by.vk.bookingsystem.controller.UserController;
 import by.vk.bookingsystem.converter.HomeConverter;
@@ -12,10 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * The converter implementation for {@link Order} and {@link OrderDto}
@@ -67,9 +66,7 @@ public class OrderConverterImpl implements OrderConverter {
             .setGuests(entity.getGuests())
             .build();
     dto.add(linkTo(OrderController.class).slash(entity.getId()).withSelfRel());
-    dto.add(
-        linkTo(methodOn(UserController.class).getUserById(dto.getOwner().getUserId()))
-            .withRel(OWNER));
+    dto.add(linkTo(linkTo(UserController.class).slash(dto.getOwner().getUserId())).withRel(OWNER));
     return dto;
   }
 
