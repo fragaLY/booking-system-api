@@ -1,3 +1,6 @@
-======================================
-BOOKING-SYSTEM APPLICATION IS STARTING
-======================================
+${Ansi.GREEN} ${AnsiBackground.BLACK}     ____  ____  ____  __ __ _____   ________     _______  _____________________  ___
+${Ansi.GREEN} ${AnsiBackground.BLACK}    / __ )/ __ \/ __ \/ //_//  _/ | / / ____/    / ___/\ \/ / ___/_  __/ ____/  |/  /
+${Ansi.GREEN} ${AnsiBackground.BLACK}   / __  / / / / / / / ,<   / //  |/ / / ________\__ \  \  /\__ \ / / / __/ / /|_/ /
+${Ansi.GREEN} ${AnsiBackground.BLACK}  / /_/ / /_/ / /_/ / /| |_/ // /|  / /_/ /_____/__/ /  / /___/ // / / /___/ /  / /
+${Ansi.GREEN} ${AnsiBackground.BLACK} /_____/\____/\____/_/ |_/___/_/ |_/\____/     /____/  /_//____//_/ /_____/_/  /_/
+${Ansi.BLUE} :: Spring Boot${spring-boot.formatted-version} :: ${Ansi.DEFAULT}
