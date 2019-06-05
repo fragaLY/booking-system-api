@@ -1,6 +1,7 @@
 package by.vk.bookingsystem.service.impl;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -43,6 +44,7 @@ public class UserServiceImpl implements UserService {
   private static final String USER_NOT_FOUND = "user.not.found";
   private static final String EMAIL_ALREADY_REGISTERED = "user.email.already.registered";
   private static final String PHONE_ALREADY_REGISTERED = "user.phone.already.registered";
+  private static final String REGISTERED_DATE_COULD_NOT_BE_CHANGED = "user.registered.changed";
 
   private static final String USER_NOT_FOUND_LOG = "User with id {} was not found.";
   private static final String EMAIL_ALREADY_REGISTERED_LOG =
@@ -183,6 +185,15 @@ public class UserServiceImpl implements UserService {
     if (!oldPhone.equalsIgnoreCase(newPhone) && userDao.existsByPhone(newPhone)) {
       LOGGER.warn(PHONE_ALREADY_REGISTERED_LOG, user);
       throw new IllegalArgumentException(environment.getProperty(PHONE_ALREADY_REGISTERED));
+    }
+
+    final LocalDateTime oldRegistered = userToUpdate.getRegistered();
+    final LocalDateTime newRegistered = user.getRegistered();
+
+    if (!oldRegistered.equals(newRegistered)) {
+      LOGGER.warn(environment.getProperty(REGISTERED_DATE_COULD_NOT_BE_CHANGED), user);
+      throw new IllegalArgumentException(
+          environment.getProperty(REGISTERED_DATE_COULD_NOT_BE_CHANGED));
     }
 
     userDao.save(userConverter.enrichModel(userToUpdate, user));
