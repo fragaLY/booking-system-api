@@ -1,11 +1,14 @@
 package by.vk.bookingsystem.converter.impl;
 
+import by.vk.bookingsystem.controller.UserController;
 import by.vk.bookingsystem.converter.UserConverter;
 import by.vk.bookingsystem.domain.User;
 import by.vk.bookingsystem.domain.role.Role;
 import by.vk.bookingsystem.dto.user.UserDto;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 /**
  * The converter implementation for {@link User} and {@link UserDto}
@@ -23,19 +26,24 @@ public class UserConverterImpl implements UserConverter {
    */
   @Override
   public UserDto convertToDto(final User user) {
-    return UserDto.newBuilder()
-        .setId(user.getId().toHexString())
-        .setFirstName(user.getFirstName())
-        .setLastName(user.getLastName())
-        .setRole(user.getRole().name())
-        .setEmail(user.getEmail())
-        .setPhone(user.getPhone())
-        .setCurrencyCode(user.getCurrencyCode())
-        .setCountry(user.getCountry())
-        .setCity(user.getCity())
-        .setRegistered(user.getRegistered())
-        .setPassword(user.getPassword())
-        .build();
+    final UserDto dto =
+        UserDto.newBuilder()
+            .setId(user.getId().toHexString())
+            .setFirstName(user.getFirstName())
+            .setLastName(user.getLastName())
+            .setRole(user.getRole().name())
+            .setEmail(user.getEmail())
+            .setPhone(user.getPhone())
+            .setCurrencyCode(user.getCurrencyCode())
+            .setCountry(user.getCountry())
+            .setCity(user.getCity())
+            .setRegistered(user.getRegistered())
+            .setPassword(user.getPassword())
+            .build();
+
+    dto.add(linkTo(UserController.class).slash(user.getId()).withSelfRel());
+
+    return dto;
   }
 
   /**
