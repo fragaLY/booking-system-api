@@ -24,7 +24,7 @@ public interface UserDao {
    * @param to {@link LocalDate}
    * @return {@link Page} of {@link Order}
    */
-  Page<User> findAllOrdersBetweenDates(Pageable pageable, LocalDate from, LocalDate to);
+  Page<User> findAllUsersBetweenDates(Pageable pageable, LocalDate from, LocalDate to);
 
   /**
    * Finds the user by id

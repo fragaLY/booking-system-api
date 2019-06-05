@@ -35,8 +35,8 @@ public interface UserMongoDao extends MongoRepository<User, ObjectId>, UserDao {
    * @param to {@link LocalDate}
    * @return {@link List} of {@link Order}
    */
-  @Query(value = "{ 'registered' : { $gte: ?0 }, 'to' : { $lte: ?1 }}")
-  Page<User> findAllOrdersBetweenDates(Pageable pageable, LocalDate from, LocalDate to);
+  @Query(value = "{ 'registered' : { $gte: ?0, $lte: ?1} }")
+  Page<User> findAllUsersBetweenDates(Pageable pageable, LocalDate from, LocalDate to);
 
   /**
    * Finds the user by id

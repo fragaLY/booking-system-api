@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
       throw new IllegalArgumentException(environment.getProperty(OrderValidatorImpl.INVALID_DATES));
     }
 
-    final Page<User> users = userDao.findAllOrdersBetweenDates(pageable, from, to);
+    final Page<User> users = userDao.findAllUsersBetweenDates(pageable, from, to);
 
     final Set<UserDto> userSet =
         users.stream()
