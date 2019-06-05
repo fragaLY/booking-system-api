@@ -140,11 +140,7 @@ public class UserController {
   @ResponseBody
   public ResponseEntity<UserDto> getUserById(
       @NotBlank(message = "The id cannot be blank") @PathVariable(value = "id") final String id) {
-
-    final UserDto user = userService.findUserById(id);
-    final Link selfRel = linkTo(UserController.class).slash(id).withSelfRel();
-    user.add(selfRel);
-    return ResponseEntity.ok(user);
+    return ResponseEntity.ok(userService.findUserById(id));
   }
 
   /**

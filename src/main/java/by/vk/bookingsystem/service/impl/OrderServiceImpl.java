@@ -1,10 +1,12 @@
 package by.vk.bookingsystem.service.impl;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import by.vk.bookingsystem.controller.HomeController;
 import by.vk.bookingsystem.controller.OrderController;
 import by.vk.bookingsystem.converter.OrderConverter;
 import by.vk.bookingsystem.dao.OrderDao;
@@ -118,7 +120,19 @@ public class OrderServiceImpl implements OrderService {
       throw new ObjectNotFoundException(environment.getProperty(ORDER_NOT_FOUND));
     }
 
-    return orderConverter.convertToDto(orderDao.findOrderById(id));
+    final OrderDto order = orderConverter.convertToDto(orderDao.findOrderById(id));
+    final List<Link> homeLinks =
+        order.getHomes().stream()
+            .map(
+                home ->
+                    linkTo(HomeController.class)
+                        .slash(home.getHomeId())
+                        .withRel("home_" + home.getName().toLowerCase()))
+            .collect(Collectors.toList());
+
+    order.add(homeLinks);
+
+    return order;
   }
 
   /**

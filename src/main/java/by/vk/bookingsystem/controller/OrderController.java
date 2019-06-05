@@ -188,18 +188,6 @@ public class OrderController {
   public ResponseEntity<OrderDto> getOrder(
       @NotBlank(message = "The id cannot be blank") @PathVariable(value = "id") final String id) {
     final OrderDto order = orderService.findOrderById(id);
-
-    final List<Link> homeLinks =
-        order.getHomes().stream()
-            .map(
-                home ->
-                    linkTo(HomeController.class)
-                        .slash(home.getHomeId())
-                        .withRel("home_" + home.getName().toLowerCase()))
-            .collect(Collectors.toList());
-
-    order.add(homeLinks);
-
     return ResponseEntity.ok(order);
   }
 
