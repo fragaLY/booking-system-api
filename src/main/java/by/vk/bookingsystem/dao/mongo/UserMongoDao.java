@@ -7,8 +7,6 @@ import by.vk.bookingsystem.dao.UserDao;
 import by.vk.bookingsystem.domain.Order;
 import by.vk.bookingsystem.domain.User;
 import org.bson.types.ObjectId;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
@@ -20,23 +18,14 @@ import org.springframework.data.mongodb.repository.Query;
 public interface UserMongoDao extends MongoRepository<User, ObjectId>, UserDao {
 
   /**
-   * Finds all users that are in the system
-   *
-   * @param pageable {@link Pageable}
-   * @return {@link Page} of {@link User}
-   */
-  Page<User> findAll(Pageable pageable);
-
-  /**
    * Finds users between dates and returns them
    *
-   * @param pageable {@link Pageable}
    * @param from {@link LocalDate}
    * @param to {@link LocalDate}
    * @return {@link List} of {@link Order}
    */
   @Query(value = "{ 'registered' : { $gte: ?0, $lte: ?1} }")
-  Page<User> findAllUsersBetweenDates(Pageable pageable, LocalDate from, LocalDate to);
+  List<User> findAllUsersBetweenDates(LocalDate from, LocalDate to);
 
   /**
    * Finds the user by id

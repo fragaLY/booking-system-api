@@ -24,8 +24,6 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Service;
 
@@ -52,8 +50,6 @@ public class UserServiceImpl implements UserService {
   private static final String PHONE_ALREADY_REGISTERED_LOG =
       "The user {} uses already existed phone";
 
-  private static final String PARAMETER_FORMAT = "?page=%d";
-  private static final String PREVIOUS = "previous";
   private static final String NEXT = "next";
 
   private final UserDao userDao;
@@ -76,48 +72,30 @@ public class UserServiceImpl implements UserService {
   }
 
   /**
-   * Finds page of users in the system and returns it
+   * Finds users between selected dates in the system and returns it
    *
-   * @param pageable {@link Pageable}
    * @param from {@link LocalDate}
    * @param to {@link LocalDate}
    * @return {@link UserSetDto}
    */
   @Cacheable(value = "users", key = "{#from, #to}")
   @Override
-  public UserSetDto findAllUsersBetweenDates(
-      final Pageable pageable, LocalDate from, LocalDate to) {
+  public UserSetDto findAllUsersBetweenDates(LocalDate from, LocalDate to) {
 
     if (from.isAfter(to)) {
       LOGGER.warn(OrderValidatorImpl.INVALID_DATES_LOG, from, to);
       throw new IllegalArgumentException(environment.getProperty(OrderValidatorImpl.INVALID_DATES));
     }
 
-    final Page<User> users = userDao.findAllUsersBetweenDates(pageable, from, to);
-
     final Set<UserDto> userSet =
-        users.stream()
+        userDao.findAllUsersBetweenDates(from, to).stream()
             .filter(Objects::nonNull)
             .map(userConverter::convertToDto)
             .collect(Collectors.toSet());
 
-    int page = users.getNumber();
-    final int pages = users.getTotalPages();
+    final UserSetDto userSetDto = new UserSetDto(userSet);
 
-    final UserSetDto userSetDto = new UserSetDto(userSet, page, pages);
-    final String linkToOrders = linkTo(UserController.class).toString();
-
-    userSetDto.add(
-        new Link(linkToOrders.concat(String.format(PARAMETER_FORMAT, page))).withSelfRel());
-
-    if (page > 0 && pages > page) {
-      userSetDto.add(
-          new Link(linkToOrders.concat(String.format(PARAMETER_FORMAT, --page))).withRel(PREVIOUS));
-    }
-    if (pages > ++page) {
-      userSetDto.add(
-          new Link(linkToOrders.concat(String.format(PARAMETER_FORMAT, ++page))).withRel(NEXT));
-    }
+    userSetDto.add(new Link(linkTo(UserController.class).toString()).withRel(NEXT));
 
     return userSetDto;
   }

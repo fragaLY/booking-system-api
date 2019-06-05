@@ -6,8 +6,6 @@ import java.util.List;
 import by.vk.bookingsystem.domain.Order;
 import by.vk.bookingsystem.domain.User;
 import org.bson.types.ObjectId;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 /**
  * The data access object layer for {@link User}
@@ -19,12 +17,11 @@ public interface UserDao {
   /**
    * Finds all users between dates and returns it
    *
-   * @param pageable {@link Pageable}
    * @param from {@link LocalDate}
    * @param to {@link LocalDate}
-   * @return {@link Page} of {@link Order}
+   * @return {@link List} of {@link Order}
    */
-  Page<User> findAllUsersBetweenDates(Pageable pageable, LocalDate from, LocalDate to);
+  List<User> findAllUsersBetweenDates(LocalDate from, LocalDate to);
 
   /**
    * Finds the user by id

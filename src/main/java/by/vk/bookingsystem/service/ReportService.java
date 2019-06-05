@@ -1,6 +1,5 @@
 package by.vk.bookingsystem.service;
 
-import java.io.IOException;
 import java.time.LocalDate;
 
 import by.vk.bookingsystem.report.WordDocument;
@@ -20,5 +19,5 @@ public interface ReportService {
    * @param to {@link LocalDate}
    * @return {@link WordDocument}
    */
-  Resource generateReportResource(LocalDate from, LocalDate to) throws IOException;
+  Resource generateReportResource(LocalDate from, LocalDate to);
 }

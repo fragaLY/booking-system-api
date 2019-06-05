@@ -1,7 +1,6 @@
 package by.vk.bookingsystem.dto.user;
 
 import java.util.Set;
-
 import javax.validation.Valid;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -21,16 +20,10 @@ import org.springframework.hateoas.ResourceSupport;
 @Getter
 @EqualsAndHashCode(callSuper = false)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonPropertyOrder({"users", "page", "pages"})
+@JsonPropertyOrder({"users", "_links"})
 public class UserSetDto extends ResourceSupport {
 
   @JsonProperty("users")
   @Valid
   private final Set<UserDto> users;
-
-  @JsonProperty("page")
-  private final int pageNumber;
-
-  @JsonProperty("pages")
-  private final int totalPages;
 }

@@ -4,7 +4,6 @@ import java.time.LocalDate;
 
 import by.vk.bookingsystem.dto.order.OrderDto;
 import by.vk.bookingsystem.dto.order.OrderSetDto;
-import org.springframework.data.domain.Pageable;
 
 /**
  * The service for {@link OrderDto}

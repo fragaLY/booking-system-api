@@ -18,8 +18,6 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
@@ -150,9 +148,8 @@ public class UserController {
   }
 
   /**
-   * Returns the page with users
+   * Returns users between selected dates
    *
-   * @param pageable {@link Pageable}
    * @param from {@link LocalDate}
    * @param to {@link LocalDate}
    * @return {@link ResponseEntity}
@@ -160,7 +157,7 @@ public class UserController {
   @ApiOperation(
       value = "Get all users",
       notes =
-          "Users will be sent in the location response page with default size = 10, page = 0, sorting by user registration date. Also, you are able to find links for next or previous page if they needed",
+          "Users will be sent in the location response",
       response = UserSetDto.class)
   @ApiResponses(
       value = {
@@ -180,8 +177,6 @@ public class UserController {
   @GetMapping(produces = MediaTypes.HAL_JSON_UTF8_VALUE)
   @ResponseBody
   public ResponseEntity<UserSetDto> getAllUsers(
-      @ApiParam("RequestParam: ?page=XXX&size=YYY&sort=ZZZ") @PageableDefault(sort = "registered")
-          final Pageable pageable,
       @ApiParam(
               value = "The start date of searching for orders. Date format yyyy-MM-dd",
               defaultValue = "0001-01-01")
@@ -195,7 +190,7 @@ public class UserController {
           @DateTimeFormat(pattern = "yyyy-MM-dd")
           final LocalDate to) {
 
-    return ResponseEntity.ok(userService.findAllUsersBetweenDates(pageable, from, to));
+    return ResponseEntity.ok(userService.findAllUsersBetweenDates(from, to));
   }
 
   /**

@@ -4,7 +4,6 @@ import java.time.LocalDate;
 
 import by.vk.bookingsystem.dto.user.UserDto;
 import by.vk.bookingsystem.dto.user.UserSetDto;
-import org.springframework.data.domain.Pageable;
 
 /**
  * The service for {@link UserDto}
@@ -16,12 +15,11 @@ public interface UserService {
   /**
    * Finds all users in the system and returns them *
    *
-   * @param pageable {@link Pageable}
    * @param from {@link LocalDate}
    * @param to {@link LocalDate}
    * @return {@link UserSetDto}
    */
-  UserSetDto findAllUsersBetweenDates(Pageable pageable, LocalDate from, LocalDate to);
+  UserSetDto findAllUsersBetweenDates(LocalDate from, LocalDate to);
 
   /**
    * Finds the user by its id.
