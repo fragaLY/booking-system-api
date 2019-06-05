@@ -50,8 +50,6 @@ public class UserServiceImpl implements UserService {
   private static final String PHONE_ALREADY_REGISTERED_LOG =
       "The user {} uses already existed phone";
 
-  private static final String NEXT = "next";
-
   private final UserDao userDao;
   private final UserConverter userConverter;
   private final Environment environment;
@@ -95,7 +93,7 @@ public class UserServiceImpl implements UserService {
 
     final UserSetDto userSetDto = new UserSetDto(userSet);
 
-    userSetDto.add(new Link(linkTo(UserController.class).toString()).withRel(NEXT));
+    userSetDto.add(new Link(linkTo(UserController.class).toString()).withSelfRel());
 
     return userSetDto;
   }
