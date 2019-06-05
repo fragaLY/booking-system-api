@@ -1,6 +1,6 @@
 package by.vk.bookingsystem.service.impl;
 
-import static org.junit.Assert.assertEquals;
+import java.time.LocalDateTime;
 
 import by.vk.bookingsystem.converter.UserConverter;
 import by.vk.bookingsystem.dao.UserDao;
@@ -16,6 +16,8 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.env.Environment;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 public class UserServiceImplTest {
@@ -41,6 +43,7 @@ public class UserServiceImplTest {
             .id(new ObjectId(USER1_ID_VALUE))
             .email(USER1_EMAIL)
             .phone(USER1_PHONE)
+            .registered(LocalDateTime.MAX)
             .build();
 
     userDto1 =
@@ -48,6 +51,7 @@ public class UserServiceImplTest {
             .setId(USER1_ID_VALUE)
             .setEmail(USER1_EMAIL)
             .setPhone(USER1_PHONE)
+            .setRegistered(LocalDateTime.MAX)
             .build();
 
     userService = new UserServiceImpl(userDao, userConverter, environment);
@@ -76,6 +80,7 @@ public class UserServiceImplTest {
             .setId(USER1_ID_VALUE)
             .setEmail(USER1_EMAIL)
             .setPhone(USER1_PHONE)
+            .setRegistered(LocalDateTime.MAX)
             .build();
 
     // when
@@ -166,13 +171,24 @@ public class UserServiceImplTest {
     // given
     final String newEmail = "new@email.com";
     final String newPhone = "+333333333";
-    final UserDto dto = UserDto.newBuilder().setPhone(newPhone).setEmail(newEmail).build();
+    final UserDto dto =
+        UserDto.newBuilder()
+            .setPhone(newPhone)
+            .setEmail(newEmail)
+            .setRegistered(LocalDateTime.MAX)
+            .build();
     final User updatedUser =
-        User.builder().id(new ObjectId(USER1_ID_VALUE)).email(newEmail).phone(newPhone).build();
+        User.builder()
+            .id(new ObjectId(USER1_ID_VALUE))
+            .email(newEmail)
+            .phone(newPhone)
+            .registered(LocalDateTime.MAX)
+            .build();
 
     Mockito.when(userDao.existsById(USER1_ID_VALUE)).thenReturn(true);
     Mockito.when(userDao.findUserById(USER1_ID_VALUE)).thenReturn(user1);
     Mockito.when(userConverter.enrichModel(user1, dto)).thenReturn(updatedUser);
+
     // when
     userService.updateUser(dto, USER1_ID_VALUE);
 
