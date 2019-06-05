@@ -1,12 +1,14 @@
 package by.vk.bookingsystem.service.impl;
 
-import static org.junit.Assert.assertEquals;
-
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 import by.vk.bookingsystem.converter.OrderConverter;
 import by.vk.bookingsystem.dao.OrderDao;
+import by.vk.bookingsystem.domain.Home;
 import by.vk.bookingsystem.domain.Order;
+import by.vk.bookingsystem.dto.home.HomeDto;
 import by.vk.bookingsystem.dto.order.OrderDto;
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
 import by.vk.bookingsystem.service.CostCalculatorService;
@@ -21,10 +23,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.env.Environment;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static org.junit.Assert.assertEquals;
+
 @RunWith(SpringRunner.class)
 public class OrderServiceImplTest {
 
   private static final String ORDER1_ID_VALUE = "5c8fba4cc077d3614023f871";
+  private static final String HOME_ID_VALUE = "5c8fba4cc077d3614023f872";
 
   @MockBean private OrderDao orderDao;
   @MockBean private OrderConverter orderConverter;
@@ -39,8 +44,15 @@ public class OrderServiceImplTest {
 
   @Before
   public void setUp() {
-    order1 = Order.builder().id(new ObjectId(ORDER1_ID_VALUE)).build();
-    dto1 = OrderDto.newBuilder().setOrderId(ORDER1_ID_VALUE).build();
+
+    final Set<Home> homes = new HashSet<>();
+    homes.add(new Home(new ObjectId(HOME_ID_VALUE), "Name"));
+
+    final Set<HomeDto> homeDtos = new HashSet<>();
+    homeDtos.add(new HomeDto(HOME_ID_VALUE, "Name"));
+
+    order1 = Order.builder().id(new ObjectId(ORDER1_ID_VALUE)).homes(homes).build();
+    dto1 = OrderDto.newBuilder().setOrderId(ORDER1_ID_VALUE).setHomes(homeDtos).build();
 
     orderService =
         new OrderServiceImpl(orderDao, orderConverter, orderValidator, costCalculator, environment);
@@ -64,7 +76,11 @@ public class OrderServiceImplTest {
     Mockito.when(orderDao.findOrderById(ORDER1_ID_VALUE)).thenReturn(order1);
     Mockito.when(orderConverter.convertToDto(order1)).thenReturn(dto1);
 
-    final OrderDto expectedResult = OrderDto.newBuilder().setOrderId(ORDER1_ID_VALUE).build();
+    final Set<HomeDto> homeDtos = new HashSet<>();
+    homeDtos.add(new HomeDto(HOME_ID_VALUE, "Name"));
+
+    final OrderDto expectedResult =
+        OrderDto.newBuilder().setOrderId(ORDER1_ID_VALUE).setHomes(homeDtos).build();
 
     // when
     final OrderDto actualResult = orderService.findOrderById(ORDER1_ID_VALUE);

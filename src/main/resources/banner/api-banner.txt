@@ -1,3 +1,4 @@
+${Ansi.GREEN} ${AnsiBackground.BLACK}
 ${Ansi.GREEN} ${AnsiBackground.BLACK}     ____  ____  ____  __ __ _____   ________     _______  _____________________  ___
 ${Ansi.GREEN} ${AnsiBackground.BLACK}    / __ )/ __ \/ __ \/ //_//  _/ | / / ____/    / ___/\ \/ / ___/_  __/ ____/  |/  /
 ${Ansi.GREEN} ${AnsiBackground.BLACK}   / __  / / / / / / / ,<   / //  |/ / / ________\__ \  \  /\__ \ / / / __/ / /|_/ /
