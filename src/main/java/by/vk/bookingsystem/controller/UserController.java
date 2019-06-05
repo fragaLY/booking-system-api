@@ -212,7 +212,7 @@ public class UserController {
         @ApiResponse(code = 403, message = "Access denied"),
         @ApiResponse(code = 500, message = "Internal Error")
       })
-  @PostMapping(consumes = MediaTypes.HAL_JSON_UTF8_VALUE)
+  @PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
   @ResponseBody
   public ResponseEntity<Void> createUser(
       @NotNull(message = "The user cannot be null") @Valid @RequestBody final UserDto dto) {
@@ -243,7 +243,7 @@ public class UserController {
         @ApiResponse(code = 403, message = "Access denied"),
         @ApiResponse(code = 500, message = "Internal Error")
       })
-  @PutMapping(value = "/{id}", consumes = MediaTypes.HAL_JSON_UTF8_VALUE)
+  @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
   @ResponseBody
   public ResponseEntity<Void> updateUser(
       final HttpServletRequest request,
