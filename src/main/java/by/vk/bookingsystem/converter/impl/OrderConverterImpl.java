@@ -66,7 +66,7 @@ public class OrderConverterImpl implements OrderConverter {
             .setGuests(entity.getGuests())
             .build();
     dto.add(linkTo(OrderController.class).slash(entity.getId()).withSelfRel());
-    dto.add(linkTo(linkTo(UserController.class).slash(dto.getOwner().getUserId())).withRel(OWNER));
+    dto.add(linkTo(UserController.class).slash(dto.getOwner().getUserId()).withRel(OWNER));
     return dto;
   }
 
