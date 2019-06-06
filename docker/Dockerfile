@@ -1,6 +1,8 @@
 FROM java:8-alpine
 VOLUME /tmp
 
+MAINTAINER vadzim.kavalkou@gmail.com
+
 ENV JAVA_XMX=512m
 ENV JMX_HOST=localhost
 
