@@ -161,7 +161,7 @@ public class UserDto extends ResourceSupport {
    * @return {@link String}
    */
   @NotBlank(message = "The country cannot not be blank")
-  @Pattern(regexp = LITERALS_ONLY_PATTERN, message = "The country cannot contain only the literals")
+  @Pattern(regexp = LITERALS_ONLY_PATTERN, message = "The country can contain only the literals")
   public String getCountry() {
     return country;
   }
@@ -172,7 +172,7 @@ public class UserDto extends ResourceSupport {
    * @return {@link String}
    */
   @NotBlank(message = "The city cannot not be blank")
-  @Pattern(regexp = LITERALS_ONLY_PATTERN, message = "The city cannot contain only the literals")
+  @Pattern(regexp = LITERALS_ONLY_PATTERN, message = "The city can contain only the literals")
   public String getCity() {
     return city;
   }

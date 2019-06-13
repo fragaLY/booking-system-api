@@ -43,7 +43,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ExceptionsHandler extends ResponseEntityExceptionHandler {
 
-  private static final String FORMAT = "Cause in %s , reason %s %n.";
+  private static final String FORMAT = "%s\n";
 
   /**
    * Handles the {@link IllegalArgumentException}
@@ -110,7 +110,7 @@ public class ExceptionsHandler extends ResponseEntityExceptionHandler {
 
     final String message =
         exception.getBindingResult().getAllErrors().stream()
-            .map(error -> String.format(FORMAT, error.getObjectName(), error.getDefaultMessage()))
+            .map(error -> String.format(FORMAT, error.getDefaultMessage()))
             .collect(Collectors.joining());
 
     final ErrorDetails errorDetails = new ErrorDetails(status, status.value(), message);
