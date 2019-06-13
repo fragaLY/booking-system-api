@@ -91,7 +91,7 @@ public class UserDto extends ResourceSupport {
   @NotNull(message = "The firstname cannot not be null")
   @Pattern(
       regexp = LITERALS_ONLY_PATTERN,
-      message = "The firstname cannot contain only the literals")
+      message = "The firstname can contain only the literals")
   @Size(min = 2, max = 100, message = "The size of firstname cannot be between 2 and 100")
   public String getFirstName() {
     return firstName;
@@ -105,7 +105,7 @@ public class UserDto extends ResourceSupport {
   @NotNull(message = "The lastname cannot not be null")
   @Pattern(
       regexp = LITERALS_ONLY_PATTERN,
-      message = "The firstname cannot contain only the literals")
+      message = "The lastname can contain only the literals")
   @Size(min = 2, max = 100, message = "The size of lastname cannot be between 2 and 100")
   public String getLastName() {
     return lastName;
@@ -140,7 +140,7 @@ public class UserDto extends ResourceSupport {
   @NotBlank(message = "The currency cannot not be null")
   @Pattern(
       regexp = LITERALS_ONLY_PATTERN,
-      message = "The currency code cannot contain only the literals")
+      message = "The currency code can contain only the literals")
   public String getCurrencyCode() {
     return currencyCode;
   }
