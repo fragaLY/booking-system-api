@@ -1,8 +1,7 @@
 package by.vk.bookingsystem.service;
 
 import java.math.BigDecimal;
-
-import by.vk.bookingsystem.dto.order.OrderDto;
+import java.time.LocalDate;
 
 /**
  * The cost calculator service.
@@ -14,8 +13,10 @@ public interface CostCalculatorService {
   /**
    * Calculates the cost of order by input values (dates and guests amount).
    *
-   * @param dto - {@link OrderDto}
+   * @param from - {@link LocalDate} the start date
+   * @param to - {@link LocalDate} the end date
+   * @param guests - amount of guests
    * @return {@link BigDecimal}
    */
-  BigDecimal calculateCost(OrderDto dto);
+  BigDecimal calculateCost(LocalDate from, LocalDate to, int guests);
 }

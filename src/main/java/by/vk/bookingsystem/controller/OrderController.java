@@ -1,11 +1,10 @@
 package by.vk.bookingsystem.controller;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -14,6 +13,7 @@ import javax.validation.constraints.NotNull;
 import by.vk.bookingsystem.dto.order.OrderDto;
 import by.vk.bookingsystem.dto.order.OrderSetDto;
 import by.vk.bookingsystem.exception.ObjectNotFoundException;
+import by.vk.bookingsystem.service.CostCalculatorService;
 import by.vk.bookingsystem.service.OrderService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -21,7 +21,6 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpMethod;
@@ -40,8 +39,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 /**
  * The controller to work with orders
@@ -64,15 +61,19 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 public class OrderController {
 
   private final OrderService orderService;
+  private final CostCalculatorService costCalculator;
 
   /**
    * The constructor of class. Uses autowiring via it.
    *
    * @param orderService - the service with business logic to work with orders
+   * @param costCalculator the cost calculator service
    */
   @Autowired
-  public OrderController(final OrderService orderService) {
+  public OrderController(
+      final OrderService orderService, final CostCalculatorService costCalculator) {
     this.orderService = orderService;
+    this.costCalculator = costCalculator;
   }
 
   /**
@@ -122,8 +123,7 @@ public class OrderController {
    */
   @ApiOperation(
       value = "Get all orders",
-      notes =
-          "Orders will be sent in the location response",
+      notes = "Orders will be sent in the location response",
       response = OrderSetDto.class)
   @ApiResponses(
       value = {
@@ -270,5 +270,50 @@ public class OrderController {
       @NotBlank(message = "The id cannot be blank") @PathVariable final String id) {
     orderService.deleteOrderById(id);
     return ResponseEntity.noContent().build();
+  }
+
+  /**
+   * Returns orders between selected dates
+   *
+   * @param from {@link LocalDate}
+   * @param to {@link LocalDate}
+   * @return {@link ResponseEntity}
+   */
+  @ApiOperation(
+      value = "Calculate price for selected inputs",
+      notes = "Cost will be sent in the location response",
+      response = OrderSetDto.class)
+  @ApiResponses(
+      value = {
+        @ApiResponse(code = 200, message = "Cost were calculated", response = BigDecimal.class),
+        @ApiResponse(
+            code = 400,
+            message = "Bad request",
+            response = IllegalArgumentException.class),
+        @ApiResponse(code = 401, message = "Unauthorized client"),
+        @ApiResponse(code = 403, message = "Access denied"),
+        @ApiResponse(
+            code = 404,
+            message = "Cost were not found",
+            response = ObjectNotFoundException.class),
+        @ApiResponse(code = 500, message = "Internal Error")
+      })
+  @GetMapping(value = "/cost", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
+  @ResponseBody
+  public ResponseEntity<BigDecimal> getCost(
+      @ApiParam(
+              value = "The start date of searching for orders. Date format yyyy-MM-dd",
+              defaultValue = "0001-01-01")
+          @RequestParam(value = "from", defaultValue = "0001-01-01")
+          @DateTimeFormat(pattern = "yyyy-MM-dd")
+          final LocalDate from,
+      @ApiParam(
+              value = "The end date of searching for orders. Date format yyyy-MM-dd",
+              defaultValue = "9999-12-31")
+          @RequestParam(value = "to", defaultValue = "9999-12-31")
+          @DateTimeFormat(pattern = "yyyy-MM-dd")
+          final LocalDate to,
+      @RequestParam(value = "guests") final int guests) {
+    return ResponseEntity.ok(costCalculator.calculateCost(from, to, guests));
   }
 }

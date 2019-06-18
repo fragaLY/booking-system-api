@@ -2,11 +2,11 @@ package by.vk.bookingsystem.service.impl;
 
 import java.math.BigDecimal;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 import by.vk.bookingsystem.dao.PriceDao;
 import by.vk.bookingsystem.domain.Price;
-import by.vk.bookingsystem.dto.order.OrderDto;
 import by.vk.bookingsystem.service.CostCalculatorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,8 +30,7 @@ public class CostCalculatorServiceImpl implements CostCalculatorService {
 
   private static final String WRONG_ORDER_DURATION = "order.duration.wrong";
 
-  private static final String COST_ORDER = "The cost for order {} is {}.";
-  private static final String WRONG_ORDER_DURATION_LOG = "The order {} has 0 days of duration.";
+  private static final String WRONG_ORDER_DURATION_LOG = "0 days of duration.";
 
   private final PriceDao priceDao;
   private final Environment environment;
@@ -51,26 +50,24 @@ public class CostCalculatorServiceImpl implements CostCalculatorService {
   /**
    * Calculates the cost of order by input values (dates and guests amount).
    *
-   * @param order - {@link OrderDto}
+   * @param from - {@link LocalDate} the start date
+   * @param to - {@link LocalDate} the end date
+   * @param guests - amount of guests
    * @return {@link BigDecimal}
    */
   @Override
-  public BigDecimal calculateCost(final OrderDto order) {
-    final Price price = priceDao.findPriceByGuests(order.getGuests());
+  public BigDecimal calculateCost(final LocalDate from, final LocalDate to, final int guests) {
+    final Price price = priceDao.findPriceByGuests(guests);
     final Duration duration =
-        Duration.between(
-            order.getFrom().atTime(LOCAL_TIME_MIDDAY), order.getTo().atTime(LOCAL_TIME_MIDDAY));
+        Duration.between(from.atTime(LOCAL_TIME_MIDDAY), to.atTime(LOCAL_TIME_MIDDAY));
 
     final long days = duration.toDays();
 
     if (days == 0) {
-      LOGGER.warn(WRONG_ORDER_DURATION_LOG, order);
+      LOGGER.warn(WRONG_ORDER_DURATION_LOG);
       throw new IllegalArgumentException(environment.getProperty(WRONG_ORDER_DURATION));
     }
 
-    final BigDecimal cost = price.getPricePerPersons().multiply(BigDecimal.valueOf(days));
-    LOGGER.debug(COST_ORDER, order, cost);
-
-    return cost;
+    return price.getPricePerPersons().multiply(BigDecimal.valueOf(days));
   }
 }

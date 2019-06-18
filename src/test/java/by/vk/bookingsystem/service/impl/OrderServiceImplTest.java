@@ -97,7 +97,8 @@ public class OrderServiceImplTest {
     Mockito.doNothing().when(orderValidator).validateHomes(dto1.getHomes());
     Mockito.doNothing().when(orderValidator).validateOrderDates(dto1);
 
-    Mockito.when(costCalculator.calculateCost(dto1)).thenReturn(BigDecimal.TEN);
+    Mockito.when(costCalculator.calculateCost(dto1.getFrom(), dto1.getTo(), dto1.getGuests()))
+        .thenReturn(BigDecimal.TEN);
     Mockito.when(orderConverter.convertToEntity(dto1)).thenReturn(order1);
     Mockito.when(orderDao.save(order1)).thenReturn(order1);
 
@@ -131,7 +132,8 @@ public class OrderServiceImplTest {
     Mockito.doNothing().when(orderValidator).validateHomes(dto1.getHomes());
     Mockito.doNothing().when(orderValidator).validateOrderDates(dto1);
 
-    Mockito.when(costCalculator.calculateCost(dto1)).thenReturn(BigDecimal.TEN);
+    Mockito.when(costCalculator.calculateCost(dto1.getFrom(), dto1.getTo(), dto1.getGuests()))
+        .thenReturn(BigDecimal.TEN);
 
     Mockito.when(orderConverter.enrichModel(order1, dto1)).thenReturn(order1);
 

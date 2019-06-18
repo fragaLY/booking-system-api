@@ -1,7 +1,5 @@
 package by.vk.bookingsystem.service.impl;
 
-import static org.junit.Assert.assertEquals;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -17,6 +15,8 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.env.Environment;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 public class CostCalculatorServiceImplTest {
@@ -45,7 +45,7 @@ public class CostCalculatorServiceImplTest {
     Mockito.when(priceDao.findPriceByGuests(guestsAmount)).thenReturn(price);
 
     // when
-    costCalculatorService.calculateCost(orderDto);
+    costCalculatorService.calculateCost(orderDto.getFrom(), orderDto.getTo(), orderDto.getGuests());
   }
 
   @Test
@@ -61,7 +61,9 @@ public class CostCalculatorServiceImplTest {
 
     final BigDecimal expectedResult = BigDecimal.valueOf(90);
     // when
-    final BigDecimal actualResult = costCalculatorService.calculateCost(orderDto);
+    final BigDecimal actualResult =
+        costCalculatorService.calculateCost(
+            orderDto.getFrom(), orderDto.getTo(), orderDto.getGuests());
 
     // then
     assertEquals(expectedResult, actualResult);
