@@ -301,16 +301,14 @@ public class OrderController {
   @GetMapping(value = "/cost", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
   @ResponseBody
   public ResponseEntity<BigDecimal> getCost(
-      @ApiParam(
-              value = "The start date of searching for orders. Date format yyyy-MM-dd",
-              defaultValue = "0001-01-01")
-          @RequestParam(value = "from", defaultValue = "0001-01-01")
+      @ApiParam(value = "The start date of searching for orders. Date format yyyy-MM-dd")
+          @RequestParam(value = "from")
           @DateTimeFormat(pattern = "yyyy-MM-dd")
           final LocalDate from,
       @ApiParam(
               value = "The end date of searching for orders. Date format yyyy-MM-dd",
-              defaultValue = "9999-12-31")
-          @RequestParam(value = "to", defaultValue = "9999-12-31")
+              required = true)
+          @RequestParam(value = "to")
           @DateTimeFormat(pattern = "yyyy-MM-dd")
           final LocalDate to,
       @RequestParam(value = "guests") final int guests) {
