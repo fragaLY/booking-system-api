@@ -43,7 +43,7 @@ logging:
     level: "%5p"
 
 server:
-  port: 8888
+  port: 8080
   jetty:
     acceptors: -1
     selectors: -1
